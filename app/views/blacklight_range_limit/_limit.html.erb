@@ -1,5 +1,5 @@
 <h3><%= facet_field_labels[solr_field] -%></h3>
-<div class="limit_content">  
+<div class="limit_content range">  
 
   <% form_tag catalog_index_path, :method => :get, :class=>"range_#{solr_field}" do %>
     <%= search_as_hidden_fields %>

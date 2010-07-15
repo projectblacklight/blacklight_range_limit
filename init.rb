@@ -8,5 +8,9 @@ config.to_prepare do
 
   CatalogController.before_filter do |controller| 
     controller.stylesheet_links << ["blacklight_range_limit", {:plugin => "blacklight_range_limit"}]
+
+    controller.javascript_includes << ["range_limit_slider", {:plugin => "blacklight_range_limit"}]
   end
+
+  
 end

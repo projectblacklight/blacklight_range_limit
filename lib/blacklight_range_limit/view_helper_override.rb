@@ -3,13 +3,7 @@
   # display. 
   module BlacklightRangeLimit::ViewHelperOverride
 
-    # Gets from Blacklight singleton object now, this method is a single
-    # point of interface with Blacklight singleton, so if all config
-    # is refactored to be controller based, we only have one place
-    # to change. 
-    def range_config
-      Blacklight.config[:facet][:range]
-    end
+
     
     def render_facet_limit(solr_field)
       if (range_config.keys.include?( solr_field ) && should_show_limit(solr_field))

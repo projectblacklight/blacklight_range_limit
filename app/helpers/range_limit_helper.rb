@@ -7,7 +7,7 @@ module RangeLimitHelper
     
     default = params["range"][solr_field][type] if params["range"] && params["range"][solr_field] && params["range"][solr_field][type]
     
-    text_field_tag("range[#{solr_field}][#{type}]", default, :maxlength=>4)
+    text_field_tag("range[#{solr_field}][#{type}]", default, :maxlength=>4, :class => "range_#{type}")
   end
 
   def should_show_limit(solr_field)

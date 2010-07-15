@@ -1,5 +1,15 @@
 <h3><%= facet_field_labels[solr_field] -%></h3>
 <div class="limit_content range_limit">  
+  <% if  params["range"] &&
+         params["range"][solr_field] &&
+       ( params["range"][solr_field]["begin"] ||
+         params["range"][solr_field]["end"] ) %>
+    <div class="current">
+      <span class="selected"><%= params["range"][solr_field]['begin'] %> to <%= params["range"][solr_field]['end'] %></span> (<%= @response.total %>) [<%= link_to "remove", remove_range_param(solr_field), :class=>"remove" %>]
+    </div>
+         
+  <% end %>
+
 
   <% form_tag catalog_index_path, :method => :get, :class=>"range_limit range_#{solr_field}" do %>
     <%= search_as_hidden_fields %>

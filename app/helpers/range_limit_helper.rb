@@ -10,10 +10,22 @@ module RangeLimitHelper
     text_field_tag("range[#{solr_field}][#{type}]", default, :maxlength=>4, :class => "range_#{type}")
   end
 
+  # Show the limit area if:
+  # 1) we have a limit already set
+  # OR
+  # 2) stats show max > min, OR
+  # 3) count > 0 if no stats available. 
   def should_show_limit(solr_field)
-    # For now, just if there are any hits at all, will expand later
-    # to if there is actually a range spread available.
-    @response.total > 0
+    stats = stats_for_field(solr_field)
+    
+    (params["range"] && params["range"][solr_field]) ||
+    (  stats &&
+      stats["max"] > stats["min"]) ||
+    ( !stats  && @response.total > 0 )
+  end
+
+  def stats_for_field(solr_field)
+    @response["stats"]["stats_fields"][solr_field] if @response["stats"] && @response["stats"]["stats_fields"]
   end
   
 end

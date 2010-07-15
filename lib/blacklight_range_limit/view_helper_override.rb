@@ -6,8 +6,10 @@
 
     
     def render_facet_limit(solr_field)
-      if (range_config.keys.include?( solr_field ) && should_show_limit(solr_field))
-        render(:partial => "blacklight_range_limit/limit", :locals=> {:solr_field => solr_field, :config => range_config[solr_field]})
+      if (range_config.keys.include?( solr_field ))
+        if (should_show_limit(solr_field))
+          render(:partial => "blacklight_range_limit/limit", :locals=> {:solr_field => solr_field, :config => range_config[solr_field]})
+        end
       else
         super(solr_field)
       end

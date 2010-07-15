@@ -11,11 +11,11 @@ module BlacklightRangeLimit::SolrHelperOverride
 
     # If we have any range facets configured, we want to ask for
     # the stats component to get min/max.
-    #range_config.keys.each do |solr_field|
-    #  solr_params["stats"] = "true"
-    #  solr_params["stats_field"] ||= []
-    #  solr_params["stats_field"] << solr_field
-    #end
+    range_config.keys.each do |solr_field|
+      solr_params["stats"] = "true"
+      solr_params["stats.field"] ||= []
+      solr_params["stats.field"] << solr_field
+    end
     
     
     #Annoying thing where default behavior is to mix together

@@ -1,0 +1,3 @@
+form.range_pub_date input.range_begin, form.range_pub_date input.range_end {
+  width: 4em; 
+}

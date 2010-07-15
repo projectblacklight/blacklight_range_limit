@@ -1,0 +1,20 @@
+<% if 
+<h3><%= facet_field_labels[solr_field] -%></h3>
+<div class="limit_content">  
+
+  <% form_tag catalog_index_path, :method => :get, :class=>"range_#{solr_field}" do %>
+    <%= search_as_hidden_fields %>
+    
+    <!-- we need to include a dummy search_field parameter if none exists,
+         to trick blacklight into displaying actual search results instead
+         of home page. Not a great solution, but easiest for now. -->
+    <% unless params.has_key?(:search_field) %>
+      <%= hidden_field_tag("search_field", "dummy_range") %>
+    <% end %>
+    
+    <%= render_range_input(solr_field, :begin) %> - <%= render_range_input(solr_field, :end) %>
+    <%= submit_tag 'Limit', :class=>'submit ui-state-default ui-corner-all' %>
+  
+  <% end %>
+</div>
+ 

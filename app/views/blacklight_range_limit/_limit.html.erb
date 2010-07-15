@@ -21,7 +21,7 @@
   <div class="profile">
     <% if stats = stats_for_field(solr_field) %>
       <div class="range">
-        Current results range from <span class="min"><%= stats["min"] %></span> to <span class="max"><%= stats["max"] %></span>
+        Current results range from <span class="min"><%= stats["min"].to_s.gsub(/\.0+/, '') %></span> to <span class="max"><%= stats["max"].to_s.gsub(/\.0+/, '') %></span>
       </div>
       <% if stats["missing"] > 0%>
         <div class="missing">

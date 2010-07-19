@@ -20,10 +20,13 @@
       # add a constraint for ranges?
       unless my_params[:range].blank?
         my_params[:range].each_pair do |solr_field, hash|
-          content << render_constraint_element( facet_field_labels[solr_field],
-            "#{hash['begin']} to #{hash['end']}",
-            :remove => remove_range_param(solr_field, my_params)          
-          ) unless hash["begin"].blank? && hash['end'].blank?
+          next unless hash["missing"] || hash["begin"] || hash["end"]
+          
+          content << render_constraint_element(
+            facet_field_labels[solr_field],
+            range_display(solr_field),
+            :remove => remove_range_param(solr_field, my_params)
+          )                      
         end
       end
       return content
@@ -34,10 +37,13 @@
       # add a constraint for ranges?
       unless my_params[:range].blank?
         my_params[:range].each_pair do |solr_field, hash|
-          content << render_search_to_s_element( 
+          next unless hash["missing"] || hash["begin"] || hash["end"]        
+          
+          content << render_search_to_s_element(
             facet_field_labels[solr_field],
-            "#{hash['begin']} to #{hash['end']}"          
-          ) unless hash["begin"].blank? && hash['end'].blank?
+            range_display(solr_field, my_params)
+          )          
+        
         end
       end
       return content

@@ -25,13 +25,19 @@ module BlacklightRangeLimit::SolrHelperOverride
     
     unless req_params["range"].blank?      
       req_params["range"].each_pair do |solr_field, hash|
-        start = hash["begin"].blank? ? "*" : hash["begin"]
-        finish = hash["end"].blank? ? "*" : hash["end"]
-
-        next if start == "*" && finish == "*"
-
-        solr_params[:fq] ||= []
-        solr_params[:fq] << "#{solr_field}: [#{start} TO #{finish}]"
+        missing = !hash["missing"].blank?
+        if missing
+          solr_params[:fq] ||= []
+          solr_params[:fq] = "-#{solr_field}:[* TO *]"
+        else          
+          start = hash["begin"].blank? ? "*" : hash["begin"]
+          finish = hash["end"].blank? ? "*" : hash["end"]
+  
+          next if start == "*" && finish == "*"
+  
+          solr_params[:fq] ||= []
+          solr_params[:fq] << "#{solr_field}: [#{start} TO #{finish}]"
+        end
       end
     end
     return solr_params

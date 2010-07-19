@@ -4,6 +4,8 @@ config.to_prepare do
   CatalogController.helper(BlacklightRangeLimit::ViewHelperOverride)
   SearchHistoryController.helper(BlacklightRangeLimit::ViewHelperOverride)
   CatalogController.helper(RangeLimitHelper)
+  SearchHistoryController.helper(RangeLimitHelper)
+
   CatalogController.send(:include, BlacklightRangeLimit::SolrHelperOverride)
 
   CatalogController.before_filter do |controller| 

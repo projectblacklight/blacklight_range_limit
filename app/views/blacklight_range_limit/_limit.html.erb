@@ -3,43 +3,48 @@
   <% if  params["range"] &&
          params["range"][solr_field] &&
        ( params["range"][solr_field]["begin"] ||
-         params["range"][solr_field]["end"] ) %>
+         params["range"][solr_field]["end"] ||
+         params["range"][solr_field]["missing"]) %>
     <div class="current">
-      <span class="selected"><%= params["range"][solr_field]['begin'] %> to <%= params["range"][solr_field]['end'] %></span> (<%= @response.total %>) [<%= link_to "remove", remove_range_param(solr_field), :class=>"remove" %>]
+      <span class="selected"><%= range_display(solr_field) %></span> (<%= @response.total %>) [<%= link_to "remove", remove_range_param(solr_field), :class=>"remove" %>]
     </div>
          
   <% end %>
 
-
-  <% form_tag catalog_index_path, :method => :get, :class=>"range_limit range_#{solr_field}" do %>
-    <%= search_as_hidden_fields %>
-    
-    <!-- we need to include a dummy search_field parameter if none exists,
-         to trick blacklight into displaying actual search results instead
-         of home page. Not a great solution, but easiest for now. -->
-    <% unless params.has_key?(:search_field) %>
-      <%= hidden_field_tag("search_field", "dummy_range") %>
-    <% end %>
-    
-    <%= render_range_input(solr_field, :begin) %> - <%= render_range_input(solr_field, :end) %>
-    <%= submit_tag 'Limit', :class=>'submit ui-state-default ui-corner-all' %>
-  
-  <% end %>
-  
-  <!-- you can hide this if you want, but it has to be on page if you want
-       JS slider and calculated facets to show up, JS sniffs it. -->
-  <div class="profile">
-    <% if stats = stats_for_field(solr_field) %>
-      <div class="range">
-        Current results range from <span class="min"><%= stats["min"].to_s.gsub(/\.0+/, '') %></span> to <span class="max"><%= stats["max"].to_s.gsub(/\.0+/, '') %></span>
-      </div>
-      <% if stats["missing"] > 0%>
-        <div class="missing">
-          Unknown <%= facet_field_labels[solr_field].downcase %> (<%= stats["missing"] %>)
-        </div>
+  <% unless params["range"] && params["range"][solr_field] && params["range"][solr_field]["missing"] %>  
+    <% form_tag catalog_index_path, :method => :get, :class=>"range_limit range_#{solr_field}" do %>
+      <%= search_as_hidden_fields %>
+      
+      <!-- we need to include a dummy search_field parameter if none exists,
+           to trick blacklight into displaying actual search results instead
+           of home page. Not a great solution, but easiest for now. -->
+      <% unless params.has_key?(:search_field) %>
+        <%= hidden_field_tag("search_field", "dummy_range") %>
       <% end %>
+      
+      <%= render_range_input(solr_field, :begin) %> - <%= render_range_input(solr_field, :end) %>
+      <%= submit_tag 'Limit', :class=>'submit ui-state-default ui-corner-all' %>
+    
     <% end %>
-  </div>
-  
+  <% end %>
+    
+  <!-- no results profile if missing is selected -->
+  <% unless params["range"] && params["range"][solr_field] && params["range"][solr_field]["missing"] %>
+    <!-- you can hide this if you want, but it has to be on page if you want
+         JS slider and calculated facets to show up, JS sniffs it. -->
+    <div class="profile">
+        <% if (min = range_results_endpoint(solr_field, :min)) &&
+              (max = range_results_endpoint(solr_field, :max)) %>
+          <div class="range">
+            Current results range from <span class="min"><%= range_results_endpoint(solr_field, :min) %></span> to <span class="max"><%= range_results_endpoint(solr_field, :max) %></span>
+          </div>
+        <% end %>
+        <% if (stats = stats_for_field(solr_field)) && stats["missing"] > 0 %>
+          <div class="missing">
+            <%= link_to BlacklightRangeLimit.labels[:missing], add_range_missing(solr_field) %> (<%= stats["missing"] %>)
+          </div>
+        <% end %>
+    </div>
+  <% end %>
 </div>
  

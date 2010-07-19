@@ -1,10 +1,9 @@
 form.range_pub_date input.range_begin, form.range_pub_date input.range_end {
   border:1px solid #DDDDDD;
-  margin-bottom:10px;
-  margin-top:5px;
   width: 4em; 
 }
 
-div.limit_content.range {
-  padding-top: 0.5em; 
+.limit_content .subsection {
+  margin-top: 1em;
 }
+

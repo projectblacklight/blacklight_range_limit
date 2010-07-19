@@ -12,7 +12,7 @@
   <% end %>
 
   <% unless params["range"] && params["range"][solr_field] && params["range"][solr_field]["missing"] %>  
-    <% form_tag catalog_index_path, :method => :get, :class=>"range_limit range_#{solr_field}" do %>
+    <% form_tag catalog_index_path, :method => :get, :class=>"range_limit subsection range_#{solr_field}" do %>
       <%= search_as_hidden_fields %>
       
       <!-- we need to include a dummy search_field parameter if none exists,
@@ -35,12 +35,12 @@
     <div class="profile">
         <% if (min = range_results_endpoint(solr_field, :min)) &&
               (max = range_results_endpoint(solr_field, :max)) %>
-          <div class="range">
+          <div class="range subsection">
             Current results range from <span class="min"><%= range_results_endpoint(solr_field, :min) %></span> to <span class="max"><%= range_results_endpoint(solr_field, :max) %></span>
           </div>
         <% end %>
         <% if (stats = stats_for_field(solr_field)) && stats["missing"] > 0 %>
-          <div class="missing">
+          <div class="missing subsection">
             <%= link_to BlacklightRangeLimit.labels[:missing], add_range_missing(solr_field) %> (<%= stats["missing"] %>)
           </div>
         <% end %>

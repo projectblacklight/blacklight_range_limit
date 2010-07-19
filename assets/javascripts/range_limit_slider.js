@@ -33,14 +33,14 @@ $(".range_limit .profile .range").each(function() {
       
       begin_el.change( function() {
          var val = parseInt($(this).val());
-         if ( val != NaN && val >= min) {
+         if ( (!isNaN(val))  && val >= min) {
            range_element.slider("values", 0, val);
          }
       });
       
       end_el.change( function() {
          var val = parseInt($(this).val());
-         if ( val != NaN && val <= max) {
+         if ( (!isNaN(val)) && val <= max) {
            range_element.slider("values", 1, val);
          }
       });

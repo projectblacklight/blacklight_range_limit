@@ -89,10 +89,10 @@ jQuery(document).ready(function($) {
           slider_container.slider("values", 1, to);
         });
         
-        var form = //$(container).closest(".limit_content").find("form.range_limit");
-        //form.find("input.range_begin").change(function () {
-        //   alert("changed"); 
-        //});
+        var form = $(container).closest(".limit_content").find("form.range_limit");
+        form.find("input.range_begin, input.range_end").change(function () {
+           plot.setSelection( form_selection(form) , true );
+        });        
         $(container).closest(".limit_content").find(".profile .range").bind("slide", function(event, ui) {
            plot.setSelection( normalized_selection(ui.values[0], ui.values[1]), true);
         });
@@ -111,6 +111,12 @@ jQuery(document).ready(function($) {
       max += 0.99999;
       
       return {xaxis: { 'from':min, 'to':max}}
+    }
+    
+    function form_selection(form) {
+      var begin_val = parseInt($(form).find("input.range_begin").val());
+      var end_val = parseInt($(form).find("input.range_end").val());
+      return normalized_selection(begin_val, end_val);
     }
     
     function function_for_find_segment(pointer_lookup_arr) {

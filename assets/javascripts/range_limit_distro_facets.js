@@ -26,8 +26,9 @@ jQuery(document).ready(function($) {
     // blacklight_range_limit/_range_facets and makes it into
     // a flot area chart. 
     function areaChart(container) {      
-      //flot loaded?
-      if ($.plot ) {
+      //flot loaded? And canvas element exists, which it should in IE
+      // if the canvas extension was loaded. 
+      if ($.plot && !!document.createElement('canvas').getContext) {
         
         // Grab the data from the ul div
         var series_data = new Array();

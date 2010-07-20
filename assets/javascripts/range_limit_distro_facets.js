@@ -50,7 +50,7 @@ jQuery(document).ready(function($) {
             
             x_ticks.push(from);
             
-            pointer_lookup.push({from: from, to: to, count: count, label: $(this).find(".facet_select").text() });
+            pointer_lookup.push({'from': from, 'to': to, 'count': count, 'label': $(this).find(".facet_select").text() });
         });
         var max_plus_one = parseInt($(container).find("ul li:last-child span.to").text())+1; 
         x_ticks.push( max_plus_one );
@@ -60,7 +60,7 @@ jQuery(document).ready(function($) {
         var plot;
         try {
           plot = $.plot($(container), [series_data],{ 
-            yaxis: { ticks: [] },
+              yaxis: {  ticks: [], min: 0, autoscaleMargin: 0.1},
             xaxis: { ticks: x_ticks },
             series: { lines: { fill: true, steps: true }},
             grid: {clickable: true, hoverable: true, autoHighlight: false},

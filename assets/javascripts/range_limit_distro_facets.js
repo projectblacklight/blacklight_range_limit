@@ -53,7 +53,7 @@ jQuery(document).ready(function($) {
         try {
           plot = $.plot($(container), [series_data],{ 
             yaxis: { ticks: [] },
-            //xaxis: { ticks: x_ticks },
+            xaxis: { ticks: x_ticks },
             series: { lines: { fill: true, steps: true }},
             grid: {clickable: true, hoverable: true, autoHighlight: false},
             selection: {mode: "x"}

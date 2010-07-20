@@ -115,7 +115,6 @@ module BlacklightRangeLimit::SolrHelperOverride
     # arithmetic issues require last to be one more than the actual
     # last value included in our inclusive range
     last += 1
-    
   
     # code cribbed from Flot auto tick calculating, but leaving out
     # some of Flot's options becuase it started to get confusing. 
@@ -156,6 +155,9 @@ module BlacklightRangeLimit::SolrHelperOverride
        i += 1
      end while ( v < last && v != prev)
 
+     # Can create dups for small ranges, tighten up
+     boundaries.uniq!
+     
      # That algorithm i don't entirely understand will sometimes
      # extend past our first and last, tighten it up and make sure
      # first and last are endpoints.     

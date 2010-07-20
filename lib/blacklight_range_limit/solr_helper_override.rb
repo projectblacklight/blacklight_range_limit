@@ -87,7 +87,7 @@ module BlacklightRangeLimit::SolrHelperOverride
     extra_solr_params = {}
     extra_solr_params[:"facet.query"] = []
     
-    boundaries = boundaries_for_range_facets(min, max, 6)
+    boundaries = boundaries_for_range_facets(min, max, 6) # 4.818
     # Now make the boundaries into actual filter.queries.
     0.upto(boundaries.length - 2) do |index|
       first = boundaries[index]
@@ -99,39 +99,20 @@ module BlacklightRangeLimit::SolrHelperOverride
     return extra_solr_params
   end
 
-  # returns an array of 'boundaries' for producing num_div relatively
-  # even segments between first and last.  The boundaries are 'nicefied'
-  # to factors of 5 or 10 if possible, instead of producing exactly
-  # even segments. 
-  def boundaries_for_range_facets(first, last, num_div)
-    range = last - first
-  
-    order = Math.log10(range).floor
-    # round to some kind of 5(0*)
-    round_factor = [(10**(order-1))*0.5, 1].max.to_i
-  
-    exact_quotient = range.to_f / num_div
-  
-    boundaries = []
-  
-    boundaries.push first
-    (1..(num_div-1)).each do |n|
-      b = round_nearest(first+(n*exact_quotient), round_factor).to_i  
-      boundaries.push(  b ) unless boundaries.last == b
-    end
-    boundaries.push(last) unless boundaries.last == last
-    return boundaries  
-  end
-
-  def new_boundaries_for_range_facets(first, last, num_div)
+  # returns an array of 'boundaries' for producing approx num_div
+  # segments between first and last.  The boundaries are 'nicefied'
+  # to factors of 5 or 10, so exact number of segments may be more
+  # or less than num_div. Algorithm copied from Flot. 
+  def boundaries_for_range_facets(first, last, num_div)    
+    #last += 1 # cause of the weird way we're doing this, this leads to better display. 
     # code cribbed from Flot auto tick calculating, but leaving out
     # some of Flot's options becuase it started to get confusing. 
     delta = (last - first).to_f / num_div
-
+  
     # Don't know what most of these variables mean, just copying
     # from Flot. 
-    dec = -1 * ( Math.log(delta) / Math.log(10)).floor
-    magn = 10 ** (-1 * dec)
+    dec = -1 * ( Math.log10(delta) ).floor
+    magn = (10 ** (-1 * dec)).to_i
     norm = delta / magn; # norm is between 1.0 and 10.0
 
     size = 10
@@ -154,17 +135,21 @@ module BlacklightRangeLimit::SolrHelperOverride
 
      start = floorInBase(first, size)
      i = 0
-     v = Float::MIN
+     v = Float::MAX
      prev = nil
-     while ( v < last)
+     begin 
        prev = v
-       debugger
        v = start + i * size
        boundaries.push(v)
-     end
+       i += 1
+     end while ( v < last && v != prev)
 
-     boundaries.unshift(first) unless boundaries[0] <= first
-     boundaries.push(last) unless boundaries.last >= last
+     # That algorithm i don't entirely understand will sometimes
+     # extend past our first and last, tighten it up and make sure
+     # first and last are endpoints.
+     boundaries.delete_if {|b| b <= first || b >= last}
+     boundaries.unshift(first)
+     boundaries.push(last)
 
      return boundaries
   end

@@ -1,55 +1,8 @@
 jQuery(document).ready(function($) {
     
-    // Takes a div holding a ul of distribution segments produced by 
-    // blacklight_range_limit/_range_facets and makes it into
-    // a flot area chart. 
-    function areaChart(container) {      
-      //flot loaded?
-      if ($.plot ) {
-        
-        // Grab the data from the ul div
-        var series_data = new Array();
-        var count_lookup = new Array();
-        var x_ticks = new Array();
-        $(container).find("ul li").each(function() {
-            var from = parseInt($(this).find("span.from").text());
-            var to = parseInt($(this).find("span.to").text());
-            var count = parseInt($(this).find("span.count").text());
-            var avg = (count / (to - from + 1));
-            
-            
-            //We use the avg as the y-coord, to make the area of each
-            //segment proportional to how many documents it holds. 
-            series_data.push( [from, avg ] );
-            series_data.push( [to, avg] );
-            
-            x_ticks.push(from);
-            
-            
-        });
-        x_ticks.push(parseInt($(container).find("ul li:last-child span.to").text()));
+      
+   
 
-
-        /*
-        try {
-          $.plot($(container), [series_data],{ 
-            yaxis: { ticks: [] },
-            xaxis: { ticks: x_ticks },
-            series: { lines: { fill: true, steps: true }},
-            grid: {clickable: true, hoverable: true, autoHighlight: false}
-          });
-        }
-        catch(err) {
-          alert(err); 
-        }
-        $(container).bind("plothover", function (event, pos, item) {
-           x_ticks  
-           pos.x 
-        });
-        */
-      }
-    }
-    
     
 $(".range_limit .profile .range").each(function() {
    var range_element = $(this);
@@ -98,21 +51,6 @@ $(".range_limit .profile .range").each(function() {
       });
             
    }
-});
-
-// Add AJAX fetched range facets if needed
-$(".range_limit .profile .distribution a.load_distribution").each(function() {
-    var container = $(this).parent('div.distribution');
-
-    $(container).load($(this).attr('href'), function(response, status) {
-        if (status == "success") {
-
-          $(container).parent().parent().show();
-          areaChart($(container));
-          //$(container).parent().parent().hide();
-
-        }
-    });     
 });
 
 });

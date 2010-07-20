@@ -7,3 +7,9 @@ form.range_pub_date input.range_begin, form.range_pub_date input.range_end {
   margin-top: 1em;
 }
 
+#range_limit_tooltip {
+  border: 1px solid #C4DAFE;
+  padding: 0.25em;
+  background-color: #E2EDFE;
+  opacity: 0.80;
+}

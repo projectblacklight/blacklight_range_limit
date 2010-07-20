@@ -7,6 +7,12 @@ jQuery(document).ready(function($) {
           if (status == "success") {
   
             $(container).parent().parent().show();
+            
+            // Flot needs explicit width and height, but we
+            // can set em based on computed width. 
+            $(container).width( $(container).width() );
+            // golden rectangle, why not?
+            $(container).height( $(container).width() / 1.618 );
             areaChart($(container));
             //$(container).parent().parent().hide();
   

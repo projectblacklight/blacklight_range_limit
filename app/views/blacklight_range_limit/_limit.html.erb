@@ -40,7 +40,7 @@
             Current results range from <span class="min"><%= range_results_endpoint(solr_field, :min) %></span> to <span class="max"><%= range_results_endpoint(solr_field, :max) %></span>
           </div>
           
-          <div class="distribution subsection" style="width:250px;height:200px">
+          <div class="distribution subsection">
             <%= link_to('View distribution', params.merge(:action => 'range_limit', :range_field => solr_field, :range_start => min, :range_end => max), :class => "load_distribution") %>
           </div>
           

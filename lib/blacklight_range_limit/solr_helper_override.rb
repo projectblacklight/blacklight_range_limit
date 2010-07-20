@@ -5,6 +5,32 @@ module BlacklightRangeLimit::SolrHelperOverride
   def self.included(some_class)
     some_class.helper_method :range_config
   end
+
+  # Action method of our own!
+  # Delivers a _partial_ that's a display of a single fields range facets.
+  # Used when we need a second Solr query to get range facets, after the
+  # first found min/max from result set. 
+  def range_limit
+    solr_field = params[:range_field] # what field to fetch for
+    start = params[:range_start].to_i
+    finish = params[:range_end].to_i
+    
+    solr_params = solr_search_params(params).merge( add_range_segments_to_solr(solr_field, start, finish ) )
+    # We don't need any actual rows or facets, we're just going to look
+    # at the facet.query's
+    solr_params[:rows] = 0
+    solr_params[:facets] = nil
+    # Not really any good way to turn off facet.field's from the solr default,
+    # no big deal it should be well-cached at this point.
+    
+    @response = Blacklight.solr.find( solr_params )
+
+    if request.xhr?
+      render(:partial => 'blacklight_range_limit/range_facets', :locals => {:solr_field => solr_field})
+    else
+      render(:partial => 'blacklight_range_limit/range_facets', :layout => true, :locals => {:solr_field => solr_field})
+    end
+  end
   
   def solr_search_params(extra_params)
     solr_params = super(extra_params)
@@ -50,5 +76,106 @@ module BlacklightRangeLimit::SolrHelperOverride
   def range_config
     Blacklight.config[:facet][:range]
   end
+
+  protected
+  # Calculates segment facets within a given start and end on a given
+  # field, returns request params to be added on to what's sent to
+  # solr to get the calculated facet segments.
+  # Assumes solr_field is an integer, as range endpoint will be found
+  # by subtracting one from subsequent boundary. 
+  def add_range_segments_to_solr(solr_field, min, max)    
+    extra_solr_params = {}
+    extra_solr_params[:"facet.query"] = []
+    
+    boundaries = boundaries_for_range_facets(min, max, 6)
+    # Now make the boundaries into actual filter.queries.
+    0.upto(boundaries.length - 2) do |index|
+      first = boundaries[index]
+      last = (index == (boundaries.length() - 2)) ? (boundaries[index+1]) : (boundaries[index+1].to_i - 1)
+    
+      extra_solr_params[:"facet.query"] << "#{solr_field}:[#{first} TO #{last}]"
+    end
+
+    return extra_solr_params
+  end
+
+  # returns an array of 'boundaries' for producing num_div relatively
+  # even segments between first and last.  The boundaries are 'nicefied'
+  # to factors of 5 or 10 if possible, instead of producing exactly
+  # even segments. 
+  def boundaries_for_range_facets(first, last, num_div)
+    range = last - first
   
+    order = Math.log10(range).floor
+    # round to some kind of 5(0*)
+    round_factor = [(10**(order-1))*0.5, 1].max.to_i
+  
+    exact_quotient = range.to_f / num_div
+  
+    boundaries = []
+  
+    boundaries.push first
+    (1..(num_div-1)).each do |n|
+      b = round_nearest(first+(n*exact_quotient), round_factor).to_i  
+      boundaries.push(  b ) unless boundaries.last == b
+    end
+    boundaries.push(last) unless boundaries.last == last
+    return boundaries  
+  end
+
+  def new_boundaries_for_range_facets(first, last, num_div)
+    # code cribbed from Flot auto tick calculating, but leaving out
+    # some of Flot's options becuase it started to get confusing. 
+    delta = (last - first).to_f / num_div
+
+    # Don't know what most of these variables mean, just copying
+    # from Flot. 
+    dec = -1 * ( Math.log(delta) / Math.log(10)).floor
+    magn = 10 ** (-1 * dec)
+    norm = delta / magn; # norm is between 1.0 and 10.0
+
+    size = 10
+     if (norm < 1.5)
+       size = 1
+     elsif (norm < 3)
+       size = 2;
+       # special case for 2.5, requires an extra decimal
+       if (norm > 2.25 ) 
+         size = 2.5;
+         dec = dec + 1
+       end                
+     elsif (norm < 7.5)
+       size = 5
+     end
+    
+     size = size * magn
+
+     boundaries = []     
+
+     start = floorInBase(first, size)
+     i = 0
+     v = Float::MIN
+     prev = nil
+     while ( v < last)
+       prev = v
+       debugger
+       v = start + i * size
+       boundaries.push(v)
+     end
+
+     boundaries.unshift(first) unless boundaries[0] <= first
+     boundaries.push(last) unless boundaries.last >= last
+
+     return boundaries
+  end
+
+  # Cribbed from Flot.  Round to nearby lower multiple of base
+  def floorInBase(n, base) 
+     return base * (n / base).floor
+  end
+
+  
+  def round_nearest(number, nearest)
+   (number/nearest.to_f).round * nearest
+  end
 end

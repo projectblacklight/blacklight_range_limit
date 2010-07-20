@@ -56,6 +56,25 @@
       end
       return my_params
     end
+
+    # Looks in the solr @response for ["facet_counts"]["facet_queries"][solr_field], for elements
+    # expressed as "solr_field:[X to Y]", turns them into
+    # a list of hashes with [:from, :to, :count], sorted by
+    # :from. Assumes integers for sorting purposes. 
+    def solr_range_queries_to_a(solr_field)
+      return [] unless @response["facet_counts"] && @response["facet_counts"]["facet_queries"]
+
+      array = []
+
+      @response["facet_counts"]["facet_queries"].each_pair do |query, count|
+        if query =~ /#{solr_field}: *\[ *(\d+) *TO *(\d+) *\]/
+          array << {:from => $1, :to => $2, :count => count}
+        end
+      end
+      array = array.sort_by {|hash| hash[:from].to_i }
+
+      return array
+    end
     
   end
 

@@ -1,0 +1,14 @@
+<% # must pass in local variable :solr_field
+%>
+
+<ul>
+  <% solr_range_queries_to_a(solr_field).each do |hash| %>
+    <li><%= link_to(
+      content_tag("span", hash[:from], :class => "from") + 
+        " to " + 
+        content_tag("span", hash[:to], :class => "to"), 
+        add_range(solr_field, hash[:from], hash[:to]).merge(:action => "index"),
+        :class => "facet_select"
+      ) %> (<%= content_tag("span", hash[:count], :class=>"count")%>)</li>
+  <% end %>
+</ul>

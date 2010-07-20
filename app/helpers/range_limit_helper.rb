@@ -69,5 +69,17 @@ module RangeLimitHelper
 
     my_params
   end
+
+  def add_range(solr_field, from, to, my_params = params)
+    my_params = my_params.dup
+    my_params["range"] ||= {}
+    my_params["range"][solr_field] ||= {}
+
+    my_params["range"][solr_field]["begin"] = from
+    my_params["range"][solr_field]["end"] = to
+    my_params["range"][solr_field].delete("missing")
+    
+    return my_params
+  end
   
 end

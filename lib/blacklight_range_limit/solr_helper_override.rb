@@ -85,6 +85,9 @@ module BlacklightRangeLimit::SolrHelperOverride
   # by subtracting one from subsequent boundary. 
   def add_range_segments_to_solr(solr_field, min, max)    
     extra_solr_params = {}
+
+    #return extra_solr_params if (max - min) == 0 
+    
     extra_solr_params[:"facet.query"] = []
     
     boundaries = boundaries_for_range_facets(min, max, 6) # 4.818
@@ -96,6 +99,7 @@ module BlacklightRangeLimit::SolrHelperOverride
       extra_solr_params[:"facet.query"] << "#{solr_field}:[#{first} TO #{last}]"
     end
 
+    debugger
     return extra_solr_params
   end
 
@@ -140,7 +144,7 @@ module BlacklightRangeLimit::SolrHelperOverride
      begin 
        prev = v
        v = start + i * size
-       boundaries.push(v)
+       boundaries.push(v.to_i)
        i += 1
      end while ( v < last && v != prev)
 

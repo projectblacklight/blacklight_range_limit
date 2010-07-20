@@ -46,13 +46,15 @@ jQuery(document).ready(function($) {
             //We use the avg as the y-coord, to make the area of each
             //segment proportional to how many documents it holds. 
             series_data.push( [from, avg ] );
-            series_data.push( [to, avg] );
+            series_data.push( [to+1, avg] );
             
             x_ticks.push(from);
             
             pointer_lookup.push({from: from, to: to, count: count, label: $(this).find(".facet_select").text() });
         });
-        x_ticks.push(parseInt($(container).find("ul li:last-child span.to").text()));
+        var max_plus_one = parseInt($(container).find("ul li:last-child span.to").text())+1; 
+        x_ticks.push( max_plus_one );
+        
 
 
         var plot;
@@ -104,7 +106,7 @@ jQuery(document).ready(function($) {
         });
        
         // initially entirely selected, to match slider
-        plot.setSelection( {xaxis: { from:min, to:max}}  );
+        plot.setSelection( {xaxis: { from:min, to:max+0.9999}}  );
         
         // try to make slider width/orientation match chart's
         var slider_container = $(container).closest(".limit_content").find(".profile .range");

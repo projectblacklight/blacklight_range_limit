@@ -24,11 +24,12 @@ $(".range_limit .profile .range").each(function() {
      $(this).slider({
          range: true,
          min: min,
-				 max: max,
-				 values: [min, max],
+				 max: max+1,
+				 values: [min, max+1],
 				 slide: function(event, ui) {
             begin_el.val(ui.values[0]);
-            end_el.val(ui.values[1]);
+            
+            end_el.val(Math.max(ui.values[1]-1, ui.values[0]));
 					}
 			});
 
@@ -46,7 +47,7 @@ $(".range_limit .profile .range").each(function() {
       end_el.change( function() {
          var val = parseInt($(this).val());
          if ( (!isNaN(val)) && val <= max) {
-           range_element.slider("values", 1, val);
+           range_element.slider("values", 1, val+1);
          }
       });
             

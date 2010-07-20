@@ -94,7 +94,7 @@ jQuery(document).ready(function($) {
           
           var slider_container = $(container).closest(".limit_content").find(".profile .range");
           slider_container.slider("values", 0, from);
-          slider_container.slider("values", 1, to);
+          slider_container.slider("values", 1, to+1);
         });
         
         var form = $(container).closest(".limit_content").find("form.range_limit");
@@ -102,7 +102,7 @@ jQuery(document).ready(function($) {
            plot.setSelection( form_selection(form) , true );
         });        
         $(container).closest(".limit_content").find(".profile .range").bind("slide", function(event, ui) {
-           plot.setSelection( normalized_selection(ui.values[0], ui.values[1]), true);
+           plot.setSelection( normalized_selection(ui.values[0], Math.max(ui.values[0], ui.values[1]-1)), true);
         });
        
         // initially entirely selected, to match slider

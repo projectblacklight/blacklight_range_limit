@@ -73,7 +73,7 @@ jQuery(document).ready(function($) {
         $(container).bind("plotclick", function (event, pos, item) {
             if ( plot.getSelection() == null) {
               segment = find_segment_for(pos.x);
-              plot.setSelection( {xaxis: { from:segment.from, to:segment.to}});
+              plot.setSelection( normalized_selection(segment.from, segment.to));
             }
         });
         $(container).bind("plotselected", function(event, ranges) {
@@ -94,12 +94,23 @@ jQuery(document).ready(function($) {
         //   alert("changed"); 
         //});
         $(container).closest(".limit_content").find(".profile .range").bind("slide", function(event, ui) {
-           plot.setSelection( {xaxis: { from:ui.values[0], to:ui.values[1]}}, true);
+           plot.setSelection( normalized_selection(ui.values[0], ui.values[1]), true);
         });
        
         plot.setSelection( {xaxis: { from:min, to:max}}  );  
         
       }
+    }
+    
+    
+    // Send endpoint to endpoint+0.99999 to have display
+    // more closely approximate limiting behavior esp
+    // at small resolutions. (Since we search on whole numbers,
+    // inclusive, but flot chart is decimal.)
+    function normalized_selection(min, max) {
+      max += 0.99999;
+      
+      return {xaxis: { 'from':min, 'to':max}}
     }
     
     function function_for_find_segment(pointer_lookup_arr) {

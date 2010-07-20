@@ -91,6 +91,7 @@ module BlacklightRangeLimit::SolrHelperOverride
     extra_solr_params[:"facet.query"] = []
     
     boundaries = boundaries_for_range_facets(min, max, 6) # 4.818
+    
     # Now make the boundaries into actual filter.queries.
     0.upto(boundaries.length - 2) do |index|
       first = boundaries[index]
@@ -107,7 +108,6 @@ module BlacklightRangeLimit::SolrHelperOverride
   # to factors of 5 or 10, so exact number of segments may be more
   # or less than num_div. Algorithm copied from Flot. 
   def boundaries_for_range_facets(first, last, num_div)    
-    #last += 1 # cause of the weird way we're doing this, this leads to better display. 
     # code cribbed from Flot auto tick calculating, but leaving out
     # some of Flot's options becuase it started to get confusing. 
     delta = (last - first).to_f / num_div
@@ -115,8 +115,8 @@ module BlacklightRangeLimit::SolrHelperOverride
     # Don't know what most of these variables mean, just copying
     # from Flot. 
     dec = -1 * ( Math.log10(delta) ).floor
-    magn = (10 ** (-1 * dec)).to_i
-    norm = delta / magn; # norm is between 1.0 and 10.0
+    magn = (10 ** (-1 * dec)).to_f
+    norm = (magn == 0) ? delta : (delta / magn) # norm is between 1.0 and 10.0
 
     size = 10
      if (norm < 1.5)

@@ -70,13 +70,18 @@ jQuery(document).ready(function($) {
         catch(err) {
           alert(err); 
         }
+        
+        // Div initially hidden to show hover mouseover legend for
+        // each segment. 
+        $('<div class="subsection hover_legend ui-corner-all"></div>').css('display', 'none').insertAfter(container);
+        
         find_segment_for = function_for_find_segment(pointer_lookup);
         $(container).bind("plothover", function (event, pos, item) {
             segment = find_segment_for(pos.x);
-            showTooltip(pos.pageX, pos.pageY, '<span class="label">' + segment.label + ':</span> <span class="count">' + segment.count + ' documents</span>');            
+            showHoverLegend(container, '<span class="label">' + segment.label + '</span> <span class="count">(' + segment.count + ')</span>');            
         });
         $(container).bind("mouseout", function() {
-          $("#range_limit_tooltip").fadeOut(200);
+          $(container).next(".hover_legend").fadeOut(200);
         });
         $(container).bind("plotclick", function (event, pos, item) {
             if ( plot.getSelection() == null) {
@@ -143,18 +148,12 @@ jQuery(document).ready(function($) {
         return pointer_lookup_arr[0];
       };
     }
-    
-     var tooltip = $('<div id="range_limit_tooltip"></div>').css( {
-            position: 'absolute',
-            display: 'none'           
-        }).appendTo("body");
-    function showTooltip(x, y, contents) {
-      var tooltip = $("#range_limit_tooltip");
+        
+    function showHoverLegend(container, contents) {
+      var el = $(container).next(".hover_legend");
 
-      tooltip.css('left', x+5);      
-      tooltip.css('top', y-30);
-      tooltip.html(contents);
-      tooltip.fadeIn(200);                       
+      el.html(contents);                   
+      el.fadeIn(200);
     }
 
 });

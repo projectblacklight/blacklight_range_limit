@@ -95,7 +95,7 @@ module BlacklightRangeLimit::SolrHelperOverride
     # Now make the boundaries into actual filter.queries.
     0.upto(boundaries.length - 2) do |index|
       first = boundaries[index]
-      last = (index == (boundaries.length() - 2)) ? (boundaries[index+1]) : (boundaries[index+1].to_i - 1)
+      last =  boundaries[index+1].to_i - 1
     
       extra_solr_params[:"facet.query"] << "#{solr_field}:[#{first} TO #{last}]"
     end
@@ -106,8 +106,17 @@ module BlacklightRangeLimit::SolrHelperOverride
   # returns an array of 'boundaries' for producing approx num_div
   # segments between first and last.  The boundaries are 'nicefied'
   # to factors of 5 or 10, so exact number of segments may be more
-  # or less than num_div. Algorithm copied from Flot. 
+  # or less than num_div. Algorithm copied from Flot.
+  #
+  # Because of arithmetic issues with creating boundaries that will
+  # be turned into inclusive ranges, the FINAL boundary will be one
+  # unit more than the actual end of the last range later computed. 
   def boundaries_for_range_facets(first, last, num_div)    
+    # arithmetic issues require last to be one more than the actual
+    # last value included in our inclusive range
+    last += 1
+    
+  
     # code cribbed from Flot auto tick calculating, but leaving out
     # some of Flot's options becuase it started to get confusing. 
     delta = (last - first).to_f / num_div
@@ -149,7 +158,7 @@ module BlacklightRangeLimit::SolrHelperOverride
 
      # That algorithm i don't entirely understand will sometimes
      # extend past our first and last, tighten it up and make sure
-     # first and last are endpoints.
+     # first and last are endpoints.     
      boundaries.delete_if {|b| b <= first || b >= last}
      boundaries.unshift(first)
      boundaries.push(last)

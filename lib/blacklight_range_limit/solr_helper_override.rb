@@ -99,7 +99,6 @@ module BlacklightRangeLimit::SolrHelperOverride
       extra_solr_params[:"facet.query"] << "#{solr_field}:[#{first} TO #{last}]"
     end
 
-    debugger
     return extra_solr_params
   end
 

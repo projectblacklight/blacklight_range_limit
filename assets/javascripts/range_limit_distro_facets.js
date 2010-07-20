@@ -97,8 +97,14 @@ jQuery(document).ready(function($) {
            plot.setSelection( normalized_selection(ui.values[0], ui.values[1]), true);
         });
        
-        plot.setSelection( {xaxis: { from:min, to:max}}  );  
+        // initially entirely selected, to match slider
+        plot.setSelection( {xaxis: { from:min, to:max}}  );
         
+        // try to make slider width/orientation match chart's
+        var slider_container = $(container).closest(".limit_content").find(".profile .range");
+        slider_container.width(plot.width());
+        slider_container.css('margin-right', 'auto');
+        slider_container.css('margin-left', 'auto');        
       }
     }
     

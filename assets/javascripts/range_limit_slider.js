@@ -7,13 +7,11 @@ jQuery(document).ready(function($) {
 $(".range_limit .profile .range").each(function() {
    var range_element = $(this);
     
-   var min = $(this).find(".min").first().text();
-   var max = $(this).find(".max").first().text();
+   var boundaries = min_max(this);
+   var min = boundaries[0];
+   var max = boundaries[1];
 
    if (min && max) {
-     min = parseInt(min);
-     max = parseInt(max);
-          
      $(this).contents().wrapAll('<div style="display:none" />');
      
      var range_element = $(this);
@@ -61,11 +59,25 @@ $(".range_limit .profile .range").each(function() {
 // returns two element array min/max as numbers. If there is a limit applied,
 // it's boundaries are are limits. Otherwise, min/max in current result
 // set as sniffed from HTML. Pass in a DOM element for a div.range
+// Will return NaN as min or max in case of error or other weirdness. 
 function min_max(range_element) {
-
+   var current_limit =  $(range_element).closest(".limit_content.range_limit").find(".current")
+   
+   
+   
+   var min = max = parseInt(current_limit.find(".single").text())
+   if ( isNaN(min)) {
+     min = parseInt(current_limit.find(".from").first().text());
+     max = parseInt(current_limit.find(".to").first().text());
+   }
   
-   $(this).find(".min").first().text();
-   $(this).find(".max").first().text();
+   if (isNaN(min) || isNaN(max)) {
+      //no current limit, take from results min max included in spans
+      min = parseInt(current_limit.find(".min").first().text());
+      max = parseInt(current_limit.find(".max").first().text());
+   }
+   
+   return [min, max]
 }
 
 });

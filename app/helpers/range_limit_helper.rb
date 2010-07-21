@@ -32,7 +32,11 @@ module RangeLimitHelper
     if hash["missing"]
       return BlacklightRangeLimit.labels[:missing]
     elsif hash["begin"] || hash["end"]
-      return "#{hash['begin']} to #{hash['end']}"
+      if hash["begin"] == hash["end"]
+        return hash["begin"]
+      else
+        return "<span class='from'>#{hash['begin']}</span> to <span class='to'>#{hash['end']}</span>"
+      end
     end
 
     return ""

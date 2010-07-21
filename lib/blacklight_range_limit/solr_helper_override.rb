@@ -3,7 +3,6 @@
 # to solr parameters creation. 
 module BlacklightRangeLimit::SolrHelperOverride
   include SegmentCalculation
-  
   def self.included(some_class)
     some_class.helper_method :range_config
   end
@@ -17,7 +16,8 @@ module BlacklightRangeLimit::SolrHelperOverride
     start = params[:range_start].to_i
     finish = params[:range_end].to_i
     
-    solr_params = solr_search_params(params).merge( add_range_segments_to_solr(solr_field, start, finish ) )
+    solr_params = solr_search_params(params)
+    add_range_segments_to_solr!(solr_params, solr_field, start, finish )
     # We don't need any actual rows or facets, we're just going to look
     # at the facet.query's
     solr_params[:rows] = 0

@@ -7,13 +7,11 @@ module BlacklightRangeLimit::SegmentCalculation
   # field, returns request params to be added on to what's sent to
   # solr to get the calculated facet segments.
   # Assumes solr_field is an integer, as range endpoint will be found
-  # by subtracting one from subsequent boundary. 
-  def add_range_segments_to_solr(solr_field, min, max)    
-    extra_solr_params = {}
-
-    #return extra_solr_params if (max - min) == 0 
-    
-    extra_solr_params[:"facet.query"] = []
+  # by subtracting one from subsequent boundary.
+  #
+  # Changes solr_params passed in. 
+  def add_range_segments_to_solr!(solr_params, solr_field, min, max)        
+    solr_params[:"facet.query"] = []
     
     boundaries = boundaries_for_range_facets(min, max, 10) # 4.818
     
@@ -22,10 +20,10 @@ module BlacklightRangeLimit::SegmentCalculation
       first = boundaries[index]
       last =  boundaries[index+1].to_i - 1
     
-      extra_solr_params[:"facet.query"] << "#{solr_field}:[#{first} TO #{last}]"
+      solr_params[:"facet.query"] << "#{solr_field}:[#{first} TO #{last}]"
     end
 
-    return extra_solr_params
+    return solr_params
   end
 
   # returns an array of 'boundaries' for producing approx num_div

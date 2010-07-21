@@ -1,5 +1,11 @@
 jQuery(document).ready(function($) {
-  // Add AJAX fetched range facets if needed
+  // Facets already on the page? Turn em into a chart. 
+  $(".range_limit .profile .distribution ul").each(function() {
+    areaChart($(this).parent()); 
+  });
+    
+    
+  // Add AJAX fetched range facets if needed, and add a chart to em
   $(".range_limit .profile .distribution a.load_distribution").each(function() {
       var container = $(this).parent('div.distribution');
   
@@ -8,11 +14,6 @@ jQuery(document).ready(function($) {
   
             $(container).parent().parent().show();
             
-            // Flot needs explicit width and height, but we
-            // can set em based on computed width. 
-            $(container).width( $(container).width() );
-            // half a golden rectangle, why not?
-            $(container).height( $(container).width() / (1.618 * 2) );
             areaChart($(container));
             //$(container).parent().parent().hide();
   
@@ -29,6 +30,12 @@ jQuery(document).ready(function($) {
       //flot loaded? And canvas element exists, which it should in IE
       // if the canvas extension was loaded. 
       if ($.plot && !!document.createElement('canvas').getContext) {
+        // Flot needs explicit width and height, but we
+        // can set em based on computed width. 
+        $(container).width( $(container).width() );
+        // half a golden rectangle, why not?
+        $(container).height( $(container).width() / (1.618 * 2) );
+        
         
         // Grab the data from the ul div
         var series_data = new Array();

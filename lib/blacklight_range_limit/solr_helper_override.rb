@@ -65,6 +65,9 @@ module BlacklightRangeLimit::SolrHelperOverride
   
           solr_params[:fq] ||= []
           solr_params[:fq] << "#{solr_field}: [#{start} TO #{finish}]"
+
+          # Add in our calculated segments
+          add_range_segments_to_solr!(solr_params, solr_field, start.to_i, finish.to_i)
         end
       end
     end

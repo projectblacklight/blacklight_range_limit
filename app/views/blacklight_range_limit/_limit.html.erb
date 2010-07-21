@@ -41,7 +41,18 @@
           </div>
           
           <div class="distribution subsection">
-            <%= link_to('View distribution', params.merge(:action => 'range_limit', :range_field => solr_field, :range_start => min, :range_end => max), :class => "load_distribution") %>
+            <!-- if we have a range begin and end set, then we already
+                 fetched segments, display them here. Otherwise, display
+                 a link to fetch them, which JS will AJAX fetch. -->
+            <% if params["range"] && params["range"][solr_field] &&
+                  params["range"][solr_field]["begin"] && 
+                  params["range"][solr_field]["end"] %>
+                  
+               <%= render(:partial => "blacklight_range_limit/range_facets", :locals => {:solr_field => solr_field}) %>
+               
+            <% else %> 
+              <%= link_to('View distribution', params.merge(:action => 'range_limit', :range_field => solr_field, :range_start => min, :range_end => max), :class => "load_distribution") %>
+            <% end %>
           </div>
           
         <% end %>

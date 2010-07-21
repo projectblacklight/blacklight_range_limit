@@ -58,4 +58,14 @@ $(".range_limit .profile .range").each(function() {
    }
 });
 
+// returns two element array min/max as numbers. If there is a limit applied,
+// it's boundaries are are limits. Otherwise, min/max in current result
+// set as sniffed from HTML. Pass in a DOM element for a div.range
+function min_max(range_element) {
+
+  
+   $(this).find(".min").first().text();
+   $(this).find(".max").first().text();
+}
+
 });

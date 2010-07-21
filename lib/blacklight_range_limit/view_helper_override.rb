@@ -25,6 +25,7 @@
           content << render_constraint_element(
             facet_field_labels[solr_field],
             range_display(solr_field),
+            :escape_value => false,
             :remove => remove_range_param(solr_field, my_params)
           )                      
         end
@@ -41,7 +42,8 @@
           
           content << render_search_to_s_element(
             facet_field_labels[solr_field],
-            range_display(solr_field, my_params)
+            range_display(solr_field, my_params),
+            :escape_value => false
           )          
         
         end

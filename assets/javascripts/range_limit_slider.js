@@ -73,8 +73,8 @@ function min_max(range_element) {
   
    if (isNaN(min) || isNaN(max)) {
       //no current limit, take from results min max included in spans
-      min = parseInt(current_limit.find(".min").first().text());
-      max = parseInt(current_limit.find(".max").first().text());
+      min = parseInt($(range_element).find(".min").first().text());
+      max = parseInt($(range_element).find(".max").first().text());
    }
    
    return [min, max]

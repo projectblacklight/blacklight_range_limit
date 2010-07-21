@@ -104,9 +104,9 @@ jQuery(document).ready(function($) {
           slider_container.slider("values", 1, to+1);
         });
         
-        var form = $(container).closest(".limit_content").find("form.range_limit");
+        var form = $(container).closest(".limit_content").find("form.range_limit");        
         form.find("input.range_begin, input.range_end").change(function () {
-           plot.setSelection( form_selection(form) , true );
+           plot.setSelection( form_selection(form, min, max) , true );
         });        
         $(container).closest(".limit_content").find(".profile .range").bind("slide", function(event, ui) {
            plot.setSelection( normalized_selection(ui.values[0], Math.max(ui.values[0], ui.values[1]-1)), true);
@@ -134,9 +134,16 @@ jQuery(document).ready(function($) {
       return {xaxis: { 'from':min, 'to':max}}
     }
     
-    function form_selection(form) {
+    function form_selection(form, min, max) {
       var begin_val = parseInt($(form).find("input.range_begin").val());
+      if (isNaN(begin_val) || begin_val < min) {
+        begin_val = min;
+      }        
       var end_val = parseInt($(form).find("input.range_end").val());
+      if (isNaN(end_val) || end_val > max) {
+        end_val = max;
+      }
+      
       return normalized_selection(begin_val, end_val);
     }
     

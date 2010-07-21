@@ -35,7 +35,7 @@ module RangeLimitHelper
       if hash["begin"] == hash["end"]
         return hash["begin"]
       else
-        return "<span class='from'>#{hash['begin']}</span> to <span class='to'>#{hash['end']}</span>"
+        return "#{hash['begin']} to #{hash['end']}"
       end
     end
 

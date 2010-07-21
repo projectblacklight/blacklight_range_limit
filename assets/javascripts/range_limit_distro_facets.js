@@ -62,7 +62,8 @@ jQuery(document).ready(function($) {
         try {
           plot = $.plot($(container), [series_data],{ 
               yaxis: {  ticks: [], min: 0, autoscaleMargin: 0.1},
-            xaxis: { ticks: x_ticks },
+            //xaxis: { ticks: x_ticks },
+            xaxis: { tickDecimals: 0 }, // force integer ticks
             series: { lines: { fill: true, steps: true }},
             grid: {clickable: true, hoverable: true, autoHighlight: false},
             selection: {mode: "x"}
@@ -82,7 +83,7 @@ jQuery(document).ready(function($) {
             showHoverLegend(container, '<span class="label">' + segment.label + '</span> <span class="count">(' + segment.count + ')</span>');            
         });
         $(container).bind("mouseout", function() {
-          $(container).next(".hover_legend").fadeOut(200);
+          $(container).next(".hover_legend").slideUp(200);
         });
         $(container).bind("plotclick", function (event, pos, item) {
             if ( plot.getSelection() == null) {
@@ -154,7 +155,7 @@ jQuery(document).ready(function($) {
       var el = $(container).next(".hover_legend");
 
       el.html(contents);                   
-      el.fadeIn(200);
+      el.slideDown(200);
     }
 
 });

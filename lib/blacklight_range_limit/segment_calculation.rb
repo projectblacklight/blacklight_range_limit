@@ -10,10 +10,12 @@ module BlacklightRangeLimit::SegmentCalculation
   # by subtracting one from subsequent boundary.
   #
   # Changes solr_params passed in. 
-  def add_range_segments_to_solr!(solr_params, solr_field, min, max)        
+  def add_range_segments_to_solr!(solr_params, solr_field, min, max)
+    field_config = range_config(solr_field)    
+  
     solr_params[:"facet.query"] = []
     
-    boundaries = boundaries_for_range_facets(min, max, 10) # 4.818
+    boundaries = boundaries_for_range_facets(min, max, (field_config[:num_segments] || 10) ) 
     
     # Now make the boundaries into actual filter.queries.
     0.upto(boundaries.length - 2) do |index|

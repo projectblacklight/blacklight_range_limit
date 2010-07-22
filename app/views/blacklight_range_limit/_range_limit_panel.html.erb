@@ -46,12 +46,10 @@
           </div>
           
           <div class="distribution subsection <%= 'chart_js' unless field_config[:chart_js] == false %>">
-            <!-- if we have a range begin and end set, then we already
-                 fetched segments, display them here. Otherwise, display
-                 a link to fetch them, which JS will AJAX fetch. -->
-            <% if params["range"] && params["range"][solr_field] &&
-                  (! params["range"][solr_field]["begin"].blank?) && 
-                  (! params["range"][solr_field]["end"].blank?) %>
+            <!-- if  we already fetched segments from solr, display them
+                 here. Otherwise, display a link to fetch them, which JS
+                 will AJAX fetch.  -->
+            <% if solr_range_queries_to_a(solr_field).length > 0 %>
                   
                <%= render(:partial => "blacklight_range_limit/range_segments", :locals => {:solr_field => solr_field}) %>
                

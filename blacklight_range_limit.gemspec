@@ -26,6 +26,7 @@ Gem::Specification.new do |s|
      "assets/javascripts/range_limit_distro_facets.js",
      "assets/javascripts/range_limit_slider.js",
      "assets/stylesheets/blacklight_range_limit.css",
+     "blacklight_range_limit.gemspec",
      "config/routes.rb",
      "install.rb",
      "lib/blacklight_range_limit.rb",

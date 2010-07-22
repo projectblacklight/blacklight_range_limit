@@ -50,29 +50,37 @@ module BlacklightRangeLimit::ControllerOverride
     #params from request and extra_params argument, so we
     #must do that too.
     req_params = params.merge( extra_params )
-    
-    unless req_params["range"].blank?      
-      req_params["range"].each_pair do |solr_field, hash|
-        missing = !hash["missing"].blank?
-        if missing
-          solr_params[:fq] ||= []
-          solr_params[:fq] = "-#{solr_field}:[* TO *]"
-        else          
-          start = hash["begin"].blank? ? "*" : hash["begin"]
-          finish = hash["end"].blank? ? "*" : hash["end"]
-  
-          next if start == "*" && finish == "*"
-  
-          solr_params[:fq] ||= []
-          solr_params[:fq] << "#{solr_field}: [#{start} TO #{finish}]"
-          
-          if ( start != "*" && finish != "*")
-            # Add in our calculated segments, can only do with both boundaries.
-            add_range_segments_to_solr!(solr_params, solr_field, start.to_i, finish.to_i)
-          end
+
+    all_range_config.each_pair do |solr_field, config|      
+      hash =  req_params["range"] && req_params["range"][solr_field] ?
+        req_params["range"][solr_field] :
+        {}
+        
+      
+      if !hash["missing"].blank?
+        # missing specified in request params
+        solr_params[:fq] ||= []
+        solr_params[:fq] = "-#{solr_field}:[* TO *]"
+        
+      elsif !(hash["begin"].blank? && hash["end"].blank?)
+        # specified in request params, begin and/or end, might just have one
+        start = hash["begin"].blank? ? "*" : hash["begin"]
+        finish = hash["end"].blank? ? "*" : hash["end"]
+
+        solr_params[:fq] ||= []
+        solr_params[:fq] << "#{solr_field}: [#{start} TO #{finish}]"
+        
+        if ( start != "*" && finish != "*")
+          # Add in our calculated segments, can only do with both boundaries.
+          add_range_segments_to_solr!(solr_params, solr_field, start.to_i, finish.to_i)
         end
+        
+      elsif ( boundaries = config[:assumed_boundaries])
+        # assumed_boundaries in config
+        add_range_segments_to_solr!(solr_params, solr_field, boundaries[0], boundaries[1])
       end
     end
+    
     return solr_params
   end
 

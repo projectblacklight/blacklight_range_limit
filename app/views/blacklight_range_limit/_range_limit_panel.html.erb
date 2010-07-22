@@ -11,7 +11,7 @@
          params["range"][solr_field]["end"] ||
          params["range"][solr_field]["missing"]) %>
     <div class="current">
-      <span class="selected"><%= range_display(solr_field) %></span> (<%= @response.total %>) [<%= link_to "remove", remove_range_param(solr_field), :class=>"remove" %>]
+      <span class="selected"><%= range_display(solr_field) %></span> (<%= format_num(@response.total) %>) [<%= link_to "remove", remove_range_param(solr_field), :class=>"remove" %>]
     </div>
          
   <% end %>
@@ -66,7 +66,7 @@
         
         <% if (stats = stats_for_field(solr_field)) && stats["missing"] > 0 %>
           <div class="missing subsection">
-            <%= link_to BlacklightRangeLimit.labels[:missing], add_range_missing(solr_field) %> (<%= stats["missing"] %>)
+            <%= link_to BlacklightRangeLimit.labels[:missing], add_range_missing(solr_field) %> (<%= format_num(stats["missing"]) %>)
           </div>
         <% end %>
     </div>

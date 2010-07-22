@@ -89,7 +89,7 @@ jQuery(document).ready(function($) {
             showHoverLegend(container, '<span class="label">' + segment.label + '</span> <span class="count">(' + segment.count + ')</span>');            
         });
         $(container).bind("mouseout", function() {
-          $(container).next(".hover_legend").slideUp(200);
+          $(container).next(".hover_legend").hide();
         });
         $(container).bind("plotclick", function (event, pos, item) {
             if ( plot.getSelection() == null) {
@@ -168,7 +168,7 @@ jQuery(document).ready(function($) {
       var el = $(container).next(".hover_legend");
 
       el.html(contents);                   
-      el.slideDown(200);
+      el.show();
     }
     
     // Check if Flot is loaded, and if browser has support for

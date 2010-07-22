@@ -37,26 +37,24 @@ module BlacklightRangeLimit::ControllerOverride
   def solr_search_params(extra_params)
     solr_params = super(extra_params)
 
-    # If we have any range facets configured, we want to ask for
-    # the stats component to get min/max.
-    all_range_config().keys.each do |solr_field|
-      solr_params["stats"] = "true"
-      solr_params["stats.field"] ||= []
-      solr_params["stats.field"] << solr_field
-    end
-    
-    
+        
     #Annoying thing where default behavior is to mix together
     #params from request and extra_params argument, so we
     #must do that too.
     req_params = params.merge( extra_params )
 
-    all_range_config.each_pair do |solr_field, config|      
+    all_range_config.each_pair do |solr_field, config|
+      # If we have any range facets configured, we want to ask for
+      # the stats component to get min/max.
+    
+      solr_params["stats"] = "true"
+      solr_params["stats.field"] ||= []
+      solr_params["stats.field"] << solr_field    
+    
       hash =  req_params["range"] && req_params["range"][solr_field] ?
         req_params["range"][solr_field] :
         {}
         
-      
       if !hash["missing"].blank?
         # missing specified in request params
         solr_params[:fq] ||= []

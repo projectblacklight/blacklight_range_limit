@@ -68,12 +68,13 @@ module BlacklightRangeLimit::ControllerOverride
         solr_params[:fq] ||= []
         solr_params[:fq] << "#{solr_field}: [#{start} TO #{finish}]"
         
-        if ( start != "*" && finish != "*")
+        if (config[:segments] != false && start != "*" && finish != "*")
           # Add in our calculated segments, can only do with both boundaries.
           add_range_segments_to_solr!(solr_params, solr_field, start.to_i, finish.to_i)
         end
         
-      elsif ( boundaries = config[:assumed_boundaries])
+      elsif (config[:segments] != false &&
+             boundaries = config[:assumed_boundaries])
         # assumed_boundaries in config
         add_range_segments_to_solr!(solr_params, solr_field, boundaries[0], boundaries[1])
       end

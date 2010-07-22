@@ -45,19 +45,20 @@
             Current results range from <span class="min"><%= range_results_endpoint(solr_field, :min) %></span> to <span class="max"><%= range_results_endpoint(solr_field, :max) %></span>
           </div>
           
-          <div class="distribution subsection <%= 'chart_js' unless field_config[:chart_js] == false %>">
-            <!-- if  we already fetched segments from solr, display them
-                 here. Otherwise, display a link to fetch them, which JS
-                 will AJAX fetch.  -->
-            <% if solr_range_queries_to_a(solr_field).length > 0 %>
-                  
-               <%= render(:partial => "blacklight_range_limit/range_segments", :locals => {:solr_field => solr_field}) %>
-               
-            <% else %> 
-              <%= link_to('View distribution', params.merge(:action => 'range_limit', :range_field => solr_field, :range_start => min, :range_end => max), :class => "load_distribution") %>
-            <% end %>
-          </div>
-          
+          <% if field_config[:segments] != false %>
+            <div class="distribution subsection <%= 'chart_js' unless field_config[:chart_js] == false %>">
+              <!-- if  we already fetched segments from solr, display them
+                   here. Otherwise, display a link to fetch them, which JS
+                   will AJAX fetch.  -->
+              <% if solr_range_queries_to_a(solr_field).length > 0 %>
+                    
+                 <%= render(:partial => "blacklight_range_limit/range_segments", :locals => {:solr_field => solr_field}) %>
+                 
+              <% else %> 
+                <%= link_to('View distribution', params.merge(:action => 'range_limit', :range_field => solr_field, :range_start => min, :range_end => max), :class => "load_distribution") %>
+              <% end %>
+            </div>
+          <% end %>  
         <% end %>
         
         

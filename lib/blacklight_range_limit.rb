@@ -6,8 +6,8 @@ module BlacklightRangeLimit
     :missing => "Unknown"
   }
 
-  def self.inject!(config)
-    config.to_prepare do
+  def self.inject!
+    Dispatcher.to_prepare do
       CatalogController.helper(BlacklightRangeLimit::ViewHelperOverride)
       SearchHistoryController.helper(BlacklightRangeLimit::ViewHelperOverride)
       CatalogController.helper(RangeLimitHelper)

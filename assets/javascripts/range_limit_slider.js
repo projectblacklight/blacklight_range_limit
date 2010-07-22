@@ -4,7 +4,7 @@ jQuery(document).ready(function($) {
    
 
     
-$(".range_limit .profile .range").each(function() {
+$(".range_limit .profile .range.slider_js").each(function() {
    var range_element = $(this);
     
    var boundaries = min_max(this);

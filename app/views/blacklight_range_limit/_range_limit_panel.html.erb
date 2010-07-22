@@ -1,3 +1,8 @@
+<%- # requires solr_config local passed in
+
+  field_config = range_config(solr_field)
+-%>
+
 <h3><%= facet_field_labels[solr_field] -%></h3>
 <div class="limit_content range_limit">  
   <% if  params["range"] &&
@@ -36,7 +41,7 @@
     
         <% if (min = range_results_endpoint(solr_field, :min)) &&
               (max = range_results_endpoint(solr_field, :max)) %>
-          <div class="range subsection">
+          <div class="range subsection <%= "slider_js" unless field_config[:slider_js] == false  %>">
             Current results range from <span class="min"><%= range_results_endpoint(solr_field, :min) %></span> to <span class="max"><%= range_results_endpoint(solr_field, :max) %></span>
           </div>
           

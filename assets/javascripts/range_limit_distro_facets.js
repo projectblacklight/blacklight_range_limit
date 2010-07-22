@@ -1,7 +1,7 @@
 jQuery(document).ready(function($) {
   // Facets already on the page? Turn em into a chart. 
   $(".range_limit .profile .distribution ul").each(function() {
-    areaChart($(this).parent()); 
+      turnIntoPlot($(this).parent());        
   });
     
     
@@ -11,17 +11,19 @@ jQuery(document).ready(function($) {
   
       $(container).load($(this).attr('href'), function(response, status) {
           if (status == "success") {
-  
-            $(container).parent().parent().show();
-            
-            areaChart($(container));
-            //$(container).parent().parent().hide();
-  
+            turnIntoPlot(container);
           }
       });     
   });
 
-          
+  function turnIntoPlot(container) {
+    wrapPrepareForFlot($(container), 
+      $(container).closest(".range_limit.limit_content"),
+      1/(1.618 * 2), // half a golden rectangle, why not. 
+      function(container) {
+        areaChart($(container));
+      });
+  }
    
      // Takes a div holding a ul of distribution segments produced by 
     // blacklight_range_limit/_range_facets and makes it into
@@ -29,13 +31,7 @@ jQuery(document).ready(function($) {
     function areaChart(container) {      
       //flot loaded? And canvas element supported.       
       if (  domDependenciesMet()  ) {
-        // Flot needs explicit width and height, but we
-        // can set em based on computed width. 
-        $(container).width( $(container).width() );
-        // half a golden rectangle, why not?
-        $(container).height( $(container).width() / (1.618 * 2) );
-        
-        
+               
         // Grab the data from the ul div
         var series_data = new Array();
         var pointer_lookup = new Array();
@@ -125,7 +121,7 @@ jQuery(document).ready(function($) {
         var slider_container = $(container).closest(".limit_content").find(".profile .range");
         slider_container.width(plot.width());
         slider_container.css('margin-right', 'auto');
-        slider_container.css('margin-left', 'auto');        
+        slider_container.css('margin-left', 'auto');           
       }
     }
     
@@ -180,4 +176,29 @@ jQuery(document).ready(function($) {
       return ( flotLoaded && canvasAvailable );
     }
 
+   /* Set up dom for flot rendering: flot needs to render in a non-hidden
+     div with explicitly set width and height. The non-hidden thing
+     is annoying to us, since it might be in a hidden facet limit. 
+     Can we get away with moving it off-screen? Not JUST the flot
+     container, or it will render weird. But the whole parent
+     limit content, testing reveals we can. */    
+    function wrapPrepareForFlot(container, parent_section, widthToHeight, call_block) {                
+        //var parent_section = $(container).closest(".range_limit.limit_content");
+        var parent_originally_hidden = $(parent_section).css("display") == "none";
+        if (parent_originally_hidden) {
+          $(parent_section).show();       
+        }
+        $(container).width( $(parent_section).width() );
+        $(container).height( $(parent_section).width() * widthToHeight );
+        if (parent_originally_hidden) {
+          parent_section.addClass("ui-helper-hidden-accessible");
+        }
+        
+        call_block(container);
+        
+        if (parent_originally_hidden) {
+          $(parent_section).removeClass("ui-helper-hidden-accessible");
+          $(parent_section).hide();
+        }
+    }
 });

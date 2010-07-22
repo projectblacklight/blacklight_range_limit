@@ -39,7 +39,7 @@ module BlacklightRangeLimit::ControllerOverride
 
     # If we have any range facets configured, we want to ask for
     # the stats component to get min/max.
-    range_config.keys.each do |solr_field|
+    all_range_config().keys.each do |solr_field|
       solr_params["stats"] = "true"
       solr_params["stats.field"] ||= []
       solr_params["stats.field"] << solr_field
@@ -76,16 +76,22 @@ module BlacklightRangeLimit::ControllerOverride
     return solr_params
   end
 
-  # Gets from Blacklight singleton object now, this method is a single
-  # point of interface with Blacklight singleton, so if all config
-  # is refactored to be controller based, we only have one place
-  # to change. 
-  def range_config
-    Blacklight.config[:facet][:range]
+  # Returns range config hash for named solr field. Returns false
+  # if not configured. Returns hash even if configured to 'true'
+  # for consistency. 
+  def range_config(solr_field)    
+    config = all_range_config[solr_field] || false
+    config = {} if config == true # normalize bool true to hash
+    return config
   end
-
-  protected
-
-  
+  # returns a hash of solr_field => config for all configured range
+  # facets, or empty hash. 
+  # Uses Blacklight.config, needs to be modified when
+  # that changes to be controller-based. This is the only method
+  # in this plugin that accesses Blacklight.config, single point
+  # of contact. 
+  def all_range_config
+    Blacklight.config[:facet][:range] || {}
+  end
 
 end

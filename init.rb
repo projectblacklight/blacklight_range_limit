@@ -17,6 +17,9 @@ config.to_prepare do
     # Replace with local version. 
     controller.javascript_includes << "http://flot.googlecode.com/svn/trunk/jquery.flot.js"
     controller.javascript_includes << "http://flot.googlecode.com/svn/trunk/jquery.flot.selection.js"
+    # canvas for IE
+    controller.extra_head_content << '<!--[if IE]><script language="javascript" type="text/javascript" src="http://flot.googlecode.com/svn/trunk/excanvas.min.js"></script><![endif]-->'
+
   end
 
   

@@ -27,9 +27,8 @@ jQuery(document).ready(function($) {
     // blacklight_range_limit/_range_facets and makes it into
     // a flot area chart. 
     function areaChart(container) {      
-      //flot loaded? And canvas element exists, which it should in IE
-      // if the canvas extension was loaded. 
-      if ($.plot && !!document.createElement('canvas').getContext) {
+      //flot loaded? And canvas element supported.       
+      if (  domDependenciesMet()  ) {
         // Flot needs explicit width and height, but we
         // can set em based on computed width. 
         $(container).width( $(container).width() );
@@ -170,6 +169,15 @@ jQuery(document).ready(function($) {
 
       el.html(contents);                   
       el.slideDown(200);
+    }
+    
+    // Check if Flot is loaded, and if browser has support for
+    // canvas object, either natively or via IE excanvas. 
+    function domDependenciesMet() {    
+      var flotLoaded = (typeof $.plot != "undefined");
+      var canvasAvailable = (document.createElement('canvas').getContext != "undefined")
+      
+      return ( flotLoaded && canvasAvailable );
     }
 
 });

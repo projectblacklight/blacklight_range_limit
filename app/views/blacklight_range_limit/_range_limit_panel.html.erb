@@ -45,7 +45,7 @@
             Current results range from <span class="min"><%= range_results_endpoint(solr_field, :min) %></span> to <span class="max"><%= range_results_endpoint(solr_field, :max) %></span>
           </div>
           
-          <div class="distribution subsection">
+          <div class="distribution subsection <%= 'chart_js' unless field_config[:chart_js] == false %>">
             <!-- if we have a range begin and end set, then we already
                  fetched segments, display them here. Otherwise, display
                  a link to fetch them, which JS will AJAX fetch. -->

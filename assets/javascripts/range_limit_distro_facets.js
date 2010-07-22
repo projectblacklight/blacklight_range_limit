@@ -1,6 +1,6 @@
 jQuery(document).ready(function($) {
   // Facets already on the page? Turn em into a chart. 
-  $(".range_limit .profile .distribution ul").each(function() {
+  $(".range_limit .profile .distribution.chart_js ul").each(function() {
       turnIntoPlot($(this).parent());        
   });
     
@@ -10,7 +10,7 @@ jQuery(document).ready(function($) {
       var container = $(this).parent('div.distribution');
   
       $(container).load($(this).attr('href'), function(response, status) {
-          if (status == "success") {
+          if ($(container).hasClass("chart_js") && status == "success" ) {
             turnIntoPlot(container);
           }
       });     
@@ -183,7 +183,6 @@ jQuery(document).ready(function($) {
      container, or it will render weird. But the whole parent
      limit content, testing reveals we can. */    
     function wrapPrepareForFlot(container, parent_section, widthToHeight, call_block) {                
-        //var parent_section = $(container).closest(".range_limit.limit_content");
         var parent_originally_hidden = $(parent_section).css("display") == "none";
         if (parent_originally_hidden) {
           $(parent_section).show();       

@@ -6,7 +6,7 @@ config.to_prepare do
   CatalogController.helper(RangeLimitHelper)
   SearchHistoryController.helper(RangeLimitHelper)
 
-  CatalogController.send(:include, BlacklightRangeLimit::SolrHelperOverride)
+  CatalogController.send(:include, BlacklightRangeLimit::ControllerOverride)
 
   CatalogController.before_filter do |controller| 
     controller.stylesheet_links << ["blacklight_range_limit", {:plugin => "blacklight_range_limit"}]

@@ -1,7 +1,7 @@
 # Meant to be applied on top of a controller that implements
 # Blacklight::SolrHelper. Will inject range limiting behaviors
 # to solr parameters creation. 
-module BlacklightRangeLimit::SolrHelperOverride
+module BlacklightRangeLimit::ControllerOverride
   include SegmentCalculation
   def self.included(some_class)
     some_class.helper_method :range_config
@@ -28,9 +28,9 @@ module BlacklightRangeLimit::SolrHelperOverride
     @response = Blacklight.solr.find( solr_params )
 
     if request.xhr?
-      render(:partial => 'blacklight_range_limit/range_facets', :locals => {:solr_field => solr_field})
+      render(:partial => 'blacklight_range_limit/range_segments', :locals => {:solr_field => solr_field})
     else
-      render(:partial => 'blacklight_range_limit/range_facets', :layout => true, :locals => {:solr_field => solr_field})
+      render(:partial => 'blacklight_range_limit/range_segments', :layout => true, :locals => {:solr_field => solr_field})
     end
   end
   

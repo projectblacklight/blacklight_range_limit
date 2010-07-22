@@ -48,7 +48,7 @@
                   (! params["range"][solr_field]["begin"].blank?) && 
                   (! params["range"][solr_field]["end"].blank?) %>
                   
-               <%= render(:partial => "blacklight_range_limit/range_facets", :locals => {:solr_field => solr_field}) %>
+               <%= render(:partial => "blacklight_range_limit/range_segments", :locals => {:solr_field => solr_field}) %>
                
             <% else %> 
               <%= link_to('View distribution', params.merge(:action => 'range_limit', :range_field => solr_field, :range_start => min, :range_end => max), :class => "load_distribution") %>

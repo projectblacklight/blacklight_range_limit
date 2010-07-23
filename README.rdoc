@@ -3,23 +3,6 @@
  
 == Range Facet Configuration
 
-  config[:facet][:range] => { 
-    "some_field" => true, # just take defaults
-    "other_field => { 
-      :num_segments => 10,
-      :slider_js => true,
-      :chart_js => true,
-      :assumed_boundaries => [ 1100, Time.now.year + 2]
-      :segments => false
-    }
-  }
-  
-  
-Note chart_js=false won't get rid of all JS, facets still need loading. To get rid of all JS 
-
-
-todo:
-
-* ajax only when open facet
-* if :assumed_boundaries is popular, provide a way to have em automatically looked up from corpus min/max on app startup, or rake task. 
-
+{ 
+  :num_segments => 10
+}

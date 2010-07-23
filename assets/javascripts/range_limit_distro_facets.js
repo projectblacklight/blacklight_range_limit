@@ -102,10 +102,10 @@ jQuery(document).ready(function($) {
           form.find("input.range_end").val(to);
           
           var slider_container = $(container).closest(".limit_content").find(".profile .range");
-          slider_container.slider("option", "min", from); 
-          slider_container.slider("values", 0, from);
-          slider_container.slider("option", "max", to+1);            
-          slider_container.slider("values", 1, to+1);
+          slider_container.slider("option", "min", min); 
+          slider_container.slider("values", 0, min);
+          slider_container.slider("option", "max", max+1);            
+          slider_container.slider("values", 1, max+1);
         });
         
         var form = $(container).closest(".limit_content").find("form.range_limit");        

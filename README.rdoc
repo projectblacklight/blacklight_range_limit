@@ -109,11 +109,11 @@ You can also turn off injection of individual components, which could be more us
 [:controller_mixin]
   The plugin mixes some methods into CatalogController, both over-riding Blacklight methods, and providing a new action of it's own. Set to false, and the plugin won't. You've basically disabled the plugin if you do this. 
   
-== Tests
+= Tests
 
 There are none. This is bad I know, sorry. 
 
-== Possible future To Do
+= Possible future To Do
 
 * tests
 * In cases where an AJAX request is needed to fetch more results, don't trigger the AJAX until the range facet has actually been opened/shown. Currently it's done on page load. 

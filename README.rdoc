@@ -1,8 +1,120 @@
- 
+BlacklightRangeLimit:  integer range limiting and profiling for Blacklight applications
+
+= Description
+
+The BlacklightRangeLimit plugin provides a 'facet' or limit for integer fields, that lets the user enter range limits with a text box or a slider, and also provides area charts giving a sense of the distribution of values (with drill down). 
+
+The primary use case of this plugin is for 'year' data, but it should work for any integer field. 
+
+If you have a Solr string field with integers in it, it may appear to work, but unless all integers are exactly the same number of digits, they will restrict, sort, and limit funny. 
+
+Decimal numbers and Dates are NOT supported; they theoretically could be in the future, although it gets tricky. 
+
+
+= Requirements
+
+A Rails app using the Blacklight plugin (post version 2.5. Either git checkout from master, or wait until whatever version comes after 2.5). If you've modified and over-ridden Blacklight a lot, things might get tricky. 
+
+A Solr integer field. Depending on your data, it may or may not be advantageous to use a tint (trie with non-zero precision) type field. 
+
+= Installation
+
+This is a plugin, not a gem. Sadly, I was not able to make this a gem, Rails2 engines plugins don't work as gems, particularly the assets.
+
+Go into your application directory, and run: 
+
+./script/plugin install git://github.com/projectblacklight/blacklight_range_limit.git
+
+Later you can run ./script/plugin update blacklight_range_limit if you like. 
+
+Requires git installed on your system. There are other ways to get the plugin in there too.  
+
+= Configuration
+
+You have at least one solr field you want to display as a range limit, that's why you've installed this plugin. In your config/initializers/blacklight_config.rb, that field needs to be listed in config[:facet][:field_names], and you also need to create a config[:facet][:range]["your_field] => true key. 
+
+  config[:facet][:field_names] << "my_field"
+  config[:facet][:range]["my_field"] = true. 
+  
+You should now get range limit display. More complicated configuration is available if desired, see Range Facet Configuration below. 
+
+Note that the plugin will be default inject links to the Flot JQuery plugin, and a couple dependencies, linked to the Flot website itself. You can turn this off and instead include Flot manually in your application, see Injection below. 
+
+== A note on AJAX use
+
+In order to calculate distribution segment ranges, we need to first know the min and max boundaries. But we don't really know that until we've fetched the result set (we use the Solr Stats component to get min and max with a result set). 
+
+So, ordinarily, after we've gotten the result set, only then can we calculate the segment ranges, and then we need to do another Solr request to actually fetch the segment range counts. 
+
+The plugin uses an AJAX request on the result page to do this. This means that for every application results display that includes any values at all in your range field, your application will get a second AJAX http request, and make a second solr request. 
+
+If you'd like to avoid this, you can turn off segment display altogether with the :segment option below; or you can set :assumed_boundaries below to use fixed boundaries for not-yet-limited segments instead of taking boundaries from the result set. 
+
+Note that a drill-down will never require the second request, because boundaries on a drill-down are always taken from the specified limits.
 
  
 == Range Facet Configuration
 
-{ 
-  :num_segments => 10
-}
+Instead of simply passing "true", you can pass a hash with additional configuration. Here's an example with all the available keys, you don't need to use them all, just the ones you want to set to non-default values. 
+
+  config[:facet][:range]["my_field"] = { 
+    :num_segments => 6,
+    :assumed_boundaries => [1100, Time.now.year + 2],
+    :slider_js => false,
+    :chart_js => false,
+    :segments => false    
+  }
+  
+[num_segments]
+   Default 10. Approximately how many segments to divide the range into for segment facets, which become segments on the chart. Actual segments are calculated to be 'nice' values, so may not exactly match your setting.  
+[assumed_boundaries]
+   Default null. For a result set that has not yet been limited, instead of taking boundaries from results and making a second AJAX request to fetch segments, just assume these given boundaries. If you'd like to avoid this second AJAX Solr call, you can set :assumed_boundaries to a two-element array of integers instead, and the assumed boundaries will always be used. Note this is live ruby code, you can put calculations in there like Time.now.year + 2. 
+[:slider_js]
+   Default true. If set to false, then the slider javascript behavior will not be loaded.  Without this behavior, you will see a div with textual min and max values. You can hide that with CSS if you like. 
+[:chart_js]
+   Default true. If set to false, then the Flot area-chart is not loaded. You will instead get textual facet values for each of the segment ranges. Note that this still often will result in a second AJAX request to fetch ranges, you haven't disabled AJAX by setting :chart_js=>true.  If you'd like to turn off segment ranges altogether, see :segments.  If you'd like to prevent the ajax but keep segments, see :assumed_boundaries. 
+[:segments]
+   Default true. If set to false, then distribution segment facets will not be loaded at all.  
+
+== Injection
+
+The plugin assumes it is in a Blacklight Rails app, and uses Blacklight methods, Rails methods, and standard ruby module includes to inject it's behaviors into the app.  
+
+You can turn off this injection if you like, although it will make the plugin less (or non-) functional unless you manually do similar injection. See lib/blacklight_range_limit.rb#inject! to see exactly what's going on. 
+
+In any initializer, you can set:
+
+  BlacklightRangeLimit.omit_inject = true
+  
+to turn off all injection. The plugin will be completely non-functional if you do this, of course. But perhaps you could try to re-use some of it's classes in a non-Blacklight, highly hacked Blacklight, or even non-Rails application this way. 
+
+You can also turn off injection of individual components, which could be more useful:
+   
+  BlacklightRangeLimit.omit_inject = {
+    :css => false,
+    :js => false,
+    :flot => false,
+    :view_helpers => false,
+    :controller_mixin => false
+  }
+
+[:css]
+  set to false and the plugin will not insert it's own CSS. 
+[:js]
+  set to false and the plugin will not insert it's own JS, which means none of your range limits will get sliders or charts. Perhaps you don't like JS, or don't like ours. 
+[:flot]
+  Normally the plugin will insert <script> links to the Flot website for the Flot plugin, the Flot Selection plugin, and the IE canvas emulator Flot needs on IE.  Perhaps you are already including these files, or would like to include them yourself pointing to local copies. Set to false. 
+[:view_helpers]
+  Set to false and the plugin will not insert it's own rails view helpers into the app. It will raise lots of errors if you do this, you probably don't want to. 
+[:controller_mixin]
+  The plugin mixes some methods into CatalogController, both over-riding Blacklight methods, and providing a new action of it's own. Set to false, and the plugin won't. You've basically disabled the plugin if you do this. 
+  
+== Tests
+
+There are none. This is bad I know, sorry. 
+
+== Possible future To Do
+
+* tests
+* In cases where an AJAX request is needed to fetch more results, don't trigger the AJAX until the range facet has actually been opened/shown. Currently it's done on page load. 
+* If :assumed_boundaries ends up popular, we could provide a method to fetch min and max values from entire corpus on app startup or in a rake task, and automatically use these as :assumed_boundaries. 

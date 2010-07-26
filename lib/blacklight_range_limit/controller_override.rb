@@ -44,6 +44,7 @@ module BlacklightRangeLimit::ControllerOverride
     req_params = params.merge( extra_params )
 
     all_range_config.each_pair do |solr_field, config|
+      config = {} if config == true
       # If we have any range facets configured, we want to ask for
       # the stats component to get min/max.
     

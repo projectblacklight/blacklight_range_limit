@@ -31,7 +31,8 @@ module BlacklightRangeLimit
       CatalogController.before_filter do |controller|
         
         unless omit_inject[:css]
-          controller.stylesheet_links << ["blacklight_range_limit", {:plugin => "blacklight_range_limit"}]
+          safe_arr_add(controller.stylesheet_links ,
+            ["blacklight_range_limit", {:plugin => "blacklight_range_limit"}])
         end
 
         unless omit_inject[:flot]          
@@ -43,14 +44,19 @@ module BlacklightRangeLimit
         end
         
         unless omit_inject[:js]
-          controller.javascript_includes << ["range_limit_slider", {:plugin => "blacklight_range_limit"}]
-          controller.javascript_includes << ["range_limit_distro_facets", {:plugin => "blacklight_range_limit"}]
+          safe_arr_add(controller.javascript_includes,
+                  ["range_limit_slider", {:plugin => "blacklight_range_limit"}])
+          safe_arr_add(controller.javascript_includes ,
+            ["range_limit_distro_facets", {:plugin => "blacklight_range_limit"}])
         end
       
       end  
     end
   end
 
-  
+  # Add element to array only if it's not already there
+  def self.safe_arr_add(array, element)
+    array << element unless array.include?(element)
+  end
   
 end

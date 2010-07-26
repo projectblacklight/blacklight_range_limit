@@ -37,10 +37,12 @@ module BlacklightRangeLimit
 
         unless omit_inject[:flot]          
           # Replace with local version. 
-          controller.javascript_includes << "http://flot.googlecode.com/svn/trunk/jquery.flot.js"
-          controller.javascript_includes << "http://flot.googlecode.com/svn/trunk/jquery.flot.selection.js"
+          safe_arr_add(controller.javascript_includes,
+          "http://flot.googlecode.com/svn/trunk/jquery.flot.js")
+          safe_arr_add(controller.javascript_includes,
+          "http://flot.googlecode.com/svn/trunk/jquery.flot.selection.js")
           # canvas for IE
-          controller.extra_head_content << '<!--[if IE]><script language="javascript" type="text/javascript" src="http://flot.googlecode.com/svn/trunk/excanvas.min.js"></script><![endif]-->'        
+          safe_arr_add(controller.extra_head_content, '<!--[if IE]><script language="javascript" type="text/javascript" src="http://flot.googlecode.com/svn/trunk/excanvas.min.js"></script><![endif]-->')        
         end
         
         unless omit_inject[:js]

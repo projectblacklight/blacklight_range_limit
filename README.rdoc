@@ -19,7 +19,7 @@ A Solr integer field. Depending on your data, it may or may not be advantageous 
 
 = Installation
 
-This is a plugin, not a gem. Sadly, I was not able to make this a gem, Rails2 engines plugins don't work as gems, particularly the assets.
+This is a plugin, not a gem. Sadly, I was not able to make this a gem, Rails2 engines plugins don't work as gems, particularly the assets. A couple different ways to get the source into your vendor/plugins directory. 
 
 Go into your application directory, and run: 
 
@@ -27,7 +27,11 @@ Go into your application directory, and run:
 
 Later you can run ./script/plugin update blacklight_range_limit if you like. 
 
-Requires git installed on your system. There are other ways to get the plugin in there too.  
+Requires git installed on your system. There are other ways to get the plugin in there too.
+
+OR
+cd $your_app/vendor/plugins
+git clone git://github.com/projectblacklight/blacklight_range_limit.git
 
 = Configuration
 

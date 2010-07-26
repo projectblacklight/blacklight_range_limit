@@ -25,7 +25,7 @@ module BlacklightRangeLimit
       end
 
       unless omit_inject[:controller_mixin]
-        CatalogController.send(:include, BlacklightRangeLimit::ControllerOverride)
+        CatalogController.send(:include, BlacklightRangeLimit::ControllerOverride) unless CatalogController.include?(BlacklightRangeLimit::ControllerOverride)
       end
       
       CatalogController.before_filter do |controller|

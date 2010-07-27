@@ -174,7 +174,7 @@ jQuery(document).ready(function($) {
     // canvas object, either natively or via IE excanvas. 
     function domDependenciesMet() {    
       var flotLoaded = (typeof $.plot != "undefined");
-      var canvasAvailable = (document.createElement('canvas').getContext != "undefined")
+      var canvasAvailable = (typeof(document.createElement('canvas').getContext) != "undefined");
       
       return ( flotLoaded && canvasAvailable );
     }

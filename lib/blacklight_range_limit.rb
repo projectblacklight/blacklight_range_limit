@@ -35,14 +35,20 @@ module BlacklightRangeLimit
             ["blacklight_range_limit", {:plugin => "blacklight_range_limit"}])
         end
 
-        unless omit_inject[:flot]          
+        unless omit_inject[:flot]
           # Replace with local version. 
           safe_arr_add(controller.javascript_includes,
-          "http://flot.googlecode.com/svn/trunk/jquery.flot.js")
-          safe_arr_add(controller.javascript_includes,
-          "http://flot.googlecode.com/svn/trunk/jquery.flot.selection.js")
+          ["flot/jquery.flot.js", {:plugin=>:blacklight_range_limit}])
+          safe_arr_add(controller.javascript_includes,          
+          ["flot/jquery.flot.selection.js", {:plugin=>:blacklight_range_limit}])
           # canvas for IE
-          safe_arr_add(controller.extra_head_content, '<!--[if IE]><script language="javascript" type="text/javascript" src="http://flot.googlecode.com/svn/trunk/excanvas.min.js"></script><![endif]-->')        
+
+          # Hacky hack to insert URL to plugin asset when we don't have
+          # access to helper methods, bah, will break if you change plugin
+          # defaults. We need Rails 3.0 please.           
+          safe_arr_add(controller.extra_head_content, '<!--[if IE]><script type="text/javascript" src="' + "#{controller.relative_url_root}/plugin_assets/blacklight_range_limit/javascripts/flot/excanvas.min.js?foo" + '"></script><![endif]-->')
+          #safe_arr_add(controller.extra_head_content, '<!--[if IE]><script language="javascript" type="text/javascript" src="https://flot.googlecode.com/svn/trunk/excanvas.min.js"></script><![endif]-->')
+          
         end
         
         unless omit_inject[:js]

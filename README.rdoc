@@ -48,7 +48,7 @@ You have at least one solr field you want to display as a range limit, that's wh
   
 You should now get range limit display. More complicated configuration is available if desired, see Range Facet Configuration below. 
 
-Note that the plugin will be default inject links to the Flot JQuery plugin, and a couple dependencies, linked to the Flot website itself. You can turn this off and instead include Flot manually in your application, see Injection below. 
+Note that the plugin will be default inject links to the Flot JQuery plugin, and a couple dependencies. The weird way it has to do this may fail in weird configurations.  You can turn this off and instead include Flot and its dependencies manually in your application, see Injection below. 
 
 == A note on AJAX use
 
@@ -113,7 +113,7 @@ You can also turn off injection of individual components, which could be more us
 [:js]
   set to false and the plugin will not insert it's own JS, which means none of your range limits will get sliders or charts. Perhaps you don't like JS, or don't like ours. 
 [:flot]
-  Normally the plugin will insert <script> links to the Flot website for the Flot plugin, the Flot Selection plugin, and the IE canvas emulator Flot needs on IE.  Perhaps you are already including these files, or would like to include them yourself pointing to local copies. Set to false. 
+  Normally the plugin will insert <script> links to the Flot plugin, the Flot Selection plugin, and the IE canvas emulator Flot needs on IE.  Perhaps you are already including these files, or would like to include them yourself. Set to false. 
 [:view_helpers]
   Set to false and the plugin will not insert it's own rails view helpers into the app. It will raise lots of errors if you do this, you probably don't want to. 
 [:controller_mixin]

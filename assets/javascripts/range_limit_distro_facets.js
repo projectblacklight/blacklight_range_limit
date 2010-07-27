@@ -174,9 +174,9 @@ jQuery(document).ready(function($) {
     // canvas object, either natively or via IE excanvas. 
     function domDependenciesMet() {    
       var flotLoaded = (typeof $.plot != "undefined");
-      var canvasAvailable = (typeof(document.createElement('canvas').getContext) != "undefined");
-      
-      return ( flotLoaded && canvasAvailable );
+      var canvasAvailable = ((typeof(document.createElement('canvas').getContext) != "undefined") || (typeof  window.CanvasRenderingContext2D != 'undefined' || typeof G_vmlCanvasManager != 'undefined'));
+
+      return (flotLoaded && canvasAvailable);
     }
 
    /* Set up dom for flot rendering: flot needs to render in a non-hidden

@@ -4,7 +4,7 @@ BlacklightRangeLimit:  integer range limiting and profiling for Blacklight appli
 
 The BlacklightRangeLimit plugin provides a 'facet' or limit for integer fields, that lets the user enter range limits with a text box or a slider, and also provides area charts giving a sense of the distribution of values (with drill down). 
 
-The primary use case of this plugin is for 'year' data, but it should work for any integer field. 
+The primary use case of this plugin is for 'year' data, but it should work for any integer field. It may not work right for negative numbers, however. 
 
 Decimal numbers and Dates are NOT supported; they theoretically could be in the future, although it gets tricky. 
 

@@ -1,4 +1,4 @@
-form.range_limit input.range_begin, form.limit input.range_end {
+form.range_limit input.range_begin, form.range_limit input.range_end {
   border:1px solid #DDDDDD;
   width: 4em; 
 }

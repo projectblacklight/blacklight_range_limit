@@ -124,7 +124,7 @@ jQuery(document).ready(function($) {
         slider_container.css('margin-left', 'auto');   
         // And set slider min/max to match charts, for sure
         slider_container.slider("option", "min", min);
-        slider_container.slider("option", "max", max);        
+        slider_container.slider("option", "max", max+1);        
       }
     }
     

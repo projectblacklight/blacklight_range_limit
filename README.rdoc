@@ -124,7 +124,7 @@ You can also turn off injection of individual components, which could be more us
 There are none. This is bad I know, sorry. 
 
 = Possible future To Do
-
+* StatsComponent replacement. We use StatsComponent to get min/max of result set, as well as missing count. StatsComponent is included on every non-drilldown request, so ranges and slider can be displayed. However, StatsComponent really can slow down the solr response with a large result set. So replace StatsComponent with other strategies. No ideal ones, we can use facet.missing to get missing count instead, but RSolr makes it harder than it should be to grab this info. We can use seperate solr queries to get min/max (sort on our field, asc and desc), but this is more complicated, more solr queries, and possibly requires redesign of AJAXy stuff, so even a lone slider can have min/max. 
 * tests
 * In cases where an AJAX request is needed to fetch more results, don't trigger the AJAX until the range facet has actually been opened/shown. Currently it's done on page load. 
 * If :assumed_boundaries ends up popular, we could provide a method to fetch min and max values from entire corpus on app startup or in a rake task, and automatically use these as :assumed_boundaries. 

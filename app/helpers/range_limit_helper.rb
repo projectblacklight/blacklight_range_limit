@@ -14,27 +14,14 @@ module RangeLimitHelper
   # Returns smallest and largest value in current result set, if available
   # from stats component response. 
   def range_results_endpoint(solr_field, type)
-    # Take from currently specified range, if available. 
-    param_key = case type
-                  when :min then "begin"
-                  when :max then "end"
-                end
-    if (params["range"] && params["range"][solr_field] && params["range"][solr_field][param_key])
-      return params["range"][solr_field][param_key]
-    end
-
-    # Otherwise take from stats, if we got em.     
     stats = stats_for_field(solr_field)
-    # Can't actually use min/max from stats when all docs
-    # had missing values, they are weird. 
-    if (stats && @response.total != stats["missing"])
-      return stats[type].to_s.gsub(/\.0+/, '')
-    # assumed_boundaries, if we got em. 
-    elsif ( boundaries = range_config(solr_field)[:assumed_boundaries] )
-      return type == :min ? boundaries[0] : boundaries[1]      
-    end
+        
+    return nil unless stats
+    # StatsComponent returns weird min/max when there are in
+    # fact no values
+    return nil if @response.total == stats["missing"]
 
-    return nil
+    return stats[type].to_s.gsub(/\.0+/, '')
   end
 
   def range_display(solr_field, my_params = params)
@@ -70,7 +57,6 @@ module RangeLimitHelper
   end
 
   def stats_for_field(solr_field)
-    debugger
     @response["stats"]["stats_fields"][solr_field] if @response["stats"] && @response["stats"]["stats_fields"]
   end
 

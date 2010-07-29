@@ -44,7 +44,13 @@ module BlacklightRangeLimit::ControllerOverride
     req_params = params.merge( extra_params )
 
     all_range_config.each_pair do |solr_field, config|
-      config = {} if config == true   
+      config = {} if config == true
+      # If we have any range facets configured, we want to ask for
+      # the stats component to get min/max.
+    
+      solr_params["stats"] = "true"
+      solr_params["stats.field"] ||= []
+      solr_params["stats.field"] << solr_field    
     
       hash =  req_params["range"] && req_params["range"][solr_field] ?
         req_params["range"][solr_field] :
@@ -73,25 +79,6 @@ module BlacklightRangeLimit::ControllerOverride
         # assumed_boundaries in config
         add_range_segments_to_solr!(solr_params, solr_field, boundaries[0], boundaries[1])
       end
-
-      # We use the stats component to get min/max and missing.
-      # But it turns out it's really slow for large result sets.
-      # Let's only ask for it when we really need it. This is a start. 
-      unless (config[:assumed_boundaries] || !(hash["begin"].blank? && hash["end"].blank?) ) 
-        solr_params["stats"] = "true"
-        solr_params["stats.field"] ||= []
-        solr_params["stats.field"] << solr_field unless solr_params["stats.field"].include?(solr_field)
-      end
-      # Without the stats component necessarily being there though,
-      # we need to make sure to ask for facet.missing when might need it
-      # to display missing values.
-      solr_params[:facet] = "true"
-      solr_params[:"facet.field"] ||= []
-      solr_params[:"facet.field"] << solr_field unless solr_params[:"facet.field"].include?(solr_field)
-      solr_params[:"f.#{solr_field}.facet.missing"] = "true";
-      # we don't really want any facets except 'missing', but we need
-      # to set limit to at least 1 to even get 'missing'
-      solr_params[:"f.#{solr_field}.facet.limit"] = "1"
     end
     
     return solr_params

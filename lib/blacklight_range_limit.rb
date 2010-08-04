@@ -18,10 +18,33 @@ module BlacklightRangeLimit
     Dispatcher.to_prepare do
       
       unless omit_inject[:view_helpers]
-        CatalogController.helper(BlacklightRangeLimit::ViewHelperOverride)
-        SearchHistoryController.helper(BlacklightRangeLimit::ViewHelperOverride)
-        CatalogController.helper(RangeLimitHelper)
-        SearchHistoryController.helper(RangeLimitHelper)
+        CatalogController.add_template_helper(
+          BlacklightRangeLimit::ViewHelperOverride
+        ) unless
+         CatalogController.master_helper_module.include?( 
+            BlacklightRangeLimit::ViewHelperOverride
+         )
+        
+        SearchHistoryController.add_template_helper(
+          BlacklightRangeLimit::ViewHelperOverride
+        ) unless
+          SearchHistoryController.master_helper_module.include?( 
+            BlacklightRangeLimit::ViewHelperOverride
+          )
+          
+        CatalogController.add_template_helper(
+          RangeLimitHelper
+         ) unless
+          CatalogController.master_helper_module.include?( 
+            RangeLimitHelper
+          )
+         
+        SearchHistoryController.add_template_helper(
+          RangeLimitHelper
+        ) unless
+          SearchHistoryController.master_helper_module.include?( 
+            RangeLimitHelper
+          )
       end
 
       unless omit_inject[:controller_mixin]

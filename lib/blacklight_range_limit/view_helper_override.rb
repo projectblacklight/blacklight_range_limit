@@ -21,10 +21,9 @@
       unless my_params[:range].blank?
         my_params[:range].each_pair do |solr_field, hash|
           next unless hash["missing"] || hash["begin"] || hash["end"]
-          
           content << render_constraint_element(
             facet_field_labels[solr_field],
-            range_display(solr_field),
+            range_display(solr_field, my_params),
             :escape_value => false,
             :remove => remove_range_param(solr_field, my_params)
           )                      

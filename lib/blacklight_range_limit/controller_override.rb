@@ -17,6 +17,11 @@ module BlacklightRangeLimit::ControllerOverride
     finish = params[:range_end].to_i
     
     solr_params = solr_search_params(params)
+
+    # Remove all field faceting for efficiency, we won't be using it.
+    solr_params.delete("facet.field")
+    solr_params.delete("facet.field".to_sym)
+    
     add_range_segments_to_solr!(solr_params, solr_field, start, finish )
     # We don't need any actual rows or facets, we're just going to look
     # at the facet.query's

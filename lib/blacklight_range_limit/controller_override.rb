@@ -41,7 +41,7 @@ module BlacklightRangeLimit::ControllerOverride
   
   def solr_search_params(extra_params)
     solr_params = super(extra_params)
-
+    debugger
         
     #Annoying thing where default behavior is to mix together
     #params from request and extra_params argument, so we
@@ -64,7 +64,7 @@ module BlacklightRangeLimit::ControllerOverride
       if !hash["missing"].blank?
         # missing specified in request params
         solr_params[:fq] ||= []
-        solr_params[:fq] = "-#{solr_field}:[* TO *]"
+        solr_params[:fq] << "-#{solr_field}:[* TO *]"
         
       elsif !(hash["begin"].blank? && hash["end"].blank?)
         # specified in request params, begin and/or end, might just have one

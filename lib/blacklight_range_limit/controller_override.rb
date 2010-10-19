@@ -41,8 +41,7 @@ module BlacklightRangeLimit::ControllerOverride
   
   def solr_search_params(extra_params)
     solr_params = super(extra_params)
-    debugger
-        
+    
     #Annoying thing where default behavior is to mix together
     #params from request and extra_params argument, so we
     #must do that too.

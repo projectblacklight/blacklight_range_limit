@@ -21,7 +21,7 @@ If all your integers are the same number of digits, you can use just about any s
 
 You need to use a "sortable" numeric-type field. In Solr 1.4, the standard "int"/solr.TrieIntField should work fine and is probably prefered. For some distributions of data, it may be more efficient to use "tint" (solr.TrieIntField with non-zero precision). 
 
-The Solr that as of this writing is distributed with Blacklight is not actually 1.4, but a pre-1.4 nightly build that does not include TrieIntFields.  The old deprecated sint or slong types should work fine too. 
+The pre Solr 1.4 now deprecated sint or slong types should work fine too. 
 
 = Installation
 

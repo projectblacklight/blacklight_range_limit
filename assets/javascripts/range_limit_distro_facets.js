@@ -93,17 +93,19 @@ jQuery(document).ready(function($) {
               plot.setSelection( normalized_selection(segment.from, segment.to));
             }
         });
-        $(container).bind("plotselected", function(event, ranges) {
-          var from = Math.floor(ranges.xaxis.from) 
-          var to = Math.floor(ranges.xaxis.to)
-          
-          var form = $(container).closest(".limit_content").find("form.range_limit");
-          form.find("input.range_begin").val(from);
-          form.find("input.range_end").val(to);
-          
-          var slider_container = $(container).closest(".limit_content").find(".profile .range");           
-          slider_container.slider("values", 0, from);
-          slider_container.slider("values", 1, to+1);
+        $(container).bind("plotselected plotselecting", function(event, ranges) {
+            if (ranges != null ) {
+              var from = Math.floor(ranges.xaxis.from); 
+              var to = Math.floor(ranges.xaxis.to);
+              
+              var form = $(container).closest(".limit_content").find("form.range_limit");
+              form.find("input.range_begin").val(from);
+              form.find("input.range_end").val(to);
+              
+              var slider_container = $(container).closest(".limit_content").find(".profile .range");           
+              slider_container.slider("values", 0, from);
+              slider_container.slider("values", 1, to+1);
+            }
         });
         
         var form = $(container).closest(".limit_content").find("form.range_limit");        

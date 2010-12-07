@@ -61,15 +61,18 @@ jQuery(document).ready(function($) {
 
 
         var plot;
+        var config = $(container).closest('.facet_limit').data('plot-config') || {};
+
         try {
-          plot = $.plot($(container), [series_data],{ 
+          plot = $.plot($(container), [series_data],
+              $.extend(true, config, { 
               yaxis: {  ticks: [], min: 0, autoscaleMargin: 0.1},
             //xaxis: { ticks: x_ticks },
             xaxis: { tickDecimals: 0 }, // force integer ticks
             series: { lines: { fill: true, steps: true }},
             grid: {clickable: true, hoverable: true, autoHighlight: false},
             selection: {mode: "x"}
-          });
+          }));
         }
         catch(err) {
           alert(err); 

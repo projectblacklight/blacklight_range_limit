@@ -50,6 +50,17 @@ You should now get range limit display. More complicated configuration is availa
 
 Note that the plugin will be default inject links to the Flot JQuery plugin, and a couple dependencies. The weird way it has to do this may fail in weird configurations.  You can turn this off and instead include Flot and its dependencies manually in your application, see Injection below. 
 
+You can also configure the look and feel of the Flot chart using the jQuery .data() method. On the `.facet_limit` container you want to configure, add a Flot options associative array (documented at http://people.iola.dk/olau/flot/API.txt) as the `plot-config` key. The `plot-config` key to set the `plot-config` key on the appropriate `.facet_limit` container. In order to customize the plot colors, for example, you could use this code:
+
+  $('.blacklight-year_i').data('plot-config', { 
+    selection: { color: '#C0FF83' }, 
+    colors: ['#ffffff'], 
+    series: { lines: { fillColor: 'rgba(255,255,255, 0.5)' }}, 
+    grid: { color: '#aaaaaa', tickColor: '#aaaaaa', borderWidth: 0 }  
+  });
+
+You can add this configuration in public/javascripts/application.js, or anywhere else loaded before the blacklight range limit javascript.
+
 == A note on AJAX use
 
 In order to calculate distribution segment ranges, we need to first know the min and max boundaries. But we don't really know that until we've fetched the result set (we use the Solr Stats component to get min and max with a result set). 

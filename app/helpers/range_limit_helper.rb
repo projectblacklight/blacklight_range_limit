@@ -33,9 +33,9 @@ module RangeLimitHelper
       return BlacklightRangeLimit.labels[:missing]
     elsif hash["begin"] || hash["end"]
       if hash["begin"] == hash["end"]
-        return "<span class='single'>#{h(hash["begin"])}</span>"
+        return "<span class='single'>#{h(hash["begin"])}</span>".html_safe
       else
-        return "<span class='from'>#{h(hash['begin'])}</span> to <span class='to'>#{h(hash['end'])}</span>"
+        return "<span class='from'>#{h(hash['begin'])}</span> to <span class='to'>#{h(hash['end'])}</span>".html_safe
       end
     end
 

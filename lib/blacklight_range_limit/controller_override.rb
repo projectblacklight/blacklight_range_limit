@@ -39,13 +39,8 @@ module BlacklightRangeLimit::ControllerOverride
     end
   end
   
-  def solr_search_params(extra_params)
-    solr_params = super(extra_params)
-    
-    #Annoying thing where default behavior is to mix together
-    #params from request and extra_params argument, so we
-    #must do that too.
-    req_params = params.merge( extra_params )
+  def solr_search_params(req_params = (params || {}))
+    solr_params = super(req_params)    
 
     all_range_config.each_pair do |solr_field, config|
       config = {} if config == true

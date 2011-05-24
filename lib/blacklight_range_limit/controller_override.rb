@@ -22,7 +22,7 @@ module BlacklightRangeLimit
   
         unless BlacklightRangeLimit.omit_inject[:flot]
           # Replace with local version. 
-          controller.javascript_includes << "flot/jquery.float.js"
+          controller.javascript_includes << "flot/jquery.flot.js"
           controller.javascript_includes << "flot/jquery.flot.selection.js"
           # canvas for IE
   

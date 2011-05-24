@@ -18,7 +18,10 @@ module BlacklightRangeLimit
     # local, they won't be. But we do our best. 
     config.to_prepare do
       BlacklightRangeLimit.inject!
-      # Ordinary module over-ride to CatalogController
+
+      unless BlacklightRangeLimit.omit_inject[:routes]
+        Blacklight::Routes.send(:include, BlacklightRangeLimit::RouteSets)
+      end
     end
   end
 end

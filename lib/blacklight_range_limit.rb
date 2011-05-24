@@ -3,6 +3,7 @@
 module BlacklightRangeLimit
   autoload :ControllerOverride, 'blacklight_range_limit/controller_override'
   autoload :ViewHelperOverride, 'blacklight_range_limit/view_helper_override'
+  autoload :RouteSets, 'blacklight_range_limit/route_sets'
 
   require 'blacklight_range_limit/version'
   require 'blacklight_range_limit/engine'

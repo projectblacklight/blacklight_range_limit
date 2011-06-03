@@ -29,7 +29,7 @@ module BlacklightRangeLimit
           # Hacky hack to insert URL to plugin asset when we don't have
           # access to helper methods, bah, will break if you change plugin
           # defaults. We need Rails 3.0 please.           
-          controller.extra_head_content << ('<!--[if IE]>' + view_context.javascript_include_tag("flot/excanvas.min.js") + '"></script><![endif]-->').html_safe
+          controller.extra_head_content << ('<!--[if IE]>' + view_context.javascript_include_tag("flot/excanvas.min.js") + '<![endif]-->').html_safe
         end
           
         unless BlacklightRangeLimit.omit_inject[:js]

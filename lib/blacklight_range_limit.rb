@@ -22,8 +22,8 @@ module BlacklightRangeLimit
   def self.omit_inject ; @omit_inject ; end
   
   def self.inject!
-      unless omit_inject[:controller_mixin]
-        Blacklight::Catalog.send(:include, BlacklightRangeLimit::ControllerOverride) unless Blacklight::Catalog.include?(BlacklightRangeLimit::ControllerOverride)
+    unless omit_inject[:controller_mixin]
+        CatalogController.send(:include, BlacklightRangeLimit::ControllerOverride) unless Blacklight::Catalog.include?(BlacklightRangeLimit::ControllerOverride)
       end
 
       unless omit_inject[:view_helpers]

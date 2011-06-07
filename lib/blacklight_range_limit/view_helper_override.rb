@@ -52,7 +52,8 @@
 
     def remove_range_param(solr_field, my_params = params)
       if ( my_params["range"] )
-        my_params = my_params.dup 
+        my_params = my_params.dup
+        my_params["range"] = my_params["range"].dup
         my_params["range"].delete(solr_field)
       end
       return my_params

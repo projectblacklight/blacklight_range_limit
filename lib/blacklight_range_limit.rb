@@ -41,6 +41,10 @@ module BlacklightRangeLimit
             RangeLimitHelper
           )
       end
+      
+      unless BlacklightRangeLimit.omit_inject[:routes]
+        Blacklight::Routes.send(:include, BlacklightRangeLimit::RouteSets)
+      end
   end
 
   # Add element to array only if it's not already there

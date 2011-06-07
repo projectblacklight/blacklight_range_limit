@@ -8,8 +8,11 @@ module BlacklightRangeLimit
     extend ActiveSupport::Concern
   
     included do
+      solr_search_params_logic << :add_range_limit_params
       helper_method :range_config
   
+      
+      
       unless BlacklightRangeLimit.omit_inject[:view_helpers]
         helper BlacklightRangeLimit::ViewHelperOverride
         helper RangeLimitHelper
@@ -71,9 +74,9 @@ module BlacklightRangeLimit
       end
     end
     
-    def solr_search_params(req_params = (params || {}))
-      solr_params = super(req_params)    
-  
+    # Method added to solr_search_params_logic to fetch
+    # proper things for date ranges. 
+    def add_range_limit_params(solr_params, req_params)            
       all_range_config.each_pair do |solr_field, config|
         config = {} if config == true
         # If we have any range facets configured, we want to ask for

@@ -20,7 +20,7 @@
       # add a constraint for ranges?
       unless my_params[:range].blank?
         my_params[:range].each_pair do |solr_field, hash|
-          next unless hash["missing"] || hash["begin"] || hash["end"]
+          next unless hash["missing"] || (!hash["begin"].empty?) || (!hash["end"].empty?)
           content << render_constraint_element(
             facet_field_labels[solr_field],
             range_display(solr_field, my_params),

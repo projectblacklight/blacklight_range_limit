@@ -15,7 +15,7 @@ A Rails app using the Blacklight plugin (post version 2.5. Either git checkout f
 
 A Solr integer field. Depending on your data, it may or may not be advantageous to use a tint (trie with non-zero precision) type field. 
 
-==Note on solr field types== 
+==Note on solr field types
 
 If all your integers are the same number of digits, you can use just about any solr type, including string/type, and all will be well. But if your integers vary in digits, strings won't sort correctly, making your numbers behave oddly in partitions and limits. This is also true if you use a pre-1.4 "integer"/pint/solr.IntField  field -- these are not "sortable". 
 
@@ -25,19 +25,26 @@ The pre Solr 1.4 now deprecated sint or slong types should work fine too.
 
 = Installation
 
-This is a plugin, not a gem. Sadly, I was not able to make this a gem, Rails2 engines plugins don't work as gems, particularly the assets. A couple different ways to get the source into your vendor/plugins directory. 
+== Blacklight 3.x/Rails 3.x
 
-Go into your application directory, and run: 
+Add
+   gem "blacklight_range_limit"
+to your Gemfile. Run "bundle install". 
 
-./script/plugin install git://github.com/projectblacklight/blacklight_range_limit.git
+Then run "rails generate blacklight_range_limit".  This will install some assets in your app's public/ folder. (This process likely to change in Rails 3.1). 
 
-Later you can run ./script/plugin update blacklight_range_limit if you like. 
+== Blacklight 2.x/Rails 2.x
 
-Requires git installed on your system. There are other ways to get the plugin in there too.
+Must be installed as a plugin, most easily using 'git', rather than as a gem. Version 0.9.6 is the last version that works with Blacklight 2.x. 
 
-OR
-cd $your_app/vendor/plugins
-git clone git://github.com/projectblacklight/blacklight_range_limit.git
+   cd ./vendor/plugins/
+   git clone git://github.com/projectblacklight/blacklight_range_limit.git
+   cd blacklight_range_limit
+   git checkout v0.9.6
+
+
+If you don't have git installed, you can try downloading the 0.9.6 package from https://github.com/projectblacklight/blacklight_range_limit/archives/master , and installing in vendor/plugins. 
+
 
 = Configuration
 

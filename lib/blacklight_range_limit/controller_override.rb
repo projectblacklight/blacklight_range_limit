@@ -66,12 +66,8 @@ module BlacklightRangeLimit
       # no big deal it should be well-cached at this point.
       
       @response = Blacklight.solr.find( solr_params )
-  
-      if request.xhr?
-        render(:partial => 'blacklight_range_limit/range_segments', :locals => {:solr_field => solr_field})
-      else
-        render(:partial => 'blacklight_range_limit/range_segments', :layout => true, :locals => {:solr_field => solr_field})
-      end
+      
+      render('blacklight_range_limit/range_segments', :locals => {:solr_field => solr_field})      
     end
     
     # Method added to solr_search_params_logic to fetch

@@ -7,9 +7,9 @@
 <div class="limit_content range_limit">  
   <% if  params["range"] &&
          params["range"][solr_field] &&
-       ( params["range"][solr_field]["begin"] ||
-         params["range"][solr_field]["end"] ||
-         params["range"][solr_field]["missing"]) %>
+         ( (!params["range"][solr_field]["begin"].blank?) ||
+           (!params["range"][solr_field]["end"].blank?) ||
+           params["range"][solr_field]["missing"]) %>
     <div class="current">
       <span class="selected"><%= range_display(solr_field) %></span> <span class="count">(<%= format_num(@response.total) %>)</span> <%= link_to "[remove]", remove_range_param(solr_field), :class=>"remove" %>
     </div>

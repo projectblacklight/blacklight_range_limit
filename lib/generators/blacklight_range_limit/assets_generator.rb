@@ -13,11 +13,11 @@ require 'rails/generators'
 require 'rails/generators/base'
 module BlacklightRangeLimit
   class AssetsGenerator < Rails::Generators::Base
-    source_root File.expand_path('../templates', __FILE__)
+    source_root File.join(BlacklightRangeLimit::Engine.root, 'app', 'assets', 'blacklight_range_limit')
 
     def assets
-      directory("public/stylesheets")
-      directory("public/javascripts")
+      directory("stylesheets", "public/stylesheets")
+      directory("javascripts", "public/javascripts")
     end
 
   end

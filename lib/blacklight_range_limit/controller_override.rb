@@ -19,23 +19,23 @@ module BlacklightRangeLimit
       end
   
       before_filter do |controller|
-        unless BlacklightRangeLimit.omit_inject[:css]
+        unless BlacklightRangeLimit.omit_inject[:css] || use_asset_pipeline?
           controller.stylesheet_links << "blacklight_range_limit"
         end
   
         unless BlacklightRangeLimit.omit_inject[:flot]
-          # Replace with local version. 
-          controller.javascript_includes << "flot/jquery.flot.js"
-          controller.javascript_includes << "flot/jquery.flot.selection.js"
-          # canvas for IE
-  
-          # Hacky hack to insert URL to plugin asset when we don't have
-          # access to helper methods, bah, will break if you change plugin
-          # defaults. We need Rails 3.0 please.           
+          unless use_asset_pipeline?
+            controller.javascript_includes << "flot/jquery.flot.js"
+            controller.javascript_includes << "flot/jquery.flot.selection.js"
+          end
+          
+          # canvas for IE. Need to inject it like this even with asset pipeline
+          # cause it needs IE conditional include. view_context hacky way
+          # to get asset url helpers. 
           controller.extra_head_content << ('<!--[if IE]>' + view_context.javascript_include_tag("flot/excanvas.min.js") + '<![endif]-->').html_safe
         end
           
-        unless BlacklightRangeLimit.omit_inject[:js]
+        unless BlacklightRangeLimit.omit_inject[:js] || use_asset_pipeline?
           controller.javascript_includes << "range_limit_slider"
           controller.javascript_includes << "range_limit_distro_facets"
         end
@@ -130,6 +130,11 @@ module BlacklightRangeLimit
     # of contact. 
     def all_range_config
       Blacklight.config[:facet][:range] || {}
+    end
+    
+    private 
+    def use_asset_pipeline?
+      BlacklightRangeLimit.use_asset_pipeline?
     end
   end
 end

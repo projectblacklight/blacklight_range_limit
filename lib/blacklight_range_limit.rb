@@ -52,4 +52,8 @@ module BlacklightRangeLimit
     array << element unless array.include?(element)
   end
   
+  def self.use_asset_pipeline?
+    (Rails::VERSION::MAJOR >= 3 and Rails::VERSION::MINOR >= 1) and Rails.application.config.assets.enabled
+  end
+  
 end

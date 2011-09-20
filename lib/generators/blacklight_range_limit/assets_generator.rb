@@ -13,12 +13,39 @@ require 'rails/generators'
 require 'rails/generators/base'
 module BlacklightRangeLimit
   class AssetsGenerator < Rails::Generators::Base
-    source_root File.join(BlacklightRangeLimit::Engine.root, 'app', 'assets', 'blacklight_range_limit')
+    source_root File.join(BlacklightRangeLimit::Engine.root, 'app', 'assets')
 
     def assets
-      directory("stylesheets", "public/stylesheets")
-      directory("javascripts", "public/javascripts")
+      if BlacklightRangeLimit.use_asset_pipeline?
+        insert_into_file "app/assets/stylesheets/application.css", :before => "*/" do
+%q{
+ *
+ * Used by blacklight_range_limit
+ *= require  'blacklight_range_limit/blacklight_range_limit'
+ *         
+}
+        end
+
+        insert_into_file "app/assets/javascripts/application.js", :after => "//= require jquery" do
+%q{
+
+// Used by blacklight_range_limit
+//= require 'flot/jquery.flot.js'
+//= require 'flot/jquery.flot.selection.js'
+// You can elmiminate one or both of these if you don't want their functionality
+//= require 'blacklight_range_limit/range_limit_slider'
+//= require 'blacklight_range_limit/range_limit_distro_facets'
+
+}          
+        end
+      else
+        directory("stylesheets/blacklight_range_limit", "public/stylesheets")        
+        directory("javascripts/blacklight_range_limit", "public/javascripts")
+        directory("javascripts/flot", "public/javascripts/flot")
+      end
     end
+    
+
 
   end
 end

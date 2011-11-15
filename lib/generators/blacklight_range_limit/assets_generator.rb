@@ -16,17 +16,16 @@ module BlacklightRangeLimit
     source_root File.join(BlacklightRangeLimit::Engine.root, 'app', 'assets')
 
     def assets
-      if BlacklightRangeLimit.use_asset_pipeline?
-        insert_into_file "app/assets/stylesheets/application.css", :before => "*/" do
+      insert_into_file "app/assets/stylesheets/application.css", :before => "*/" do
 %q{
  *
  * Used by blacklight_range_limit
  *= require  'blacklight_range_limit/blacklight_range_limit'
  *         
 }
-        end
+      end
 
-        insert_into_file "app/assets/javascripts/application.js", :after => "//= require jquery" do
+      insert_into_file "app/assets/javascripts/application.js", :after => "//= require jquery" do
 %q{
 
 // Used by blacklight_range_limit
@@ -37,11 +36,6 @@ module BlacklightRangeLimit
 //= require 'blacklight_range_limit/range_limit_distro_facets'
 
 }          
-        end
-      else
-        directory("stylesheets/blacklight_range_limit", "public/stylesheets")        
-        directory("javascripts/blacklight_range_limit", "public/javascripts")
-        directory("javascripts/flot", "public/javascripts/flot")
       end
     end
     

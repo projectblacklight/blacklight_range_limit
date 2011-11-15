@@ -73,11 +73,7 @@ module BlacklightRangeLimit
     # Method added to solr_search_params_logic to fetch
     # proper things for date ranges. 
     def add_range_limit_params(solr_params, req_params)            
-      all_range_config.each_pair do |solr_field, config|
-        config = {} if config == true
-        # If we have any range facets configured, we want to ask for
-        # the stats component to get min/max.
-      
+      blacklight_config.facet_fields.select { |key, config| config.range }.each_pair do |solr_field, config|
         solr_params["stats"] = "true"
         solr_params["stats.field"] ||= []
         solr_params["stats.field"] << solr_field    
@@ -99,13 +95,13 @@ module BlacklightRangeLimit
           solr_params[:fq] ||= []
           solr_params[:fq] << "#{solr_field}: [#{start} TO #{finish}]"
           
-          if (config[:segments] != false && start != "*" && finish != "*")
+          if (config.segments != false && start != "*" && finish != "*")
             # Add in our calculated segments, can only do with both boundaries.
             add_range_segments_to_solr!(solr_params, solr_field, start.to_i, finish.to_i)
           end
           
-        elsif (config[:segments] != false &&
-               boundaries = config[:assumed_boundaries])
+        elsif (config.segments != false &&
+               boundaries = config.assumed_boundaries)
           # assumed_boundaries in config
           add_range_segments_to_solr!(solr_params, solr_field, boundaries[0], boundaries[1])
         end
@@ -118,20 +114,12 @@ module BlacklightRangeLimit
     # if not configured. Returns hash even if configured to 'true'
     # for consistency. 
     def range_config(solr_field)    
-      config = all_range_config[solr_field] || false
-      config = {} if config == true # normalize bool true to hash
-      return config
+      config = blacklight_config.facet_fields[solr_field]
+      return false unless config.range
+
+      config
     end
-    # returns a hash of solr_field => config for all configured range
-    # facets, or empty hash. 
-    # Uses Blacklight.config, needs to be modified when
-    # that changes to be controller-based. This is the only method
-    # in this plugin that accesses Blacklight.config, single point
-    # of contact. 
-    def all_range_config
-      Blacklight.config[:facet][:range] || {}
-    end
-    
+
     private 
     def use_asset_pipeline?
       BlacklightRangeLimit.use_asset_pipeline?

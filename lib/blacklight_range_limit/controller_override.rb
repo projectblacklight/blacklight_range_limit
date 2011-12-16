@@ -101,15 +101,13 @@ module BlacklightRangeLimit
     # if not configured. Returns hash even if configured to 'true'
     # for consistency. 
     def range_config(solr_field)    
-      config = blacklight_config.facet_fields[solr_field]
-      return false unless config.range
+      field = blacklight_config.facet_fields[solr_field]
+      return false unless field.range
+
+      config = field.range
+      config = {} if config === true
 
       config
-    end
-
-    private 
-    def use_asset_pipeline?
-      BlacklightRangeLimit.use_asset_pipeline?
     end
   end
 end

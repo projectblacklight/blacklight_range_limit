@@ -11,8 +11,6 @@ Decimal numbers and Dates are NOT supported; they theoretically could be in the 
 
 = Requirements
 
-A Rails app using the Blacklight plugin (post version 2.5. Either git checkout from master, or wait until whatever version comes after 2.5). If you've modified and over-ridden Blacklight a lot, things might get tricky. 
-
 A Solr integer field. Depending on your data, it may or may not be advantageous to use a tint (trie with non-zero precision) type field. 
 
 ==Note on solr field types
@@ -31,27 +29,13 @@ Add
    gem "blacklight_range_limit"
 to your Gemfile. Run "bundle install". 
 
-Then run "rails generate blacklight_range_limit".  This will install some assets in your app's public/ folder. (This process likely to change in Rails 3.1). 
-
-== Blacklight 2.x/Rails 2.x
-
-Must be installed as a plugin, most easily using 'git', rather than as a gem. Version 0.9.6 is the last version that works with Blacklight 2.x. 
-
-   cd ./vendor/plugins/
-   git clone git://github.com/projectblacklight/blacklight_range_limit.git
-   cd blacklight_range_limit
-   git checkout v0.9.6
-
-
-If you don't have git installed, you can try downloading the 0.9.6 package from https://github.com/projectblacklight/blacklight_range_limit/archives/master , and installing in vendor/plugins. 
-
+Then run "rails generate blacklight_range_limit".  This will install some asset references in your application.js and application.css
 
 = Configuration
 
-You have at least one solr field you want to display as a range limit, that's why you've installed this plugin. In your config/initializers/blacklight_config.rb, that field needs to be listed in config[:facet][:field_names], and you also need to create a config[:facet][:range]["your_field] => true key. 
+You have at least one solr field you want to display as a range limit, that's why you've installed this plugin. In your CatalogController, the facet configuration should look like:
 
-  config[:facet][:field_names] << "my_field"
-  config[:facet][:range]["my_field"] = true. 
+  config.add_facet_field 'pub_date', :label => 'Publication Year', :range => true 
   
 You should now get range limit display. More complicated configuration is available if desired, see Range Facet Configuration below. 
 
@@ -66,7 +50,7 @@ You can also configure the look and feel of the Flot chart using the jQuery .dat
     grid: { color: '#aaaaaa', tickColor: '#aaaaaa', borderWidth: 0 }  
   });
 
-You can add this configuration in public/javascripts/application.js, or anywhere else loaded before the blacklight range limit javascript.
+You can add this configuration in app/assets/javascript/application.js, or anywhere else loaded before the blacklight range limit javascript.
 
 == A note on AJAX use
 
@@ -85,7 +69,7 @@ Note that a drill-down will never require the second request, because boundaries
 
 Instead of simply passing "true", you can pass a hash with additional configuration. Here's an example with all the available keys, you don't need to use them all, just the ones you want to set to non-default values. 
 
-  config[:facet][:range]["my_field"] = { 
+config.add_facet_field 'pub_date', :label => 'Publication Year', :range => {
     :num_segments => 6,
     :assumed_boundaries => [1100, Time.now.year + 2],
     :slider_js => false,
@@ -119,19 +103,10 @@ to turn off all injection. The plugin will be completely non-functional if you d
 You can also turn off injection of individual components, which could be more useful:
    
   BlacklightRangeLimit.omit_inject = {
-    :css => false,
-    :js => false,
-    :flot => false,
     :view_helpers => false,
     :controller_mixin => false
   }
 
-[:css]
-  set to false and the plugin will not insert it's own CSS. 
-[:js]
-  set to false and the plugin will not insert it's own JS, which means none of your range limits will get sliders or charts. Perhaps you don't like JS, or don't like ours. 
-[:flot]
-  Normally the plugin will insert <script> links to the Flot plugin, the Flot Selection plugin, and the IE canvas emulator Flot needs on IE.  Perhaps you are already including these files, or would like to include them yourself. Set to false. 
 [:view_helpers]
   Set to false and the plugin will not insert it's own rails view helpers into the app. It will raise lots of errors if you do this, you probably don't want to. 
 [:controller_mixin]

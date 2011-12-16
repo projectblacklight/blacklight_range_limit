@@ -103,10 +103,12 @@ to turn off all injection. The plugin will be completely non-functional if you d
 You can also turn off injection of individual components, which could be more useful:
    
   BlacklightRangeLimit.omit_inject = {
+    :excanvas => false,
     :view_helpers => false,
     :controller_mixin => false
   }
-
+[:excanvas]
+  Set to false to disable loading the IE 'excanvas' compatibility layer
 [:view_helpers]
   Set to false and the plugin will not insert it's own rails view helpers into the app. It will raise lots of errors if you do this, you probably don't want to. 
 [:controller_mixin]

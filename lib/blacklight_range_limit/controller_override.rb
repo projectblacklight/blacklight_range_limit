@@ -19,25 +19,12 @@ module BlacklightRangeLimit
       end
   
       before_filter do |controller|
-        unless BlacklightRangeLimit.omit_inject[:css] || use_asset_pipeline?
-          controller.stylesheet_links << "blacklight_range_limit"
-        end
-  
-        unless BlacklightRangeLimit.omit_inject[:flot]
-          unless use_asset_pipeline?
-            controller.javascript_includes << "flot/jquery.flot.js"
-            controller.javascript_includes << "flot/jquery.flot.selection.js"
-          end
-          
+        unless BlacklightRangeLimit.omit_inject[:excanvas]
+               
           # canvas for IE. Need to inject it like this even with asset pipeline
           # cause it needs IE conditional include. view_context hacky way
           # to get asset url helpers. 
           controller.extra_head_content << ('<!--[if IE]>' + view_context.javascript_include_tag("flot/excanvas.min.js") + '<![endif]-->').html_safe
-        end
-          
-        unless BlacklightRangeLimit.omit_inject[:js] || use_asset_pipeline?
-          controller.javascript_includes << "range_limit_slider"
-          controller.javascript_includes << "range_limit_distro_facets"
         end
       end
     end

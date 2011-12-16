@@ -3,7 +3,6 @@
   field_config = range_config(solr_field)
 -%>
 
-<h3><%= facet_field_labels[solr_field] -%></h3>
 <div class="limit_content range_limit">  
   <% if  params["range"] &&
          params["range"][solr_field] &&

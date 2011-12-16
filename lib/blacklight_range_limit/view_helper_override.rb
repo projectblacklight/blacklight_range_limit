@@ -5,14 +5,9 @@
 
 
     
-    def render_facet_limit(solr_field)
-      if ( range_config(solr_field) )
-        if (should_show_limit(solr_field))
-          render(:partial => "blacklight_range_limit/range_limit_panel", :locals=> {:solr_field => solr_field })
-        end
-      else
-        super(solr_field)
-      end
+    def facet_partial_name(display_facet)
+      return "blacklight_range_limit/range_limit_panel" if range_config(display_facet.name) and should_show_limit(display_facet.name)
+      super
     end
 
     def render_constraints_filters(my_params = params)

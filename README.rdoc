@@ -60,10 +60,6 @@ You can also configure the look and feel of the Flot chart using the jQuery .dat
 
 You can add this configuration in app/assets/javascript/application.js, or anywhere else loaded before the blacklight range limit javascript.
 
-== Precompiled assets
-
-If you are using precompiled assets in production add the following line to config/production.rb
-  config.assets.precompile += %w( flot/excanvas.min.js )
 
 == A note on AJAX use
 

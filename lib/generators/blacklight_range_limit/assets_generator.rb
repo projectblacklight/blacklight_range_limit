@@ -28,7 +28,8 @@ module BlacklightRangeLimit
       insert_into_file "app/assets/javascripts/application.js", :after => "//= require jquery\n" do
 %q{
 
-// You can elmiminate one or both of these if you don't want their functionality
+// For blacklight_range_limit built-in JS, if you don't want it you don't need
+// this:
 //= require 'blacklight_range_limit'
 
 }          

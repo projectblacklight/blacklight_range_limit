@@ -33,6 +33,8 @@ to your Gemfile. Run "bundle install".
 
 Then run "rails generate blacklight_range_limit".  This will install some asset references in your application.js and application.css.
 
+**Note** that blacklight_range_limit js will 'require' jquery into your manifest even if you didn't already have it, the JS needs jquery. 
+
 = Configuration
 
 You have at least one solr field you want to display as a range limit, that's why you've installed this plugin. In your CatalogController, the facet configuration should look like:

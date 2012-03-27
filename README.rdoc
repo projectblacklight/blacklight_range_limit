@@ -108,15 +108,18 @@ You can also turn off injection of individual components, which could be more us
   BlacklightRangeLimit.omit_inject = {
     :view_helpers => false,
     :controller_mixin => false,
-    :routes => false
+    :routes => false,
+    :excanvas => false
   }
 [:view_helpers]
   Set to false and the plugin will not insert it's own rails view helpers into the app. It will raise lots of errors if you do this, you probably don't want to. 
 [:controller_mixin]
-  The plugin mixes some methods into CatalogController, both over-riding Blacklight methods, and providing a new action of it's own. Set to false, and the plugin won't. You've basically disabled the plugin if you do this. 
+  The plugin mixes some methods into CatalogController, both over-riding Blacklight methods, and providing a new action of it's own. Set to false, and the plugin won't. You've basically disabled the plugin if you do this.  
 [:routes]
   Disable automatic routes loading
-
+[:excanvas]
+  Disables injection of a conditionally-commented script tag to load the excanvas library for supporting 'canvas' on IE.  blacklight_range_limit does this in the controller mixin, using Blacklight's "extra_head_content" feature to add actual conditional script tag for IE in html <head>. 
+  
 = Tests
 
 Start the Blacklight demo jetty server (on port 8983)

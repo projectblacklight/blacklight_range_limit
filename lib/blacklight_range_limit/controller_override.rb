@@ -24,7 +24,7 @@ module BlacklightRangeLimit
           # canvas for IE. Need to inject it like this even with asset pipeline
           # cause it needs IE conditional include. view_context hacky way
           # to get asset url helpers. 
-          controller.extra_head_content << ('<!--[if IE]>' + view_context.javascript_include_tag("flot/excanvas.min.js") + '<![endif]-->').html_safe
+          controller.extra_head_content << ('<!--[if lt IE 9]>' + view_context.javascript_include_tag("flot/excanvas.min.js") + ' <![endif]-->').html_safe
         end
       end
     end

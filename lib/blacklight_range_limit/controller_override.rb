@@ -59,8 +59,14 @@ module BlacklightRangeLimit
     
     # Method added to solr_search_params_logic to fetch
     # proper things for date ranges. 
-    def add_range_limit_params(solr_params, req_params)            
-      blacklight_config.facet_fields.select { |key, config| config.range }.each_pair do |solr_field, config|
+    def add_range_limit_params(solr_params, req_params)    
+       ranged_facet_configs = 
+         blacklight_config.facet_fields.select { |key, config| config.range } 
+       # In ruby 1.8, hash.select returns an array of pairs, in ruby 1.9
+       # it returns a hash. Turn it into a hash either way.  
+       ranged_facet_configs = Hash[ ranged_facet_configs ] unless ranged_facet_configs.kind_of?(Hash)
+       
+       ranged_facet_configs.each_pair do |solr_field, config|
         solr_params["stats"] = "true"
         solr_params["stats.field"] ||= []
         solr_params["stats.field"] << solr_field    

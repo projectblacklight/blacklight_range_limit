@@ -29,8 +29,6 @@ describe "Blacklight Range Limit" do
     click_link 'View distribution'
     click_link '1941 to 1944'
 
-    save_and_open_page
-
     page.should have_content "1941 to 1944 (1) [remove]"
   end
 end

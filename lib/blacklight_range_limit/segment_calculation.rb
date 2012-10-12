@@ -14,7 +14,7 @@ module BlacklightRangeLimit
     def add_range_segments_to_solr!(solr_params, solr_field, min, max)
       field_config = range_config(solr_field)    
     
-      solr_params[:"facet.query"] = []
+      solr_params[:"facet.query"] ||= []
       
       boundaries = boundaries_for_range_facets(min, max, (field_config[:num_segments] || 10) ) 
       

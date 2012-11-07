@@ -19,40 +19,42 @@ $(".range_limit .profile .range.slider_js").each(function() {
      var begin_el = form.find("input.range_begin");
      var end_el = form.find("input.range_end");
      
-     $(this).slider({
-         range: true,
-         min: min,
-				 max: max+1,
-				 values: [min, max+1],
-				 slide: function(event, ui) {
-            begin_el.val(ui.values[0]);
-            
-            end_el.val(Math.max(ui.values[1]-1, ui.values[0]));
-					}
-			});
+     if ($(this).slider) {
 
-      
-      begin_el.val(min);
-      end_el.val(max);
-      
-      begin_el.change( function() {
-         var val = parseInt($(this).val());
-         if ( isNaN(val)  || val < min) {
-           //for weird data, set slider at min           
-           val = min;
-         }
-         range_element.slider("values", 0, val);
-      });
-      
-      end_el.change( function() {
-         var val = parseInt($(this).val());
-         if ( isNaN(val) || val > max ) {
-           //weird entry, set slider to max
-           val = max;
-         }
-         range_element.slider("values", 1, val+1);         
-      });
-            
+       $(this).slider({
+           range: true,
+           min: min,
+           max: max+1,
+           values: [min, max+1],
+           slide: function(event, ui) {
+              begin_el.val(ui.values[0]);
+              
+              end_el.val(Math.max(ui.values[1]-1, ui.values[0]));
+            }
+        });
+
+        
+        begin_el.val(min);
+        end_el.val(max);
+        
+        begin_el.change( function() {
+           var val = parseInt($(this).val());
+           if ( isNaN(val)  || val < min) {
+             //for weird data, set slider at min           
+             val = min;
+           }
+           range_element.slider("values", 0, val);
+        });
+        
+        end_el.change( function() {
+           var val = parseInt($(this).val());
+           if ( isNaN(val) || val > max ) {
+             //weird entry, set slider to max
+             val = max;
+           }
+           range_element.slider("values", 1, val+1);         
+        });
+     } 
    }
 });
 

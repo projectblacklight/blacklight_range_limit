@@ -4,6 +4,7 @@
 -%>
 
 <div class="limit_content range_limit">  
+  <span class="selected"/>
   <% if  params["range"] &&
          params["range"][solr_field] &&
          ( (! params["range"][solr_field]["begin"].blank?) ||
@@ -70,4 +71,4 @@
     </div>
   <% end %>
 </div>
- 
+

@@ -1,0 +1,36 @@
+form.range_limit input.range_begin, form.range_limit input.range_end {
+  border:1px solid #DDDDDD;
+  width: 4em; 
+}
+
+.limit_content .subsection {
+  margin-top: 1em;
+}
+
+.hover_legend {
+  border: 1px solid #C4DAFE;
+  padding: 0.25em;  
+}
+
+/* bootstrap emergency tweaks */
+
+.range_limit {
+  display: block;
+  .current {
+    padding-left: 1em;
+   }
+
+  .profile {
+    display: none;
+  }
+
+  form {
+
+    padding-left: 1em;
+
+    .ui-state-default {
+      line-height: 23px;
+      vertical-align: top;
+    }
+  }
+}

@@ -49,12 +49,13 @@ module BlacklightRangeLimit
       # at the facet.query's
       solr_params[:rows] = 0
       solr_params[:facets] = nil
+      solr_params[:qt] ||= blacklight_config.qt
       # Not really any good way to turn off facet.field's from the solr default,
       # no big deal it should be well-cached at this point.
-      
-      @response = Blacklight.solr.find( solr_params )
-      
-      render('blacklight_range_limit/range_segments', :locals => {:solr_field => solr_field})      
+
+      @response = Blacklight.solr.get( blacklight_config.solr_path, :params => solr_params )
+
+      render('blacklight_range_limit/range_segments', :locals => {:solr_field => solr_field})
     end
     
     # Method added to solr_search_params_logic to fetch

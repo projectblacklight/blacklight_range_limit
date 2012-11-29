@@ -5,4 +5,5 @@
 //= require 'jquery'
 //= require 'flot/jquery.flot.js'
 //= require 'flot/jquery.flot.selection.js'
+//= require bootstrap-tooltip
 //= require_tree './blacklight_range_limit'

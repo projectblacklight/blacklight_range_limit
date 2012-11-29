@@ -1,6 +1,6 @@
 form.range_limit input.range_begin, form.range_limit input.range_end {
   border:1px solid #DDDDDD;
-  width: 4em; 
+  width: 4em;
 }
 
 .limit_content .subsection {
@@ -8,6 +8,5 @@ form.range_limit input.range_begin, form.range_limit input.range_end {
 }
 
 .hover_legend {
-  border: 1px solid #C4DAFE;
-  padding: 0.25em;  
+  padding: 0.25em;
 }

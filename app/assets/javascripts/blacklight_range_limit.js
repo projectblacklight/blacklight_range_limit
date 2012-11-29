@@ -3,6 +3,7 @@
 // require does not need to change if we change file list.
 
 //= require 'jquery'
+//= require 'jquery-ui-1.9.2.custom.js'
 //= require 'flot/jquery.flot.js'
 //= require 'flot/jquery.flot.selection.js'
 //= require bootstrap-tooltip

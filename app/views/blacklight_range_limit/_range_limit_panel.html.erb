@@ -16,7 +16,7 @@
   <% end %>
 
   <% unless params["range"] && params["range"][solr_field] && params["range"][solr_field]["missing"] %>  
-    <%= form_tag catalog_index_path, :method => :get, :class=>"range_limit subsection range_#{solr_field}" do %>
+    <%= form_tag catalog_index_path, :method => :get, :class=>"range_limit subsection range_#{solr_field} form-inline" do %>
       <%= search_as_hidden_fields %>
       
       <!-- we need to include a dummy search_field parameter if none exists,
@@ -27,7 +27,7 @@
       <% end %>
       
       <%= render_range_input(solr_field, :begin) %> - <%= render_range_input(solr_field, :end) %>
-      <%= submit_tag 'Limit', :class=>'submit ui-state-default ui-corner-all' %>
+      <%= submit_tag 'Limit', :class=>'submit btn' %>
     
     <% end %>
   <% end %>

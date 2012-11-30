@@ -5,7 +5,6 @@ Bundler.require :default, :development
 
 require 'blacklight/engine'
 require 'rsolr'
-require 'rsolr-ext'
 require 'capybara/rspec'
 Combustion.initialize!
 

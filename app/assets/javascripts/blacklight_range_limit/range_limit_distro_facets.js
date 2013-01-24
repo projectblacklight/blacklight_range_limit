@@ -90,7 +90,7 @@ jQuery(document).ready(function($) {
 
             if(segment != last_segment) {
             $('.distribution').tooltip('destroy');
-            $('.distribution').tooltip({'title': function() { return find_segment_for(pos.x).label  + ' <span class="count">(' + segment.count + ')</span>' }, 'placement': 'bottom', 'trigger': 'manual', 'delay': { show: 0, hide: 100}});
+            $('.distribution').tooltip({'title': function() { return find_segment_for(pos.x).label  + ' (' + segment.count + ')' }, 'placement': 'bottom', 'trigger': 'manual', 'delay': { show: 0, hide: 100}});
 
              last_segment  = segment;
            }

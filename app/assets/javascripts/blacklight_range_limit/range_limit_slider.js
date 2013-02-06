@@ -31,6 +31,7 @@ $(".range_limit .profile .range.slider_js").each(function() {
               end_el.val(Math.max(ui.values[1]-1, ui.values[0]));
             }
         });
+     }      
 
         
         begin_el.val(min);
@@ -53,7 +54,6 @@ $(".range_limit .profile .range.slider_js").each(function() {
            }
            range_element.slider("values", 1, val+1);         
         });
-     }      
    }
 });
 

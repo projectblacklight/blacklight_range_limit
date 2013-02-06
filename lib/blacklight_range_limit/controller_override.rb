@@ -49,13 +49,12 @@ module BlacklightRangeLimit
       # at the facet.query's
       solr_params[:rows] = 0
       solr_params[:facets] = nil
-      solr_params[:qt] ||= blacklight_config.qt
       # Not really any good way to turn off facet.field's from the solr default,
       # no big deal it should be well-cached at this point.
-
-      @response = Blacklight.solr.get( blacklight_config.solr_path, :params => solr_params )
-
-      render('blacklight_range_limit/range_segments', :locals => {:solr_field => solr_field}, :layout => !request.xhr?)
+      
+      @response = Blacklight.solr.find( solr_params )
+      
+      render('blacklight_range_limit/range_segments', :locals => {:solr_field => solr_field})      
     end
     
     # Method added to solr_search_params_logic to fetch
@@ -66,7 +65,7 @@ module BlacklightRangeLimit
        # In ruby 1.8, hash.select returns an array of pairs, in ruby 1.9
        # it returns a hash. Turn it into a hash either way.  
        ranged_facet_configs = Hash[ ranged_facet_configs ] unless ranged_facet_configs.kind_of?(Hash)
-       
+
        ranged_facet_configs.each_pair do |solr_field, config|
         solr_params["stats"] = "true"
         solr_params["stats.field"] ||= []

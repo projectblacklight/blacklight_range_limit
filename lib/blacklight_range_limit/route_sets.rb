@@ -3,7 +3,7 @@ module BlacklightRangeLimit
     protected
     def catalog
       add_routes do |options|
-        match 'catalog/range_limit' => 'catalog#range_limit'
+        get 'catalog/range_limit' => 'catalog#range_limit'
       end
 
       super

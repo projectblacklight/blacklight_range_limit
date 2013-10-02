@@ -11,13 +11,13 @@ describe "Blacklight Range Limit" do
   end
 
   it "should show the range limit facet" do
-    visit '/catalog?q='
+    visit '/catalog'
     page.should have_selector 'input.range_begin'
     page.should have_selector 'input.range_end'
   end
 
   it "should provide distribution information" do
-    visit '/catalog?q='
+    visit '/catalog'
     click_link 'View distribution'
 
     page.should have_content("1941 to 1944 (1)")
@@ -25,7 +25,7 @@ describe "Blacklight Range Limit" do
   end
 
   it "should limit appropriately" do
-    visit '/catalog?q='
+    visit '/catalog'
     click_link 'View distribution'
     click_link '1941 to 1944'
 

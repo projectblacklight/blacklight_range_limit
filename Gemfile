@@ -2,6 +2,8 @@ source 'http://rubygems.org'
 
 gemspec
 
+gem 'engine_cart'
+
 group :test do
   gem 'devise'
   gem 'devise-guests'

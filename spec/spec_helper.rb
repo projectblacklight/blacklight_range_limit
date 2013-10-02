@@ -1,15 +1,15 @@
 require 'rubygems'
-require 'bundler'
+require 'bundler/setup'
 
-Bundler.require :default, :development
+ENV["RAILS_ENV"] ||= 'test'
 
-require 'blacklight/engine'
 require 'rsolr'
-require 'capybara/rspec'
-Combustion.initialize!
+
+require File.expand_path("config/environment", ENV['RAILS_ROOT'] || File.expand_path("../internal", __FILE__))
+
 
 require 'rspec/rails'
-require 'capybara/rails'
+require 'capybara/rspec'
 
 
 RSpec.configure do |config|

@@ -207,21 +207,18 @@ jQuery(document).ready(function($) {
      container, or it will render weird. But the whole parent
      limit content, testing reveals we can. */
     function wrapPrepareForFlot(container, parent_section, widthToHeight, call_block) {
-        var parent_originally_hidden = $(parent_section).css("display") == "none";
+      var c = $(parent_section).closest(".panel-collapse.collapse");
+        var parent_originally_hidden = c != [];
         if (parent_originally_hidden) {
-          $(parent_section).show();
+          c.collapse('show');
         }
         $(container).width( $(parent_section).width() );
         $(container).height( $(parent_section).width() * widthToHeight );
-        if (parent_originally_hidden) {
-          parent_section.addClass("ui-helper-hidden-accessible");
-        }
 
         call_block(container);
 
         if (parent_originally_hidden) {
-          $(parent_section).removeClass("ui-helper-hidden-accessible");
-          $(parent_section).hide();
+          c.collapse('hide');
         }
     }
 });

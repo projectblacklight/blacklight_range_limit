@@ -3,8 +3,15 @@
   # display. 
   module BlacklightRangeLimit::ViewHelperOverride
 
+    def query_has_constraints?(localized_params = params)
+      !(localized_params[:q].blank? and localized_params[:f].blank? and localized_params[:range].blank?)
+    end
 
-    
+    def has_search_parameters?
+      !params[:q].blank? or !params[:f].blank? or !params[:search_field].blank? or !params[:range].blank?
+    end
+
+   
     def facet_partial_name(display_facet)
       return "blacklight_range_limit/range_limit_panel" if range_config(display_facet.name) and should_show_limit(display_facet.name)
       super

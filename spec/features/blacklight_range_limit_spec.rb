@@ -4,7 +4,7 @@ describe "Blacklight Range Limit" do
   before do
     CatalogController.blacklight_config = Blacklight::Configuration.new
     CatalogController.configure_blacklight do |config|
-      config.add_facet_field 'pub_date_sort', :range => true
+      config.add_facet_field 'pub_date_sort', :label => "Publication Year", :range => true
       config.default_solr_params[:'facet.field'] = config.facet_fields.keys
     end
 
@@ -29,6 +29,8 @@ describe "Blacklight Range Limit" do
     click_link 'View distribution'
     click_link '1941 to 1944'
 
+    page.should have_selector ".document"
     page.should have_content "1941 to 1944 (1) [remove]"
+    page.should have_selector ".constraint .filterName", :text => "Publication Year" 
   end
 end

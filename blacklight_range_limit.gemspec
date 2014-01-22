@@ -18,11 +18,11 @@ Gem::Specification.new do |s|
   s.require_paths = ["lib"]
 
 
-  s.add_dependency "rails", ">= 3.0", "<= 5.0"
+  s.add_dependency "rails", ">= 3.0", "< 5.0"
   s.add_dependency "jquery-rails" # our JS needs jquery_rails
   s.add_dependency "blacklight", "~> 4.0"
 
-  s.add_development_dependency "rspec"
+  s.add_development_dependency "rspec", ">= 2.0"
   s.add_development_dependency "rspec-rails"
   s.add_development_dependency "capybara"
   s.add_development_dependency "sqlite3"

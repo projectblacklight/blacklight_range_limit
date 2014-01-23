@@ -107,8 +107,9 @@ module BlacklightRangeLimit
     # Returns range config hash for named solr field. Returns false
     # if not configured. Returns hash even if configured to 'true'
     # for consistency. 
-    def range_config(solr_field)    
-      field = blacklight_config.facet_fields[solr_field]
+    def range_config(solr_field)
+      field = blacklight_config.facet_fields[solr_field.to_s]
+
       return false unless field.range
 
       config = field.range

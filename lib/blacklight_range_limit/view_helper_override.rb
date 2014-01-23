@@ -10,6 +10,19 @@
       super
     end
 
+    # Over-ride to recognize our custom params for range facets
+    def facet_field_in_params?(field_name)
+      return super || (
+        range_config(field_name) &&
+        params[:range] &&
+        params[:range][field_name] &&
+          ( params[:range][field_name]["begin"].present? ||
+            params[:range][field_name]["end"].present? ||
+            params[:range][field_name]["missing"].present?
+          )
+      )
+    end
+
     def render_constraints_filters(my_params = params)
       content = super(my_params)
       # add a constraint for ranges?

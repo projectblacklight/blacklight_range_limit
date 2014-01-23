@@ -82,6 +82,12 @@ module RangeLimitHelper
     my_params["range"][solr_field]["begin"] = from
     my_params["range"][solr_field]["end"] = to
     my_params["range"][solr_field].delete("missing")
+
+    # eliminate temporary range status params that were just
+    # for looking things up
+    my_params.delete("range_field")
+    my_params.delete("range_start")
+    my_params.delete("range_end")
     
     return my_params
   end

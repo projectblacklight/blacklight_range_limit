@@ -48,13 +48,18 @@ jQuery(document).ready(function($) {
       // resize the container's height, since width may have changed. 
       container.height( container.width() * display_ratio  );
 
-      // redraw the chart. how to redraw after possible resize?
-      // Cribbed from https://github.com/flot/flot/blob/master/jquery.flot.resize.js
+      // redraw the chart. 
       var plot = container.data("plot");
-      if (plot) {        
+      if (plot) {
+        // how to redraw after possible resize?
+        // Cribbed from https://github.com/flot/flot/blob/master/jquery.flot.resize.js
         plot.resize();
         plot.setupGrid();
         plot.draw();
+        // plus trigger redraw of the selection, which otherwise ain't always right
+        // we'll trigger a fake event on one of the boxes
+        var form = $(container).closest(".limit_content").find("form.range_limit");
+        form.find("input.range_begin").trigger("change");
       }
     }    
   });

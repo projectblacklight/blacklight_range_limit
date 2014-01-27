@@ -1,4 +1,9 @@
 jQuery(document).ready(function($) {
+  // ratio of width to height for desired display, multiply width by this ratio
+  // to get height. hard-coded in for now. 
+  var display_ratio = 1/(1.618 * 2); // half a golden rectangle, why not
+
+
   // Facets already on the page? Turn em into a chart.
   $(".range_limit .profile .distribution.chart_js ul").each(function() {
       turnIntoPlot($(this).parent());
@@ -32,6 +37,28 @@ jQuery(document).ready(function($) {
     }
   });
 
+  // after a collapsible facet contents is fully shown,
+  // resize the flot chart to current conditions. This way, if you change
+  // browser window size, you can get chart resized to fit by closing and opening
+  // again, if needed. 
+  $("body").on("shown.bs.collapse", function(event) {
+    var container =  $(event.target).filter(".facet-content").find(".chart_js");
+
+    if (container && container.width() > 0) {
+      // resize the container's height, since width may have changed. 
+      container.height( container.width() * display_ratio  );
+
+      // redraw the chart. how to redraw after possible resize?
+      // Cribbed from https://github.com/flot/flot/blob/master/jquery.flot.resize.js
+      var plot = container.data("plot");
+      if (plot) {        
+        plot.resize();
+        plot.setupGrid();
+        plot.draw();
+      }
+    }    
+  });
+
   // second arg, if provided, is a number of ms we're willing to
   // wait for the container to have width before giving up -- we'll
   // set 50ms timers to check back until timeout is expired or the
@@ -49,9 +76,8 @@ jQuery(document).ready(function($) {
 
     // for some reason width sometimes return negative, not sure
     // why but it's some kind of hidden. 
-    if (container.width() > 0) {
-      var ratio = 1/(1.618 * 2); // half a golden rectangle, why not
-      var height = container.width() * ratio;
+    if (container.width() > 0) {      
+      var height = container.width() * display_ratio;
       
       // Need an explicit height to make flot happy.   
       container.height( height )

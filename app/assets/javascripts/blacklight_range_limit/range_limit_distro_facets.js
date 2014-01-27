@@ -16,13 +16,53 @@ jQuery(document).ready(function($) {
       });
   });
 
-  function turnIntoPlot(container) {
-    wrapPrepareForFlot($(container),
-      $(container).closest(".range_limit.limit_content"),
-      1/(1.618 * 2), // half a golden rectangle, why not.
-      function(container) {
-        areaChart($(container));
-      });
+  // Listen for twitter bootstrap collapsible open events, to render flot
+  // in previously hidden divs on open, if needed. 
+  $("body").on("show.bs.collapse", function(event) {
+    // Was the target a .facet-content including a .chart-js?
+    var container =  $(event.target).filter(".facet-content").find(".chart_js");
+
+    // only if it doesn't already have a canvas, it isn't already drawn
+    if (container && container.find("canvas").size() == 0) {
+      // be willing to wait up to 1100ms for container to
+      // have width -- right away on show.bs is too soon, but
+      // shown.bs is later than we want, we want to start rendering
+      // while animation is still in progress. 
+      turnIntoPlot(container, 1100);
+    }
+  });
+
+  // second arg, if provided, is a number of ms we're willing to
+  // wait for the container to have width before giving up -- we'll
+  // set 50ms timers to check back until timeout is expired or the
+  // container is finally visible. The timeout is used when we catch
+  // bootstrap show event, but the animation hasn't barely begun yet -- but
+  // we don't want to wait until it's finished, we want to start rendering
+  // as soon as we can. 
+  function turnIntoPlot(container, wait_for_visible) {
+    // flot can only render in a a div with a defined width.
+    // for instance, a hidden div can't generally be rendered in (although if you set
+    // an explicit width on it, it might work)
+    //
+    // We'll count on later code that catch bootstrap collapse open to render
+    // on show, for currently hidden divs. 
+
+    // for some reason width sometimes return negative, not sure
+    // why but it's some kind of hidden. 
+    if (container.width() > 0) {
+      var ratio = 1/(1.618 * 2); // half a golden rectangle, why not
+      var height = container.width() * ratio;
+      
+      // Need an explicit height to make flot happy.   
+      container.height( height )
+      
+      areaChart($(container));
+    }
+    else if (wait_for_visible > 0) {
+      setTimeout(function() {
+        turnIntoPlot(container, wait_for_visible - 50);
+      }, 50);
+    }
   }
 
      // Takes a div holding a ul of distribution segments produced by
@@ -198,27 +238,5 @@ jQuery(document).ready(function($) {
       var canvasAvailable = ((typeof(document.createElement('canvas').getContext) != "undefined") || (typeof  window.CanvasRenderingContext2D != 'undefined' || typeof G_vmlCanvasManager != 'undefined'));
 
       return (flotLoaded && canvasAvailable);
-    }
-
-   /* Set up dom for flot rendering: flot needs to render in a non-hidden
-     div with explicitly set width and height. The non-hidden thing
-     is annoying to us, since it might be in a hidden facet limit.
-     Can we get away with moving it off-screen? Not JUST the flot
-     container, or it will render weird. But the whole parent
-     limit content, testing reveals we can. */
-    function wrapPrepareForFlot(container, parent_section, widthToHeight, call_block) {
-      var c = $(parent_section).closest(".panel-collapse.collapse");
-        var parent_originally_hidden = c != [];
-        if (parent_originally_hidden) {
-          c.collapse('show');
-        }
-        $(container).width( $(parent_section).width() );
-        $(container).height( $(parent_section).width() * widthToHeight );
-
-        call_block(container);
-
-        if (parent_originally_hidden) {
-          c.collapse('hide');
-        }
     }
 });

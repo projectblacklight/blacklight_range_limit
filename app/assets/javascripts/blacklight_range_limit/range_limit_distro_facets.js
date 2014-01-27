@@ -144,10 +144,6 @@ jQuery(document).ready(function($) {
           alert(err);
         }
 
-        // Div initially hidden to show hover mouseover legend for
-        // each segment.
-        $('<div class="subsection hover_legend ui-corner-all"></div>').css('display', 'block').insertAfter(container);
-
         find_segment_for = function_for_find_segment(pointer_lookup);
         var last_segment = null;
 
@@ -161,11 +157,10 @@ jQuery(document).ready(function($) {
              last_segment  = segment;
            }
             $('.distribution').tooltip('show');
-           // showHoverLegend(container, segment.label + '<span class="count">(' + segment.count + ')</span>');
+
         });
         $(container).bind("mouseout", function() {
             $('.distribution').tooltip('hide');
-          //$(container).next(".hover_legend").hide();
         });
         $(container).bind("plotclick", function (event, pos, item) {
             if ( plot.getSelection() == null) {
@@ -250,13 +245,6 @@ jQuery(document).ready(function($) {
       };
     }
         
-    function showHoverLegend(container, contents) {
-      var el = $(container).next(".hover_legend");
-
-      el.html(contents);                   
-      el.show();
-    }
-    
     // Check if Flot is loaded, and if browser has support for
     // canvas object, either natively or via IE excanvas. 
     function domDependenciesMet() {    

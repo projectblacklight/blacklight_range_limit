@@ -92,7 +92,7 @@ Instead of simply passing "true", you can pass a hash with additional configurat
    
 == Javascript dependencies
 
-The selectable histograms/barcharts are done with Javascript, using Flot[http://code.google.com/p/flot/]. Flot requires JQuery, as well as support for the HTML5 canvas element. In IE previous to IE9, canvas element support is added with excanvas[http://excanvas.sourceforge.net/]. 
+The selectable histograms/barcharts are done with Javascript, using Flot[http://code.google.com/p/flot/]. Flot requires JQuery, as well as support for the HTML5 canvas element. In IE previous to IE9, canvas element support can be added with excanvas[http://excanvas.sourceforge.net/]. For the slider, [bootstrap-slider](http://www.eyecon.ro/bootstrap-slider/) is used (bootstrap-slider is actually third party, not officially bootstrap). Flot and bootstrap-slider are both directly included in blacklight_range_limit in vendor. 
 
 A `require 'blacklight_range_limit'` in a Rails asset pipeline manifest file will automatically include all of these things. The blacklight_range_limit adds just this line to your `app/assets/application.js`. 
 
@@ -102,7 +102,7 @@ Note this means a copy of jquery, from the jquery-rails gem, will be included in
 
 If you don't want any of this gem's JS, you can simply remove the `require 'blacklight_range_limit'` line from your application.js, and hack something else together yourself. 
 
-The excanvas inclusion for IE is handled a bit differently. Coudln't get conditional inclusion of excanvas in pure JS to work, it does need an actual seperate script line in the HTML document surrounded by IE conditional comments; this gem adds that line using Blacklight's `extra_head_content` feature allowing dependencies to inject content in HTML head; requires your layout to follow BL conventions, or just add excanvas yourself manually. This gem's attempt to inject the excanvas script line can be turned off in configuration, see Injection below. 
+(todo, different:) The excanvas inclusion for IE is handled a bit differently. Coudln't get conditional inclusion of excanvas in pure JS to work, it does need an actual seperate script line in the HTML document surrounded by IE conditional comments; this gem adds that line using Blacklight's `extra_head_content` feature allowing dependencies to inject content in HTML head; requires your layout to follow BL conventions, or just add excanvas yourself manually. This gem's attempt to inject the excanvas script line can be turned off in configuration, see Injection below. 
 
 
 == Injection

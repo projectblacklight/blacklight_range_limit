@@ -18,42 +18,59 @@ $(".range_limit .profile .range.slider_js").each(function() {
      var form = $(range_element).closest(".range_limit").find("form.range_limit");
      var begin_el = form.find("input.range_begin");
      var end_el = form.find("input.range_end");
+
+     var placeholder_input = $('<input type="text" data-slider-placeholder="true" style="width:100%;">').appendTo(range_element);
      
-     if ($(this).slider) {
-       $(this).slider({
-           range: true,
-           min: min,
-           max: max+1,
-           values: [min, max+1],
-           slide: function(event, ui) {
-              begin_el.val(ui.values[0]);
-              
-              end_el.val(Math.max(ui.values[1]-1, ui.values[0]));
-            }
-        });
+     // make sure slider is loaded
+     if (placeholder_input.slider !== undefined) {
+      placeholder_input.slider({
+        min: min,
+        max: max+1,
+        value: [min, max+1],
+        tooltip: "hide"
+      });
+
+      // try to make slider width/orientation match chart's
+      var container      = range_element.closest(".range_limit");
+      var plot           = container.find(".chart_js").data("plot");
+      var slider_el      = container.find(".slider");
+        
+      slider_el.width(plot.width());
+      slider_el.css("display", "block")
+      slider_el.css('margin-right', 'auto');
+      slider_el.css('margin-left', 'auto'); 
      }
-        
-        begin_el.val(min);
-        end_el.val(max);
-        
-        begin_el.change( function() {
-           var val = parseInt($(this).val());
-           if ( isNaN(val)  || val < min) {
-             //for weird data, set slider at min           
-             val = min;
-           }
-           range_element.slider("values", 0, val);
-        });
-        
-        end_el.change( function() {
-           var val = parseInt($(this).val());
-           if ( isNaN(val) || val > max ) {
-             //weird entry, set slider to max
-             val = max;
-           }
-           range_element.slider("values", 1, val+1);         
-        });
    }
+
+        
+  begin_el.val(min);
+  end_el.val(max);
+        
+  begin_el.change( function() {
+    var val = parseInt($(this).val());
+    if ( isNaN(val)  || val < min) {
+      //for weird data, set slider at min           
+      val = min;
+    }
+    var values = placeholder_input.data("slider").getValue();
+    values[0] = val;
+    placeholder_input.slider("setValue", values);
+  });
+        
+  end_el.change( function() {
+     var val = parseInt($(this).val());
+     if ( isNaN(val) || val > max ) {
+       //weird entry, set slider to max
+       val = max;
+     }
+    var values = placeholder_input.data("slider").getValue();
+    values[1] = val;
+    placeholder_input.slider("setValue", values);
+  });
+
+  
+  
+   
 });
 
 // returns two element array min/max as numbers. If there is a limit applied,

@@ -161,7 +161,7 @@ jQuery(document).ready(function($) {
 
              last_segment  = segment;
            }
-            $('.distribution').tooltip('show');
+          $('.distribution').tooltip('show');
 
         });
         $(container).bind("mouseout", function() {
@@ -173,7 +173,7 @@ jQuery(document).ready(function($) {
               plot.setSelection( normalized_selection(segment.from, segment.to));
             }
         });
-        $(container).bind("plotselected plotselecting", function(event, ranges) {
+        $(container).bind("plotselected plotselecting", function(event, ranges) {          
             if (ranges != null ) {
               var from = Math.floor(ranges.xaxis.from);
               var to = Math.floor(ranges.xaxis.to);
@@ -182,11 +182,10 @@ jQuery(document).ready(function($) {
               form.find("input.range_begin").val(from);
               form.find("input.range_end").val(to);
               
-              var slider_container = $(container).closest(".limit_content").find(".profile .range");
-							$(document).ready(function() {
-								slider_container.slider("values", 0, from);
-	              slider_container.slider("values", 1, to+1);
-							});
+              var slider_placeholder = $(container).closest(".limit_content").find("[data-slider-placeholder]");
+              if (slider_placeholder) {
+							  slider_placeholder.slider("setValue", [from, to+1]);
+              }								
             }
         });
 
@@ -194,24 +193,15 @@ jQuery(document).ready(function($) {
         form.find("input.range_begin, input.range_end").change(function () {
            plot.setSelection( form_selection(form, min, max) , true );
         });
-        $(container).closest(".limit_content").find(".profile .range").bind("slide", function(event, ui) {
-           plot.setSelection( normalized_selection(ui.values[0], Math.max(ui.values[0], ui.values[1]-1)), true);
+        $(container).closest(".limit_content").find(".profile .range").on("slide", function(event, ui) {
+          var values = $(event.target).data("slider").getValue();
+          form.find("input.range_begin").val(values[0]);
+          form.find("input.range_end").val(values[1]);
+          plot.setSelection( normalized_selection(values[0], Math.max(values[0], values[1]-1)), true);
         });
 
         // initially entirely selected, to match slider
         plot.setSelection( {xaxis: { from:min, to:max+0.9999}}  );
-        
-        // try to make slider width/orientation match chart's
-        var slider_container = $(container).closest(".limit_content").find(".profile .range");
-        slider_container.width(plot.width());
-        slider_container.css('margin-right', 'auto');
-        slider_container.css('margin-left', 'auto');   
-        // And set slider min/max to match charts, for sure
-				$(document).ready(function() {
-	        slider_container.slider("option", "min", min);
-	        slider_container.slider("option", "max", max+1);					
-				});
-
       }
     }
 

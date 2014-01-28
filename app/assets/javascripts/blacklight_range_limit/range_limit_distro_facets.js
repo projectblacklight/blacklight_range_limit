@@ -166,19 +166,20 @@ jQuery(document).ready(function($) {
         var last_segment = null;
 
         $(container).bind("plothover", function (event, pos, item) {
-            segment = find_segment_for(pos.x);
+          segment = find_segment_for(pos.x);
 
-            if(segment != last_segment) {
+          if(segment != last_segment) {
             $('.distribution').tooltip('destroy');
             $('.distribution').tooltip({'title': function() { return find_segment_for(pos.x).label  + ' (' + segment.count + ')' }, 'placement': 'bottom', 'trigger': 'manual', 'delay': { show: 0, hide: 100}});
+            $('.distribution').tooltip('show');
 
-             last_segment  = segment;
+            last_segment  = segment;
            }
-          $('.distribution').tooltip('show');
-
         });
+
         $(container).bind("mouseout", function() {
-            $('.distribution').tooltip('hide');
+          last_segment = null;
+          $('.distribution').tooltip('hide');
         });
         $(container).bind("plotclick", function (event, pos, item) {
             if ( plot.getSelection() == null) {

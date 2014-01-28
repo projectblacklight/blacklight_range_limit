@@ -17,16 +17,6 @@ module BlacklightRangeLimit
         helper BlacklightRangeLimit::ViewHelperOverride
         helper RangeLimitHelper
       end
-  
-      before_filter do |controller|
-        unless BlacklightRangeLimit.omit_inject[:excanvas]
-               
-          # canvas for IE. Need to inject it like this even with asset pipeline
-          # cause it needs IE conditional include. view_context hacky way
-          # to get asset url helpers. 
-          controller.extra_head_content << ('<!--[if lt IE 9]>' + view_context.javascript_include_tag("flot/excanvas.min.js") + ' <![endif]-->').html_safe
-        end
-      end
     end
   
     # Action method of our own!
@@ -60,7 +50,7 @@ module BlacklightRangeLimit
     
     # Method added to solr_search_params_logic to fetch
     # proper things for date ranges. 
-    def add_range_limit_params(solr_params, req_params)    
+    def add_range_limit_params(solr_params, req_params)
        ranged_facet_configs = 
          blacklight_config.facet_fields.select { |key, config| config.range } 
        # In ruby 1.8, hash.select returns an array of pairs, in ruby 1.9

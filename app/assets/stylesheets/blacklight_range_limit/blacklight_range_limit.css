@@ -9,3 +9,8 @@ form.range_limit input.range_begin, form.range_limit input.range_end {
 .hover_legend {
   padding: 0.25em;
 }
+
+.slider_js .slider-selection {
+  /* color from flot selection */
+  background: #e8cfac;
+}

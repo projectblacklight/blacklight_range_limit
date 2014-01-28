@@ -115,6 +115,16 @@ local custom layout instead. Then add this to the html <head> section:
 
     <!--[if lte IE 8]><%= javascript_include_tag 'excanvas' %><![endif]-->
 
+== Touch?
+
+For touch screens, one wants the UI to work well. The slider used is
+[bootstrap_slider](http://www.eyecon.ro/bootstrap-slider/), which says if you add
+Modernizr to your page, touch events will be supported. We haven't tested it
+ourselves yet. 
+
+Also not sure how well the flot select UI works on a touch screen. The slider
+is probably the best touch UI anyway, if it can be made to work well. 
+
 
 == Injection
 

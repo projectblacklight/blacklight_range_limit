@@ -1,6 +1,5 @@
 form.range_limit input.range_begin, form.range_limit input.range_end {
-  border:1px solid #DDDDDD;
-  width: 4em;
+  width: 4.5em;
 }
 
 .limit_content .subsection {

@@ -9,9 +9,18 @@
          ( (! params["range"][solr_field]["begin"].blank?) ||
            (! params["range"][solr_field]["end"].blank?) ||
            params["range"][solr_field]["missing"]) %>
-    <div class="current">
-      <span class="selected"><%= range_display(solr_field) %></span> <span class="count">(<%= number_with_delimiter(@response.total) %>)</span> <%= link_to "[remove]", remove_range_param(solr_field), :class=>"remove" %>
-    </div>
+    <ul class="current list-unstyled facet-values">
+      <li class="selected">
+        <span class="facet-label">
+          <span class="selected"><%= range_display(solr_field) %></span> 
+           <%= link_to remove_range_param(solr_field), :class=>"remove", :title => "remove" do %>
+            <span class="glyphicon glyphicon-remove"></span>
+            <span class="sr-only">[remove]</span>
+           <% end %>
+        </span>
+        <span class="selected facet-count"><%= number_with_delimiter(@response.total) %></span>
+      </li>
+    </ul>
          
   <% end %>
 
@@ -26,8 +35,8 @@
         <%= hidden_field_tag("search_field", "dummy_range") %>
       <% end %>
       
-      <%= render_range_input(solr_field, :begin) %> - <%= render_range_input(solr_field, :end) %>
-      <%= submit_tag 'Limit', :class=>'submit btn' %>
+      <%= render_range_input(solr_field, :begin) %> – <%= render_range_input(solr_field, :end) %>
+      <%= submit_tag 'Limit', :class=>'submit btn btn-default' %>
     
     <% end %>
   <% end %>
@@ -40,9 +49,9 @@
     
         <% if (min = range_results_endpoint(solr_field, :min)) &&
               (max = range_results_endpoint(solr_field, :max)) %>
-          <div class="range subsection <%= "slider_js" unless field_config[:slider_js] == false  %>">
+          <p class="range subsection <%= "slider_js" unless field_config[:slider_js] == false  %>">
             Current results range from <span class="min"><%= range_results_endpoint(solr_field, :min) %></span> to <span class="max"><%= range_results_endpoint(solr_field, :max) %></span>
-          </div>
+          </p>
           
           <% if field_config[:segments] != false %>
             <div class="distribution subsection <%= 'chart_js' unless field_config[:chart_js] == false %>">

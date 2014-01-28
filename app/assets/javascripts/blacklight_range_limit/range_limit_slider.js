@@ -34,11 +34,13 @@ $(".range_limit .profile .range.slider_js").each(function() {
       var container      = range_element.closest(".range_limit");
       var plot           = container.find(".chart_js").data("plot");
       var slider_el      = container.find(".slider");
-        
-      slider_el.width(plot.width());
-      slider_el.css("display", "block")
-      slider_el.css('margin-right', 'auto');
-      slider_el.css('margin-left', 'auto'); 
+       
+      if (plot && slider_el) { 
+        slider_el.width(plot.width());
+        slider_el.css("display", "block")
+        slider_el.css('margin-right', 'auto');
+        slider_el.css('margin-left', 'auto'); 
+      }
      }
    }
 
@@ -71,7 +73,7 @@ $(".range_limit .profile .range.slider_js").each(function() {
 });
 
 // catch event for redrawing chart, to redraw slider to match width
-$("body").on("plotRedrawn.blacklight.rangeLimit", function(event) {
+$("body").on("plotDrawn.blacklight.rangeLimit", function(event) {
   var area       = $(event.target).closest(".limit_content.range_limit");
   var plot       = area.find(".chart_js").data("plot");
   var slider_el  = area.find(".slider");

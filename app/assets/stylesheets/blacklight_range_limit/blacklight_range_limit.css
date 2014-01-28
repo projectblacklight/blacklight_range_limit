@@ -1,3 +1,8 @@
+form.range_limit {
+  /* leave room for buttons not to collide on line wrap */
+  line-height: 3;
+}
+
 form.range_limit input.range_begin, form.range_limit input.range_end {
   width: 4.5em;
 }

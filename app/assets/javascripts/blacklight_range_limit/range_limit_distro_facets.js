@@ -43,13 +43,14 @@ jQuery(document).ready(function($) {
     }
   });
 
+
+
   // after a collapsible facet contents is fully shown,
   // resize the flot chart to current conditions. This way, if you change
   // browser window size, you can get chart resized to fit by closing and opening
   // again, if needed. 
-  $("body").on("shown.bs.collapse", function(event) {
-    var container =  $(event.target).filter(".facet-content").find(".chart_js");
 
+  function redrawPlot(container) {
     if (container && container.width() > 0) {
       // resize the container's height, since width may have changed. 
       container.height( container.width() * display_ratio  );
@@ -71,7 +72,38 @@ jQuery(document).ready(function($) {
         $(container).trigger(redrawnEvent);
       }
     }    
+  }
+
+  $("body").on("shown.bs.collapse", function(event) {
+    var container =  $(event.target).filter(".facet-content").find(".chart_js");
+    redrawPlot(container);
   });
+
+  // debouce borrowed from underscore
+  // Returns a function, that, as long as it continues to be invoked, will not
+  // be triggered. The function will be called after it stops being called for
+  // N milliseconds. If `immediate` is passed, trigger the function on the
+  // leading edge, instead of the trailing.
+  debounce = function(func, wait, immediate) {
+    var timeout;
+    return function() {
+      var context = this, args = arguments;
+      var later = function() {
+        timeout = null;
+        if (!immediate) func.apply(context, args);
+      };
+      var callNow = immediate && !timeout;
+      clearTimeout(timeout);
+      timeout = setTimeout(later, wait);
+      if (callNow) func.apply(context, args);
+    };
+  };
+
+  $(window).on("resize", debounce(function() {
+    $(".chart_js").each(function(i, container) {
+      redrawPlot($(container));
+    });
+  }, 350));
 
   // second arg, if provided, is a number of ms we're willing to
   // wait for the container to have width before giving up -- we'll

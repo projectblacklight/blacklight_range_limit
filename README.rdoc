@@ -113,7 +113,7 @@ the excanvas.js file, but you'll have to manually add a reference to it to your 
 template -- if you were previously using the stock Blacklight layout, you'll have to add a
 local custom layout instead. Then add this to the html <head> section:
 
-    <!--[if lte IE 8]><%= javascript_include_tag 'excanvas' %><![endif]-->
+    <!--[if lte IE 8]><%= javascript_include_tag 'flot/excanvas.min' %><![endif]-->
 
 == Touch?
 

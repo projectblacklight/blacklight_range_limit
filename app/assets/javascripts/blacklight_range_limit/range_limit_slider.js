@@ -66,11 +66,22 @@ $(".range_limit .profile .range.slider_js").each(function() {
     var values = placeholder_input.data("slider").getValue();
     values[1] = val;
     placeholder_input.slider("setValue", values);
-  });
-
-  
-  
+  });    
    
+});
+
+// catch event for redrawing chart, to redraw slider to match width
+$("body").on("plotRedrawn.blacklight.rangeLimit", function(event) {
+  var area       = $(event.target).closest(".limit_content.range_limit");
+  var plot       = area.find(".chart_js").data("plot");
+  var slider_el  = area.find(".slider");
+
+  if (plot && slider_el) {
+      slider_el.width(plot.width());
+      slider_el.css("display", "block")
+      slider_el.css('margin-right', 'auto');
+      slider_el.css('margin-left', 'auto'); 
+  }
 });
 
 // returns two element array min/max as numbers. If there is a limit applied,

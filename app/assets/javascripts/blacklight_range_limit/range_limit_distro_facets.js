@@ -1,7 +1,13 @@
+/* A custom event "plotRedrawn.blacklight.rangeLimit" will be sent when flot plot
+   is redrawn on screen possibly with a new size. target of event will be the DOM element 
+   containing the plot.  Used to resize slider to match. */
+
 jQuery(document).ready(function($) {
   // ratio of width to height for desired display, multiply width by this ratio
   // to get height. hard-coded in for now. 
   var display_ratio = 1/(1.618 * 2); // half a golden rectangle, why not
+  var redrawnEvent = "plotRedrawn.blacklight.rangeLimit";
+
 
 
   // Facets already on the page? Turn em into a chart.
@@ -60,6 +66,9 @@ jQuery(document).ready(function($) {
         // we'll trigger a fake event on one of the boxes
         var form = $(container).closest(".limit_content").find("form.range_limit");
         form.find("input.range_begin").trigger("change");
+
+        // send our custom event to trigger redraw of slider
+        $(container).trigger(redrawnEvent);
       }
     }    
   });
@@ -71,6 +80,8 @@ jQuery(document).ready(function($) {
   // bootstrap show event, but the animation hasn't barely begun yet -- but
   // we don't want to wait until it's finished, we want to start rendering
   // as soon as we can. 
+  //
+  // We also will 
   function turnIntoPlot(container, wait_for_visible) {
     // flot can only render in a a div with a defined width.
     // for instance, a hidden div can't generally be rendered in (although if you set

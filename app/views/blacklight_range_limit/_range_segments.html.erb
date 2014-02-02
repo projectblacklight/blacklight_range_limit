@@ -6,14 +6,14 @@
     <li>
         <span class="facet-label">
             <%= link_to(
-              content_tag("span", hash[:from], :class => "from") + 
+              content_tag("span", facet_display_value(solr_field, hash[:from]), :class => "from") + 
                 " to " + 
-                content_tag("span", hash[:to], :class => "to"), 
+                content_tag("span", facet_display_value(solr_field, hash[:to]), :class => "to"), 
                 add_range(solr_field, hash[:from], hash[:to]).merge(:action => "index"),
                 :class => "facet_select"
               ) %> 
         </span>
-        <span class="facet-count"><%= content_tag("span", hash[:count], :class=>"count")%></span>
+        <%= render_facet_count hash[:count], classes: 'count' %>
     </li>
   <% end %>
 </ul>

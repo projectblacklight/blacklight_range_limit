@@ -22,7 +22,7 @@ Gem::Specification.new do |s|
   s.add_dependency "jquery-rails" # our JS needs jquery_rails
   # for blacklight, we want to allow 5.0.0.preX, as well as all 5.x.y, 
   # but not 6. can't seem to make it do so other than this:
-  s.add_dependency "blacklight", ">= 5.0.0.pre", "< 6"
+  s.add_dependency "blacklight", ">= 5.0.0.pre4", "< 6"
 
   s.add_development_dependency "rspec", ">= 2.0"
   s.add_development_dependency "rspec-rails"

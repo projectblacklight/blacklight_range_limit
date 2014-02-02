@@ -20,8 +20,8 @@ describe "Blacklight Range Limit" do
     visit '/catalog'
     click_link 'View distribution'
 
-    page.should have_content("1941 to 1944 (1)")
-    page.should have_content("2005 to 2008 (7)")
+    page.should have_content("1941 to 1944 1")
+    page.should have_content("2005 to 2008 7")
   end
 
   it "should limit appropriately" do
@@ -29,6 +29,6 @@ describe "Blacklight Range Limit" do
     click_link 'View distribution'
     click_link '1941 to 1944'
 
-    page.should have_content "1941 to 1944 (1) [remove]"
+    page.should have_content "1941 to 1944 [remove] 1"
   end
 end

@@ -24,8 +24,7 @@ RSpec::Core::RakeTask.new do |t|
 end
 
 task :ci => ['jetty:clean', 'engine_cart:generate'] do
-  ENV['environment'] = "test"
-  jetty_params = Jettywrapper.load_config
+  jetty_params = Jettywrapper.load_config('test')
   jetty_params[:startup_wait]= 60
   error = Jettywrapper.wrap(jetty_params) do
     Rake::Task["test:seed"].invoke
@@ -38,9 +37,9 @@ namespace :test do
 
   desc "Put sample data into solr"
   task :seed => ['engine_cart:generate'] do
-    docs = File.join(APP_ROOT, 'solr', 'sample_solr_documents.yml')
     within_test_app do
-      system "RAILS_ENV=test rake blacklight_test_app:seed DOC_PATH=#{docs}"
+      ENV['RAILS_ENV'] ||= 'test'
+      system "rake blacklight:solr:seed"
     end
   end
 

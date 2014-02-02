@@ -11,10 +11,4 @@ namespace :blacklight_test_app do
     t.ruby_opts = "-I#{gem_home}/spec"
   end
 
-  task :seed do
-    docs = YAML::load(File.open(ENV['DOC_PATH']))
-    puts "Seeding solr with documents from #{ENV['DOC_PATH']}"
-    Blacklight.solr.add docs
-    Blacklight.solr.commit
-  end
 end

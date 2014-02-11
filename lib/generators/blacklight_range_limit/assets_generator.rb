@@ -29,7 +29,7 @@ module BlacklightRangeLimit
 }
         end
       else
-        warn "Can not find application.css to insert `require blacklight_range_limit`, did not insert"
+        say_status "warning", "Can not find application.css, did not insert our require", :red
       end
 
       append_to_file "app/assets/javascripts/application.js" do

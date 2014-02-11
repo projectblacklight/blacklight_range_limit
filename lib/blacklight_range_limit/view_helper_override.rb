@@ -10,6 +10,23 @@
       super
     end
 
+    def has_range_limit_parameters?(params = params)
+      params[:range] && 
+        params[:range].any? do |key, v| 
+          v.present? && v.respond_to?(:'[]') && 
+          (v["begin"].present? || v["end"].present? || v["missing"].present?)
+        end
+    end
+
+    # over-ride, call super, but make sure our range limits count too
+    def has_search_parameters?
+      super || has_range_limit_parameters?
+    end
+
+    def query_has_constraints?(params = params)         
+      super || has_range_limit_parameters?(params)
+    end
+
     # Over-ride to recognize our custom params for range facets
     def facet_field_in_params?(field_name)
       return super || (

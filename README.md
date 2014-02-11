@@ -88,7 +88,7 @@ Instead of simply passing "true", you can pass a hash with additional configurat
   * Default 10. Approximately how many segments to divide the range into for segment facets, which become segments on the chart. Actual segments are calculated to be 'nice' values, so may not exactly match your setting.  
 * **:assumed_boundaries** :
   * Default null. For a result set that has not yet been limited, instead of taking boundaries from results and making a second AJAX request to fetch segments, just assume these given boundaries. If you'd like to avoid this second AJAX Solr call, you can set :assumed_boundaries to a two-element array of integers instead, and the assumed boundaries will always be used. Note this is live ruby code, you can put calculations in there like Time.now.year + 2. 
-* **:segments&& :
+* **:segments** :
   * Default true. If set to false, then distribution segment facets will not be loaded at all.  
    
 ## Javascript dependencies

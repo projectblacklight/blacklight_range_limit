@@ -16,13 +16,20 @@ module BlacklightRangeLimit
     source_root File.join(BlacklightRangeLimit::Engine.root, 'app', 'assets')
 
     def assets
-      insert_into_file "app/assets/stylesheets/application.css", :before => "*/" do
+      application_css = Dir["app/assets/stylesheets/application{.css,.scss,.css.scs}"].first
+
+      if application_css
+
+        insert_into_file application_css, :before => "*/" do
 %q{
  *
  * Used by blacklight_range_limit
  *= require  'blacklight_range_limit'
  *         
 }
+        end
+      else
+        warn "Can not find application.css to insert `require blacklight_range_limit`, did not insert"
       end
 
       append_to_file "app/assets/javascripts/application.js" do

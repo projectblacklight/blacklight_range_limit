@@ -27,6 +27,14 @@ module BlacklightRangeLimit
       end
 
       unless omit_inject[:view_helpers]
+
+        CatalogController.send(:helper, 
+          BlacklightRangeLimit::ViewHelperOverride
+        ) unless
+          CatalogController.helpers.is_a?( 
+            BlacklightRangeLimit::ViewHelperOverride
+          )
+
         SearchHistoryController.send(:helper, 
           BlacklightRangeLimit::ViewHelperOverride
         ) unless
@@ -39,6 +47,13 @@ module BlacklightRangeLimit
         ) unless
           SearchHistoryController.helpers.is_a?( 
             RangeLimitHelper
+          )
+          
+        SavedSearchesController.send(:helper, 
+          BlacklightRangeLimit::ViewHelperOverride
+        ) unless
+          SavedSearchesController.helpers.is_a?( 
+            BlacklightRangeLimit::ViewHelperOverride
           )
       end
       

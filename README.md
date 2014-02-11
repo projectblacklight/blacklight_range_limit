@@ -2,6 +2,8 @@ BlacklightRangeLimit:  integer range limiting and profiling for Blacklight appli
 
 [![Build Status](https://travis-ci.org/projectblacklight/blacklight_range_limit.png?branch=v5.0.0)](https://travis-ci.org/projectblacklight/blacklight_range_limit) [![Gem Version](https://badge.fury.io/rb/blacklight_range_limit.png)](http://badge.fury.io/rb/blacklight_range_limit)
 
+![Screen shot](doc/example-screenshot.png)
+
 # Description
 
 The BlacklightRangeLimit plugin provides a 'facet' or limit for integer fields, that lets the user enter range limits with a text box or a slider, and also provides area charts giving a sense of the distribution of values (with drill down). 

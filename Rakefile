@@ -23,7 +23,7 @@ RSpec::Core::RakeTask.new do |t|
 
 end
 
-task :ci => ['jetty:clean', 'engine_cart:generate'] do
+task :ci => ['jetty:clean', 'engine_cart:clean', 'engine_cart:generate'] do
   jetty_params = Jettywrapper.load_config('test')
   jetty_params[:startup_wait]= 60
   error = Jettywrapper.wrap(jetty_params) do

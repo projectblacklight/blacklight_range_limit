@@ -7,7 +7,7 @@ module RangeLimitHelper
     
     default = params["range"][solr_field][type] if params["range"] && params["range"][solr_field] && params["range"][solr_field][type]
     
-    text_field_tag("range[#{solr_field}][#{type}]", default, :maxlength=>4, :class => "range_#{type}")
+    text_field_tag("range[#{solr_field}][#{type}]", default, :maxlength=>4, :class => "form-control range_#{type}")
   end
 
   # type is 'min' or 'max'
@@ -82,6 +82,12 @@ module RangeLimitHelper
     my_params["range"][solr_field]["begin"] = from
     my_params["range"][solr_field]["end"] = to
     my_params["range"][solr_field].delete("missing")
+
+    # eliminate temporary range status params that were just
+    # for looking things up
+    my_params.delete("range_field")
+    my_params.delete("range_start")
+    my_params.delete("range_end")
     
     return my_params
   end

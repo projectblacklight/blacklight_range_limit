@@ -25,7 +25,7 @@ The pre Solr 1.4 now deprecated sint or slong types should work fine too.
 
 = Installation
 
-Recent versions of this plugin require Blacklight versions 3.2 or later, which requires Rails 3.1 or later and the Rails asset pipeline. 
+Current 5.x version of `blacklight_range_limit` work with `blacklight` 5.x -- we now synchronize the _major version number_ between `blacklight` and `blacklight_range_limit`.  `blacklight_range_limit` 2.1 is the last version believed to work with blacklight 4.x or possibly blacklight 3.x.
 
 Add
 
@@ -92,7 +92,7 @@ Instead of simply passing "true", you can pass a hash with additional configurat
    
 == Javascript dependencies
 
-The selectable histograms/barcharts are done with Javascript, using Flot[http://code.google.com/p/flot/]. Flot requires JQuery, as well as support for the HTML5 canvas element. In IE previous to IE9, canvas element support is added with excanvas[http://excanvas.sourceforge.net/]. 
+The selectable histograms/barcharts are done with Javascript, using Flot[http://code.google.com/p/flot/]. Flot requires JQuery, as well as support for the HTML5 canvas element. In IE previous to IE9, canvas element support can be added with excanvas[http://excanvas.sourceforge.net/]. For the slider, [bootstrap-slider](http://www.eyecon.ro/bootstrap-slider/) is used (bootstrap-slider is actually third party, not officially bootstrap). Flot and bootstrap-slider are both directly included in blacklight_range_limit in vendor. 
 
 A `require 'blacklight_range_limit'` in a Rails asset pipeline manifest file will automatically include all of these things. The blacklight_range_limit adds just this line to your `app/assets/application.js`. 
 
@@ -102,7 +102,28 @@ Note this means a copy of jquery, from the jquery-rails gem, will be included in
 
 If you don't want any of this gem's JS, you can simply remove the `require 'blacklight_range_limit'` line from your application.js, and hack something else together yourself. 
 
-The excanvas inclusion for IE is handled a bit differently. Coudln't get conditional inclusion of excanvas in pure JS to work, it does need an actual seperate script line in the HTML document surrounded by IE conditional comments; this gem adds that line using Blacklight's `extra_head_content` feature allowing dependencies to inject content in HTML head; requires your layout to follow BL conventions, or just add excanvas yourself manually. This gem's attempt to inject the excanvas script line can be turned off in configuration, see Injection below. 
+== IE8, excanvas
+
+IE8 and below do not support the 'canvas' element, needed for flot to render the chart. 
+Without canvas, view will cleanly degrade to an ordinary textual listing of range segments
+as facets. 
+
+Or, you can use excanvas.js to add canvas support to IE.  blacklight_range_limit includes
+the excanvas.js file, but you'll have to manually add a reference to it to your Rails layout
+template -- if you were previously using the stock Blacklight layout, you'll have to add a
+local custom layout instead. Then add this to the html <head> section:
+
+    <!--[if lte IE 8]><%= javascript_include_tag 'flot/excanvas.min' %><![endif]-->
+
+== Touch?
+
+For touch screens, one wants the UI to work well. The slider used is
+[bootstrap_slider](http://www.eyecon.ro/bootstrap-slider/), which says if you add
+Modernizr to your page, touch events will be supported. We haven't tested it
+ourselves yet. 
+
+Also not sure how well the flot select UI works on a touch screen. The slider
+is probably the best touch UI anyway, if it can be made to work well. 
 
 
 == Injection
@@ -122,8 +143,7 @@ You can also turn off injection of individual components, which could be more us
   BlacklightRangeLimit.omit_inject = {
     :view_helpers => false,
     :controller_mixin => false,
-    :routes => false,
-    :excanvas => false
+    :routes => false
   }
 [:view_helpers]
   Set to false and the plugin will not insert it's own rails view helpers into the app. It will raise lots of errors if you do this, you probably don't want to. 
@@ -131,8 +151,6 @@ You can also turn off injection of individual components, which could be more us
   The plugin mixes some methods into CatalogController, both over-riding Blacklight methods, and providing a new action of it's own. Set to false, and the plugin won't. You've basically disabled the plugin if you do this.  
 [:routes]
   Disable automatic routes loading
-[:excanvas]
-  Disables injection of a conditionally-commented script tag to load the excanvas library for supporting 'canvas' on IE.  blacklight_range_limit does this in the controller mixin, using Blacklight's "extra_head_content" feature to add actual conditional script tag for IE in html <head>. 
   
 See Javascript Dependencies above for disabling injection of gem's js.   
   

@@ -10,14 +10,45 @@
       super
     end
 
+    def has_range_limit_parameters?(params = params)
+      params[:range] && 
+        params[:range].any? do |key, v| 
+          v.present? && v.respond_to?(:'[]') && 
+          (v["begin"].present? || v["end"].present? || v["missing"].present?)
+        end
+    end
+
+    # over-ride, call super, but make sure our range limits count too
+    def has_search_parameters?
+      super || has_range_limit_parameters?
+    end
+
+    def query_has_constraints?(params = params)         
+      super || has_range_limit_parameters?(params)
+    end
+
+    # Over-ride to recognize our custom params for range facets
+    def facet_field_in_params?(field_name)
+      return super || (
+        range_config(field_name) &&
+        params[:range] &&
+        params[:range][field_name] &&
+          ( params[:range][field_name]["begin"].present? ||
+            params[:range][field_name]["end"].present? ||
+            params[:range][field_name]["missing"].present?
+          )
+      )
+    end
+
     def render_constraints_filters(my_params = params)
       content = super(my_params)
       # add a constraint for ranges?
       unless my_params[:range].blank?
         my_params[:range].each_pair do |solr_field, hash|
+
           next unless hash["missing"] || (!hash["begin"].blank?) || (!hash["end"].blank?)
           content << render_constraint_element(
-            facet_field_labels[solr_field],
+            blacklight_config.facet_fields[solr_field].label,
             range_display(solr_field, my_params),
             :escape_value => false,
             :remove => remove_range_param(solr_field, my_params)
@@ -35,7 +66,7 @@
           next unless hash["missing"] || (!hash["begin"].blank?) || (! hash["end"].blank?)        
           
           content << render_search_to_s_element(
-            facet_field_labels[solr_field],
+            blacklight_config.facet_fields[solr_field].label,
             range_display(solr_field, my_params),
             :escape_value => false
           )          

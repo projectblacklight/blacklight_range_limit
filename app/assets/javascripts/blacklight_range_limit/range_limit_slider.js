@@ -1,9 +1,8 @@
-jQuery(document).ready(function($) {
-    
-      
-   
+// for Blacklight.onLoad:
+//= require blacklight/core
 
-    
+Blacklight.onLoad(function() {
+        
 $(".range_limit .profile .range.slider_js").each(function() {
    var range_element = $(this);
     
@@ -40,6 +39,9 @@ $(".range_limit .profile .range.slider_js").each(function() {
         slider_el.css("display", "block")
         slider_el.css('margin-right', 'auto');
         slider_el.css('margin-left', 'auto'); 
+      }
+      else if (slider_el) {
+        slider_el.css("width", "100%");
       }
      }
    }

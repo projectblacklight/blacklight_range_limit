@@ -3,8 +3,9 @@ require 'rails/generators'
 class TestAppGenerator < Rails::Generators::Base
   source_root File.expand_path("../../../../test_app_templates", __FILE__)
 
-  def copy_blacklight_test_app_rake_task
-    copy_file "lib/tasks/blacklight_test_app.rake"
+  # This is only necessary for Rails 3
+  def remove_index
+    remove_file "public/index.html"
   end
 
   def run_blacklight_generator

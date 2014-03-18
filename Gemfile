@@ -11,6 +11,8 @@ group :test do
   gem 'turbolinks'
 end
 
+gem 'sass-rails'
+
 if File.exists?('spec/test_app_templates/Gemfile.extra')
   eval File.read('spec/test_app_templates/Gemfile.extra'), nil, 'spec/test_app_templates/Gemfile.extra'
 end

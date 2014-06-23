@@ -1,4 +1,4 @@
-# Copy BlacklightRangeLimit assets to public folder in current app. 
+# Copy BlacklightRangeLimit assets to public folder in current app.
 # If you want to do this on application startup, you can
 # add this next line to your one of your environment files --
 # generally you'd only want to do this in 'development', and can
@@ -8,7 +8,7 @@
 
 
 # Need the requires here so we can call the generator from environment.rb
-# as suggested above. 
+# as suggested above.
 require 'rails/generators'
 require 'rails/generators/base'
 module BlacklightRangeLimit
@@ -16,7 +16,7 @@ module BlacklightRangeLimit
     source_root File.join(BlacklightRangeLimit::Engine.root, 'app', 'assets')
 
     def assets
-      application_css = Dir["app/assets/stylesheets/application{.css,.scss,.css.scs}"].first
+      application_css = Dir["app/assets/stylesheets/application{.css,.scss,.css.scss}"].first
 
       if application_css
 
@@ -25,7 +25,7 @@ module BlacklightRangeLimit
  *
  * Used by blacklight_range_limit
  *= require  'blacklight_range_limit'
- *         
+ *
 }
         end
       else
@@ -39,12 +39,11 @@ module BlacklightRangeLimit
 // this:
 //= require 'blacklight_range_limit'
 
-}          
+}
       end
     end
-    
+
 
 
   end
 end
-

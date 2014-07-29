@@ -1,6 +1,10 @@
 <%- # requires solr_config local passed in
 
-  field_config = range_config(solr_field)
+  field_config = range_config(solr_field)  
+  label = blacklight_config.facet_fields[solr_field].label
+  
+  input_label_range_begin = field_config[:input_label_range_begin] || t("blacklight.range_limit.range_begin", field_label: label)
+  input_label_range_end   = field_config[:input_label_range_end] || t("blacklight.range_limit.range_end", field_label: label)
 -%>
 
 <div class="limit_content range_limit">  
@@ -35,7 +39,7 @@
         <%= hidden_field_tag("search_field", "dummy_range") %>
       <% end %>
       
-      <%= render_range_input(solr_field, :begin) %> – <%= render_range_input(solr_field, :end) %>
+      <%= render_range_input(solr_field, :begin, input_label_range_begin) %> – <%= render_range_input(solr_field, :end, input_label_range_end) %>
       <%= submit_tag 'Limit', :class=>'submit btn btn-default' %>
     
     <% end %>

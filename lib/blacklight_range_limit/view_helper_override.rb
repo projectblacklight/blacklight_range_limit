@@ -3,7 +3,22 @@
   # display. 
   module BlacklightRangeLimit::ViewHelperOverride
 
+    def has_range_limit_parameters?(params = params)
+      params[:range] && 
+        params[:range].any? do |key, v| 
+          v.present? && v.respond_to?(:'[]') && 
+          (v["begin"].present? || v["end"].present? || v["missing"].present?)
+        end
+    end
 
+    # over-ride, call super, but make sure our range limits count too
+    def has_search_parameters?
+      super || has_range_limit_parameters?
+    end
+
+    def query_has_constraints?(params = params)         
+      super || has_range_limit_parameters?(params)
+    end
     
     def facet_partial_name(display_facet)
       return "blacklight_range_limit/range_limit_panel" if range_config(display_facet.name) and should_show_limit(display_facet.name)

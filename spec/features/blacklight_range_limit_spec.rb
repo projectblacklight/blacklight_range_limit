@@ -15,6 +15,7 @@ describe "Blacklight Range Limit" do
     page.should have_selector 'input.range_end'
     page.should have_selector 'label.sr-only[for="range_pub_date_sort_begin"]', :text => 'Publication Date Sort range begin'
     page.should have_selector 'label.sr-only[for="range_pub_date_sort_end"]', :text => 'Publication Date Sort range end'
+    expect(page).to have_css 'input.submit', value: 'Limit'
   end
 
   it "should provide distribution information" do

@@ -17,9 +17,9 @@
       <li class="selected">
         <span class="facet-label">
           <span class="selected"><%= range_display(solr_field) %></span> 
-           <%= link_to remove_range_param(solr_field), :class=>"remove", :title => "remove" do %>
+           <%= link_to remove_range_param(solr_field), :class=>"remove", :title => t('blacklight.range_limit.remove_limit') do %>
             <span class="glyphicon glyphicon-remove"></span>
-            <span class="sr-only">[remove]</span>
+            <span class="sr-only">[<%= t('blacklight.range_limit.remove_limit') %>]</span>
            <% end %>
         </span>
         <span class="selected facet-count"><%= number_with_delimiter(@response.total) %></span>
@@ -40,7 +40,7 @@
       <% end %>
       
       <%= render_range_input(solr_field, :begin, input_label_range_begin) %> – <%= render_range_input(solr_field, :end, input_label_range_end) %>
-      <%= submit_tag 'Limit', :class=>'submit btn btn-default' %>
+      <%= submit_tag t('blacklight.range_limit.submit_limit'), :class=>'submit btn btn-default' %>
     
     <% end %>
   <% end %>

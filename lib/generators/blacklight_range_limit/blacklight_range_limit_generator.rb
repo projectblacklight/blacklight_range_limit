@@ -7,5 +7,4 @@ class BlacklightRangeLimitGenerator < Rails::Generators::Base
   def copy_public_assets
     BlacklightRangeLimit::AssetsGenerator.start
   end
-
 end

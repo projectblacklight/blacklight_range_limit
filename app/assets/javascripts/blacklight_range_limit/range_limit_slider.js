@@ -10,7 +10,7 @@ $(".range_limit .profile .range.slider_js").each(function() {
    var min = boundaries[0];
    var max = boundaries[1];
 
-   if (min && max) {
+   if (isInt(min) && isInt(max)) {
      $(this).contents().wrapAll('<div style="display:none" />');
      
      var range_element = $(this);
@@ -46,7 +46,6 @@ $(".range_limit .profile .range.slider_js").each(function() {
      }
    }
 
-        
   begin_el.val(min);
   end_el.val(max);
         
@@ -110,6 +109,13 @@ function min_max(range_element) {
    }
    
    return [min, max]
+}
+
+
+// Check to see if a value is an Integer
+// see: http://stackoverflow.com/questions/3885817/how-to-check-if-a-number-is-float-or-integer
+function isInt(n) {
+  return n % 1 === 0;
 }
 
 });

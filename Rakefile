@@ -6,13 +6,11 @@ Bundler::GemHelper.install_tasks
 
 require 'rspec/core/rake_task'
 
-
-TEST_APP_TEMPLATES = 'spec/test_app_templates'
-TEST_APP = 'spec/internal'
 require 'engine_cart/rake_task'
 
+EngineCart.fingerprint_proc = EngineCart.rails_fingerprint_proc
+
 ZIP_URL = "https://github.com/projectblacklight/blacklight-jetty/archive/v4.0.0.zip"
-APP_ROOT = File.dirname(__FILE__)
 
 require 'jettywrapper'
 
@@ -23,7 +21,7 @@ RSpec::Core::RakeTask.new do |t|
 
 end
 
-task :ci => ['jetty:clean', 'engine_cart:clean', 'engine_cart:generate'] do
+task :ci => ['jetty:clean', 'engine_cart:generate'] do
   jetty_params = Jettywrapper.load_config('test')
   jetty_params[:startup_wait]= 60
   error = Jettywrapper.wrap(jetty_params) do

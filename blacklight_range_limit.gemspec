@@ -29,4 +29,5 @@ Gem::Specification.new do |s|
   s.add_development_dependency "sqlite3"
   s.add_development_dependency 'launchy'
   s.add_development_dependency "jettywrapper", "~> 1.5", ">= 1.5.2"
+  s.add_development_dependency "engine_cart", "~> 0.6"
 end

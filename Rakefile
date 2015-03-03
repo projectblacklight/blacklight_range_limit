@@ -10,7 +10,7 @@ require 'engine_cart/rake_task'
 
 EngineCart.fingerprint_proc = EngineCart.rails_fingerprint_proc
 
-ZIP_URL = "https://github.com/projectblacklight/blacklight-jetty/archive/v4.0.0.zip"
+ZIP_URL = "https://github.com/projectblacklight/blacklight-jetty/archive/v4.10.3.zip"
 
 require 'jettywrapper'
 

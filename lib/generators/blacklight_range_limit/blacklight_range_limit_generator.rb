@@ -1,10 +1,8 @@
 require 'rails/generators'
 
 class BlacklightRangeLimitGenerator < Rails::Generators::Base
-  source_root File.expand_path('../templates', __FILE__)
-
-  require File.expand_path('../assets_generator.rb', __FILE__)
-  def copy_public_assets
-    BlacklightRangeLimit::AssetsGenerator.start
+  def run_install_generator
+    say "`rails g blacklight_range_limit` is deprecated; use `rails g blacklight_range_limit:install` instead", :red
+    generate "blacklight_range_limit:install"
   end
 end

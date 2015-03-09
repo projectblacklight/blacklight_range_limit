@@ -25,3 +25,4 @@ Gemfile.lock
 /jetty
 /pkg
 /tmp
+/.bundle

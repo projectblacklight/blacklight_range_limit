@@ -2,6 +2,7 @@
 
 module BlacklightRangeLimit
   autoload :ControllerOverride, 'blacklight_range_limit/controller_override'
+  autoload :SearchBuilderOverride, 'blacklight_range_limit/search_builder_override'
   autoload :ViewHelperOverride, 'blacklight_range_limit/view_helper_override'
   autoload :RouteSets, 'blacklight_range_limit/route_sets'
 
@@ -22,8 +23,12 @@ module BlacklightRangeLimit
   def self.omit_inject ; @omit_inject ; end
   
   def self.inject!
-    unless omit_inject[:controller_mixin]
+      unless omit_inject[:controller_mixin]
         CatalogController.send(:include, BlacklightRangeLimit::ControllerOverride) unless Blacklight::Catalog.include?(BlacklightRangeLimit::ControllerOverride)
+      end
+
+      unless omit_inject[:search_builder_mixin]
+        Blacklight::Solr::SearchBuilder.send(:include, BlacklightRangeLimit::SearchBuilderOverride) unless Blacklight::Solr::SearchBuilder.include?(BlacklightRangeLimit::SearchBuilderOverride)
       end
 
       unless omit_inject[:view_helpers]

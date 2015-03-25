@@ -1,6 +1,7 @@
 module BlacklightRangeLimit
   module SearchBuilderOverride
     include SegmentCalculation
+    extend ActiveSupport::Concern
 
     included do
       default_processor_chain << :add_range_limit_params

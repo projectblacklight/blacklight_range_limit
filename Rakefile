@@ -37,7 +37,7 @@ namespace :test do
   task :seed => ['engine_cart:generate'] do
     within_test_app do
       ENV['RAILS_ENV'] ||= 'test'
-      system "rake blacklight:solr:seed"
+      system "rake blacklight:index:seed"
       system "rake blacklight_range_limit:seed"
     end
   end

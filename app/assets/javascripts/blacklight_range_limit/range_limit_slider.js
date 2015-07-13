@@ -50,7 +50,7 @@ $(".range_limit .profile .range.slider_js").each(function() {
   end_el.val(max);
         
   begin_el.change( function() {
-    var val = parseNum($(this).val());
+    var val = BlacklightRangeLimit.parseNum($(this).val());
     if ( isNaN(val)  || val < min) {
       //for weird data, set slider at min           
       val = min;
@@ -61,7 +61,7 @@ $(".range_limit .profile .range.slider_js").each(function() {
   });
         
   end_el.change( function() {
-     var val = parseNum($(this).val());
+     var val = BlacklightRangeLimit.parseNum($(this).val());
      if ( isNaN(val) || val > max ) {
        //weird entry, set slider to max
        val = max;
@@ -96,16 +96,16 @@ function min_max(range_element) {
    
    
    
-   var min = max = parseNum(current_limit.find(".single").text())
+   var min = max = BlacklightRangeLimit.parseNum(current_limit.find(".single").text())
    if ( isNaN(min)) {
-     min = parseNum(current_limit.find(".from").first().text());
-     max = parseNum(current_limit.find(".to").first().text());
+     min = BlacklightRangeLimit.parseNum(current_limit.find(".from").first().text());
+     max = BlacklightRangeLimit.parseNum(current_limit.find(".to").first().text());
    }
   
    if (isNaN(min) || isNaN(max)) {
       //no current limit, take from results min max included in spans
-      min = parseNum($(range_element).find(".min").first().text());
-      max = parseNum($(range_element).find(".max").first().text());
+      min = BlacklightRangeLimit.parseNum($(range_element).find(".min").first().text());
+      max = BlacklightRangeLimit.parseNum($(range_element).find(".max").first().text());
    }
    
    return [min, max]

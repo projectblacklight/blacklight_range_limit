@@ -155,13 +155,13 @@ Blacklight.onLoad(function() {
         var series_data = new Array();
         var pointer_lookup = new Array();
         var x_ticks = new Array();
-        var min = parseNum($(container).find("ul li:first-child span.from").text());
-        var max = parseNum($(container).find("ul li:last-child span.to").text());
+        var min = BlacklightRangeLimit.parseNum($(container).find("ul li:first-child span.from").text());
+        var max = BlacklightRangeLimit.parseNum($(container).find("ul li:last-child span.to").text());
 
         $(container).find("ul li").each(function() {
-            var from = parseNum($(this).find("span.from").text());
-            var to = parseNum($(this).find("span.to").text());
-            var count = parseNum($(this).find("span.count").text());
+            var from = BlacklightRangeLimit.parseNum($(this).find("span.from").text());
+            var to = BlacklightRangeLimit.parseNum($(this).find("span.to").text());
+            var count = BlacklightRangeLimit.parseNum($(this).find("span.count").text());
             var avg = (count / (to - from + 1));
 
 
@@ -174,7 +174,7 @@ Blacklight.onLoad(function() {
 
             pointer_lookup.push({'from': from, 'to': to, 'count': count, 'label': $(this).find(".facet_select").text() });
         });
-        var max_plus_one = parseNum($(container).find("ul li:last-child span.to").text())+1;
+        var max_plus_one = BlacklightRangeLimit.parseNum($(container).find("ul li:last-child span.to").text())+1;
         x_ticks.push( max_plus_one );
 
 
@@ -205,7 +205,7 @@ Blacklight.onLoad(function() {
 
           if(segment != last_segment) {
             $('.distribution').tooltip('destroy');            
-            $('.distribution').tooltip({'title': function() { return find_segment_for(pos.x).label  + ' (' + parseNum(segment.count) + ')' }, 'placement': 'bottom', 'trigger': 'manual', 'delay': { show: 0, hide: 100}});
+            $('.distribution').tooltip({'title': function() { return find_segment_for(pos.x).label  + ' (' + BlacklightRangeLimit.parseNum(segment.count) + ')' }, 'placement': 'bottom', 'trigger': 'manual', 'delay': { show: 0, hide: 100}});
             $('.distribution').tooltip('show');
 
             last_segment  = segment;
@@ -266,11 +266,11 @@ Blacklight.onLoad(function() {
     }
 
     function form_selection(form, min, max) {
-      var begin_val = parseNum($(form).find("input.range_begin").val());
+      var begin_val = BlacklightRangeLimit.parseNum($(form).find("input.range_begin").val());
       if (isNaN(begin_val) || begin_val < min) {
         begin_val = min;
       }
-      var end_val = parseNum($(form).find("input.range_end").val());
+      var end_val = BlacklightRangeLimit.parseNum($(form).find("input.range_end").val());
       if (isNaN(end_val) || end_val > max) {
         end_val = max;
       }

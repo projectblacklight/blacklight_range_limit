@@ -8,7 +8,7 @@ module BlacklightRangeLimit
     extend ActiveSupport::Concern
   
     included do
-      search_params_logic << :add_range_limit_params
+      solr_search_params_logic << :add_range_limit_params
       helper_method :range_config
   
       

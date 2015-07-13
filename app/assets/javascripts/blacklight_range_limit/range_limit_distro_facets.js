@@ -204,7 +204,7 @@ Blacklight.onLoad(function() {
           segment = find_segment_for(pos.x);
 
           if(segment != last_segment) {
-            $('.distribution').tooltip('destroy');            
+            $('.distribution').tooltip('destroy');
             $('.distribution').tooltip({'title': function() { return find_segment_for(pos.x).label  + ' (' + BlacklightRangeLimit.parseNum(segment.count) + ')' }, 'placement': 'bottom', 'trigger': 'manual', 'delay': { show: 0, hide: 100}});
             $('.distribution').tooltip('show');
 

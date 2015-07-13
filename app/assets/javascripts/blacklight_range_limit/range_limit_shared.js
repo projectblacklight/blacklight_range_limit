@@ -17,7 +17,7 @@
 
   BlacklightRangeLimit.parseNum = function parseNum(str) {
     str = String(str).replace(/[^0-9]/g, '');
-    return parseInt(str);
+    return parseInt(str, 10);
   };
 
   global.BlacklightRangeLimit = BlacklightRangeLimit;

@@ -43,7 +43,7 @@ module BlacklightRangeLimit
       # Not really any good way to turn off facet.field's from the solr default,
       # no big deal it should be well-cached at this point.
 
-      @response = Blacklight.solr.get( blacklight_config.solr_path, :params => solr_params )
+      @response = Blacklight.default_index.connection.get( blacklight_config.solr_path, :params => solr_params )
 
       render('blacklight_range_limit/range_segments', :locals => {:solr_field => solr_field}, :layout => !request.xhr?)
     end

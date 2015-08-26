@@ -16,3 +16,10 @@ else
     gem 'sass-rails', "< 5.0"
   end
 end
+
+# I'm sorry, this is harsh and I think ought to be done some other way with
+# engine_cart, but I don't understand how or what's going on, and this
+# is all I could to avoid:
+# undefined method `type' for .focus:Sass::Selector::Class
+#         (in .../blacklight_range_limit/spec/internal/app/assets/stylesheets/blacklight.css.scss)
+gem 'sass', "~> 3.4"

@@ -19,7 +19,7 @@ Gem::Specification.new do |s|
 
   s.add_dependency "rails", ">= 3.0", "< 5.0"
   s.add_dependency "jquery-rails" # our JS needs jquery_rails  
-  s.add_dependency "blacklight", "~> 5.14"
+  s.add_dependency "blacklight", "~> 5.15"
 
   s.add_development_dependency "rspec", "~> 3.0"
   s.add_development_dependency "rspec-rails"

@@ -36,18 +36,9 @@ module BlacklightRangeLimit
       # field (with start/end params) mentioned in query params
       # range_field, range_start, and range_end
 
-      # This rather complicated to do in current state of BL and the
-      # possible ways the app is working, we do our best. 
-      original_filter_list = if self.respond_to?(:search_params_logic) && self.search_params_logic != true
-        self.search_params_logic
-      else
-        self.blacklight_config.search_builder_class.default_processor_chain
+      @response, _ = search_results(params, search_params_logic) do |search_builder|
+        search_builder.except(:add_range_limit_params).append(:fetch_specific_range_limit)
       end
-
-      filter_list = original_filter_list - [:add_range_limit_params]
-      filter_list += [:fetch_specific_range_limit]
-
-      @response, _ = search_results(params, filter_list)
 
       render('blacklight_range_limit/range_segments', :locals => {:solr_field => params[:range_field]}, :layout => !request.xhr?)
     end

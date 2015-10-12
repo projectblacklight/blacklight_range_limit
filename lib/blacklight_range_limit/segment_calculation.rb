@@ -12,7 +12,7 @@ module BlacklightRangeLimit
     #
     # Changes solr_params passed in. 
     def add_range_segments_to_solr!(solr_params, solr_field, min, max)
-      field_config = range_config(solr_field)    
+      field_config = BlacklightRangeLimit.range_config(blacklight_config, solr_field)    
     
       solr_params[:"facet.query"] ||= []
       
@@ -98,6 +98,8 @@ module BlacklightRangeLimit
     def floorInBase(n, base) 
        return base * (n / base).floor
     end
+
+
     
   end
 end

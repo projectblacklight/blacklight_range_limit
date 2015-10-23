@@ -26,6 +26,21 @@ describe "Blacklight Range Limit" do
 
     expect(page).to have_content "2000 to 2008 [remove] 12"
   end
+
+  context 'when I18n translation is available' do
+    before do
+      I18n.backend.store_translations(:en, blacklight: {search: {fields: {facet: {pub_date_sort: 'Publication Date I18n'}}}})
+    end
+
+    it 'should render the I18n label' do
+      visit catalog_index_path
+      click_link 'View distribution'
+      click_link '2000 to 2008'
+
+      expect(page).to have_content 'Publication Date I18n'
+      expect(page).to_not have_content 'Publication Date Sort'
+    end
+  end
 end
 
 describe "Blacklight Range Limit with configured input labels" do

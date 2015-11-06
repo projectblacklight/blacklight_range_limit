@@ -22,6 +22,7 @@ Gemfile.lock
 ## PROJECT::SPECIFIC
 
 /spec/internal
+.internal_test_app
 /jetty
 /pkg
 /tmp

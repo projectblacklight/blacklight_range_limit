@@ -2,11 +2,14 @@ require 'blacklight_range_limit/segment_calculation'
 
 module BlacklightRangeLimit
   module RangeLimitBuilder
+    extend ActiveSupport::Concern
     include BlacklightRangeLimit::SegmentCalculation
 
-    # Method added to solr_search_params_logic to fetch
-    # proper things for date ranges. This should be added in by default to standard
-    # processing chain. 
+    included do
+      default_processor_chain << :add_range_limit_params
+    end
+
+    # Method added to to fetch proper things for date ranges.
     def add_range_limit_params(solr_params)
        ranged_facet_configs = 
          blacklight_config.facet_fields.select { |key, config| config.range } 

@@ -3,7 +3,7 @@ require 'spec_helper'
 describe "Blacklight Range Limit" do
 
   it "should show the range limit facet" do
-    visit catalog_index_path
+    visit search_catalog_path
     expect(page).to have_selector 'input.range_begin'
     expect(page).to have_selector 'input.range_end'
     expect(page).to have_selector 'label.sr-only[for="range_pub_date_sort_begin"]', :text => 'Publication Date Sort range begin'
@@ -12,7 +12,7 @@ describe "Blacklight Range Limit" do
   end
 
   it "should provide distribution information" do
-    visit catalog_index_path
+    visit search_catalog_path
     click_link 'View distribution'
 
     expect(page).to have_content("1500 to 1599 0")
@@ -20,7 +20,7 @@ describe "Blacklight Range Limit" do
   end
 
   it "should limit appropriately" do
-    visit catalog_index_path
+    visit search_catalog_path
     click_link 'View distribution'
     click_link '2000 to 2008'
 
@@ -33,7 +33,7 @@ describe "Blacklight Range Limit" do
     end
 
     it 'should render the I18n label' do
-      visit catalog_index_path
+      visit search_catalog_path
       click_link 'View distribution'
       click_link '2000 to 2008'
 

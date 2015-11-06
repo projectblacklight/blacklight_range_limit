@@ -37,7 +37,7 @@ to your Gemfile. Run "bundle install".
 
 Then run 
 
-    rails generate blacklight_range_limit 
+    rails generate blacklight_range_limit:install
 
 This will install some asset references in your application.js and application.css.
 

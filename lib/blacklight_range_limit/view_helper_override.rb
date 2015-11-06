@@ -48,7 +48,7 @@
 
           next unless hash["missing"] || (!hash["begin"].blank?) || (!hash["end"].blank?)
           content << render_constraint_element(
-            blacklight_config.facet_fields[solr_field].label,
+            facet_field_label(solr_field),
             range_display(solr_field, my_params),
             :escape_value => false,
             :remove => remove_range_param(solr_field, my_params)
@@ -66,7 +66,7 @@
           next unless hash["missing"] || (!hash["begin"].blank?) || (! hash["end"].blank?)        
           
           content << render_search_to_s_element(
-            blacklight_config.facet_fields[solr_field].label,
+            facet_field_label(solr_field),
             range_display(solr_field, my_params),
             :escape_value => false
           )          

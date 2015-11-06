@@ -1,7 +1,7 @@
 <%- # requires solr_config local passed in
 
   field_config = range_config(solr_field)  
-  label = blacklight_config.facet_fields[solr_field].label
+  label = facet_field_label(solr_field)
   
   input_label_range_begin = field_config[:input_label_range_begin] || t("blacklight.range_limit.range_begin", field_label: label)
   input_label_range_end   = field_config[:input_label_range_end] || t("blacklight.range_limit.range_end", field_label: label)

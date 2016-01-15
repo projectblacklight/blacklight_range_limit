@@ -45,20 +45,23 @@ This will install some asset references in your application.js and application.c
 
 You have at least one solr field you want to display as a range limit, that's why you've installed this plugin. In your CatalogController, the facet configuration should look like:
 
-    config.add_facet_field 'pub_date', :label => 'Publication Year', :range => true 
+```ruby
+config.add_facet_field 'pub_date', label: 'Publication Year', range: true 
+```
   
 You should now get range limit display. More complicated configuration is available if desired, see Range Facet Configuration below. 
 
 
 You can also configure the look and feel of the Flot chart using the jQuery .data() method. On the `.facet_limit` container you want to configure, add a Flot options associative array (documented at http://people.iola.dk/olau/flot/API.txt) as the `plot-config` key. The `plot-config` key to set the `plot-config` key on the appropriate `.facet_limit` container. In order to customize the plot colors, for example, you could use this code:
 
-    $('.blacklight-year_i').data('plot-config', { 
-      selection: { color: '#C0FF83' }, 
-      colors: ['#ffffff'], 
-      series: { lines: { fillColor: 'rgba(255,255,255, 0.5)' }}, 
-      grid: { color: '#aaaaaa', tickColor: '#aaaaaa', borderWidth: 0 }  
-    });
-
+```javascript
+$('.blacklight-year_i').data('plot-config', { 
+    selection: { color: '#C0FF83' }, 
+    colors: ['#ffffff'], 
+    series: { lines: { fillColor: 'rgba(255,255,255, 0.5)' }}, 
+    grid: { color: '#aaaaaa', tickColor: '#aaaaaa', borderWidth: 0 }  
+});
+```
 You can add this configuration in app/assets/javascript/application.js, or anywhere else loaded before the blacklight range limit javascript.
 
 ## A note on AJAX use
@@ -78,12 +81,15 @@ Note that a drill-down will never require the second request, because boundaries
 
 Instead of simply passing "true", you can pass a hash with additional configuration. Here's an example with all the available keys, you don't need to use them all, just the ones you want to set to non-default values. 
 
-    config.add_facet_field 'pub_date', :label => 'Publication Year', :range => {
-      :num_segments => 6,
-      :assumed_boundaries => [1100, Time.now.year + 2],
-      :segments => false    
-    }
-  
+```ruby
+config.add_facet_field 'pub_date', label: 'Publication Year', 
+                       range: {
+                         num_segments: 6,
+                         assumed_boundaries: [1100, Time.now.year + 2],
+                         segments: false    
+                       }
+```
+
 * **:num_segments** :
   * Default 10. Approximately how many segments to divide the range into for segment facets, which become segments on the chart. Actual segments are calculated to be 'nice' values, so may not exactly match your setting.  
 * **:assumed_boundaries** :
@@ -135,17 +141,21 @@ You can turn off this injection if you like, although it will make the plugin le
 
 In any initializer, you can set:
 
-    BlacklightRangeLimit.omit_inject = true
-  
+```ruby
+BlacklightRangeLimit.omit_inject = true
+```
+
 to turn off all injection. The plugin will be completely non-functional if you do this, of course. But perhaps you could try to re-use some of it's classes in a non-Blacklight, highly hacked Blacklight, or even non-Rails application this way. 
 
 You can also turn off injection of individual components, which could be more useful:
    
-    BlacklightRangeLimit.omit_inject = {
-      :view_helpers => false,
-      :controller_mixin => false,
-      :routes => false
-    }
+```ruby
+BlacklightRangeLimit.omit_inject = {
+  view_helpers: false,
+  controller_mixin: false,
+  routes: false
+}
+```
 
 * **:view_helpers** :
   * Set to false and the plugin will not insert it's own rails view helpers into the app. It will raise lots of errors if you do this, you probably don't want to. 

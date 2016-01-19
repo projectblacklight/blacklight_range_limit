@@ -17,11 +17,13 @@ module BlacklightRangeLimit
     end
 
     def install_search_builder
-      inject_into_file 'app/models/search_builder.rb', after: /include Blacklight::Solr::SearchBuilderBehavior.*$/ do
-        <<-EOF
-
-          include BlacklightRangeLimit::RangeLimitBuilder
-        EOF
+      path = 'app/models/search_builder.rb'
+      if File.exists? path
+        inject_into_file path, after: /include Blacklight::Solr::SearchBuilderBehavior.*$/ do
+          "\n  include BlacklightRangeLimit::RangeLimitBuilder\n"
+        end
+      else
+        say_status("error", "Unable to find #{path}. You must manually add the 'include BlacklightRangeLimit::RangeLimitBuilder' to your SearchBuilder", :red)
       end
     end
 

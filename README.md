@@ -132,40 +132,6 @@ ourselves yet.
 Also not sure how well the flot select UI works on a touch screen. The slider
 is probably the best touch UI anyway, if it can be made to work well. 
 
-
-## Injection
-
-The plugin assumes it is in a Blacklight Rails app, and uses Blacklight methods, Rails methods, and standard ruby module includes to inject it's behaviors into the app.  
-
-You can turn off this injection if you like, although it will make the plugin less (or non-) functional unless you manually do similar injection. See lib/blacklight_range_limit.rb#inject! to see exactly what's going on. 
-
-In any initializer, you can set:
-
-```ruby
-BlacklightRangeLimit.omit_inject = true
-```
-
-to turn off all injection. The plugin will be completely non-functional if you do this, of course. But perhaps you could try to re-use some of it's classes in a non-Blacklight, highly hacked Blacklight, or even non-Rails application this way. 
-
-You can also turn off injection of individual components, which could be more useful:
-   
-```ruby
-BlacklightRangeLimit.omit_inject = {
-  view_helpers: false,
-  controller_mixin: false,
-  routes: false
-}
-```
-
-* **:view_helpers** :
-  * Set to false and the plugin will not insert it's own rails view helpers into the app. It will raise lots of errors if you do this, you probably don't want to. 
-* **:controller_mixin** :
-  * The plugin mixes some methods into CatalogController, both over-riding Blacklight methods, and providing a new action of it's own. Set to false, and the plugin won't. You've basically disabled the plugin if you do this.  
-* **:routes** :
-  * Disable automatic routes loading
-  
-See Javascript Dependencies above for disabling injection of gem's js.   
-  
 # Tests
 
 Test coverage is not great, but there are some tests, using rspec.  Run `rake ci` or just `rake` to seed and

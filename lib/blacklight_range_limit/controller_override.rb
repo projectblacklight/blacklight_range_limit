@@ -1,22 +1,20 @@
 # Meant to be applied on top of a controller that implements
 # Blacklight::SolrHelper. Will inject range limiting behaviors
-# to solr parameters creation. 
+# to solr parameters creation.
 require 'blacklight_range_limit/segment_calculation'
 module BlacklightRangeLimit
   module ControllerOverride
     extend ActiveSupport::Concern
 
     included do
-      unless BlacklightRangeLimit.omit_inject[:view_helpers]
-        helper BlacklightRangeLimit::ViewHelperOverride
-        helper RangeLimitHelper
-      end
+      helper BlacklightRangeLimit::ViewHelperOverride
+      helper RangeLimitHelper
     end
-  
+
     # Action method of our own!
     # Delivers a _partial_ that's a display of a single fields range facets.
     # Used when we need a second Solr query to get range facets, after the
-    # first found min/max from result set. 
+    # first found min/max from result set.
     def range_limit
       # We need to swap out the add_range_limit_params search param filter,
       # and instead add in our fetch_specific_range_limit filter,

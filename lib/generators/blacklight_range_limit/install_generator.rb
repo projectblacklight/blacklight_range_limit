@@ -2,6 +2,8 @@ require 'rails/generators'
 
 module BlacklightRangeLimit
   class InstallGenerator < Rails::Generators::Base
+    source_root File.expand_path('../templates', __FILE__)
+
     def copy_public_assets
       generate 'blacklight_range_limit:assets'
     end
@@ -21,6 +23,10 @@ module BlacklightRangeLimit
           include BlacklightRangeLimit::RangeLimitBuilder
         EOF
       end
+    end
+
+    def install_search_history_controller
+     copy_file "search_history_controller.rb", "app/controllers/search_history_controller.rb"
     end
 
     def install_routing_concern

@@ -14,34 +14,7 @@ module BlacklightRangeLimit
   self.labels = {
     :missing => "Unknown"
   }
-
   
-  @omit_inject = {}
-  def self.omit_inject=(value)
-    value = Hash.new(true) if value == true
-    @omit_inject = value      
-  end
-  def self.omit_inject ; @omit_inject ; end
-  
-  def self.inject!
-
-      unless omit_inject[:view_helpers]
-        SearchHistoryController.send(:helper, 
-          BlacklightRangeLimit::ViewHelperOverride
-        ) unless
-          SearchHistoryController.helpers.is_a?( 
-            BlacklightRangeLimit::ViewHelperOverride
-          )
-         
-        SearchHistoryController.send(:helper, 
-          RangeLimitHelper
-        ) unless
-          SearchHistoryController.helpers.is_a?( 
-            RangeLimitHelper
-          )
-      end
-  end
-
   # Add element to array only if it's not already there
   def self.safe_arr_add(array, element)
     array << element unless array.include?(element)
@@ -64,5 +37,4 @@ module BlacklightRangeLimit
 
     config
   end
-  
 end

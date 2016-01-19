@@ -17,7 +17,7 @@ class TestAppGenerator < Rails::Generators::Base
   def run_blacklight_range_limit_generator
     say_status("warning", "GENERATING BL", :yellow)       
 
-    generate 'blacklight_range_limit'
+    generate 'blacklight_range_limit:install'
   end
 
   def fixtures
@@ -26,8 +26,8 @@ class TestAppGenerator < Rails::Generators::Base
   end
 
   def inject_into_catalog_controller
-    inject_into_file 'app/controllers/catalog_controller.rb', after: "config.add_facet_field 'example_pivot_field', :label => 'Pivot Field', :pivot => ['format', 'language_facet']" do
-      "\n    config.add_facet_field 'pub_date_sort', :label => 'Publication Date Sort', :range => true"
+    inject_into_file 'app/controllers/catalog_controller.rb', after: /config.add_facet_field 'format'.*$/ do
+      "\n    config.add_facet_field 'pub_date_sort', label: 'Publication Date Sort', range: true"
     end
   end
 end

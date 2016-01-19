@@ -4,10 +4,11 @@ module BlacklightRangeLimit
   require 'blacklight_range_limit/range_limit_builder'
   require 'blacklight_range_limit/controller_override'
   require 'blacklight_range_limit/view_helper_override'
-  require 'blacklight_range_limit/route_sets'
 
   require 'blacklight_range_limit/version'
   require 'blacklight_range_limit/engine'
+
+  autoload :Routes, 'blacklight_range_limit/routes'
 
   mattr_accessor :labels
   self.labels = {
@@ -23,9 +24,6 @@ module BlacklightRangeLimit
   def self.omit_inject ; @omit_inject ; end
   
   def self.inject!
-    unless omit_inject[:controller_mixin]
-        CatalogController.send(:include, BlacklightRangeLimit::ControllerOverride) unless Blacklight::Catalog.include?(BlacklightRangeLimit::ControllerOverride)
-      end
 
       unless omit_inject[:view_helpers]
         SearchHistoryController.send(:helper, 
@@ -41,10 +39,6 @@ module BlacklightRangeLimit
           SearchHistoryController.helpers.is_a?( 
             RangeLimitHelper
           )
-      end
-      
-      unless BlacklightRangeLimit.omit_inject[:routes]
-        Blacklight::Routes.send(:include, BlacklightRangeLimit::RouteSets)
       end
   end
 

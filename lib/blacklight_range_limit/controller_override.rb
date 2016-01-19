@@ -5,23 +5,11 @@ require 'blacklight_range_limit/segment_calculation'
 module BlacklightRangeLimit
   module ControllerOverride
     extend ActiveSupport::Concern
-  
-    included do        
+
+    included do
       unless BlacklightRangeLimit.omit_inject[:view_helpers]
         helper BlacklightRangeLimit::ViewHelperOverride
         helper RangeLimitHelper
-      end
-
-      if self.respond_to? :search_params_logic
-        search_params_logic << :add_range_limit_params
-      end
-      if self.blacklight_config.search_builder_class
-        unless self.blacklight_config.search_builder_class.include?(BlacklightRangeLimit::RangeLimitBuilder)
-          self.blacklight_config.search_builder_class.send(:include,  
-              BlacklightRangeLimit::RangeLimitBuilder  
-          ) 
-          self.blacklight_config.search_builder_class.default_processor_chain << :add_range_limit_params
-        end
       end
     end
   
@@ -36,7 +24,7 @@ module BlacklightRangeLimit
       # field (with start/end params) mentioned in query params
       # range_field, range_start, and range_end
 
-      @response, _ = search_results(params, search_params_logic) do |search_builder|
+      @response, _ = search_results(params) do |search_builder|
         search_builder.except(:add_range_limit_params).append(:fetch_specific_range_limit)
       end
 

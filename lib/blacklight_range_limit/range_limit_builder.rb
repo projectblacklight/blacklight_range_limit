@@ -6,7 +6,8 @@ module BlacklightRangeLimit
     include BlacklightRangeLimit::SegmentCalculation
 
     included do
-      default_processor_chain << :add_range_limit_params
+      # Use setters so not to propagate changes
+      self.default_processor_chain += [:add_range_limit_params]
     end
 
     # Method added to to fetch proper things for date ranges.

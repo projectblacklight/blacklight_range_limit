@@ -10,9 +10,7 @@ module BlacklightRangeLimit
 
     def install_catalog_controller_mixin
       inject_into_class 'app/controllers/catalog_controller.rb', CatalogController do
-        <<-EOF
-          include BlacklightRangeLimit::ControllerOverride
-        EOF
+        "\n  include BlacklightRangeLimit::ControllerOverride\n"
       end
     end
 
@@ -36,14 +34,11 @@ module BlacklightRangeLimit
     end
 
     def add_range_limit_concern_to_catalog
-      routing_code = <<-EOF.strip_heredoc
-
-        concerns :range_searchable
-      EOF
-
       sentinel = /concerns :searchable.*$/
 
-      inject_into_file 'config/routes.rb', routing_code, after: sentinel
+      inject_into_file 'config/routes.rb', after: sentinel do
+        "\n    concerns :range_searchable\n"
+      end
     end
   end
 end

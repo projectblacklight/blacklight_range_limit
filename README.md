@@ -86,7 +86,8 @@ config.add_facet_field 'pub_date', label: 'Publication Year',
                        range: {
                          num_segments: 6,
                          assumed_boundaries: [1100, Time.now.year + 2],
-                         segments: false    
+                         segments: false,
+                         maxlength: 4
                        }
 ```
 
@@ -96,6 +97,8 @@ config.add_facet_field 'pub_date', label: 'Publication Year',
   * Default null. For a result set that has not yet been limited, instead of taking boundaries from results and making a second AJAX request to fetch segments, just assume these given boundaries. If you'd like to avoid this second AJAX Solr call, you can set :assumed_boundaries to a two-element array of integers instead, and the assumed boundaries will always be used. Note this is live ruby code, you can put calculations in there like Time.now.year + 2. 
 * **:segments** :
   * Default true. If set to false, then distribution segment facets will not be loaded at all.  
+* **:maxlength** :
+  * Default 4. Changes the value of the `maxlength` attribute of the text boxes, which determines how many digits can be entered.
    
 ## Javascript dependencies
 
@@ -134,10 +137,10 @@ is probably the best touch UI anyway, if it can be made to work well.
 
 # Tests
 
-Test coverage is not great, but there are some tests, using rspec.  Run `rake ci` or just `rake` to seed and
+Test coverage is not great, but there are some tests, using rspec.  Run `bundle exec rake ci` or just `bundle exec rake` to seed and
 start a demo jetty server, build a clean test app, and run tests. 
 
-Just `rake spec` to just run tests against an existing test app and jetty server. 
+Just `bundle exec rake spec` to just run tests against an existing test app and jetty server. 
 
 # Possible future To Do
 

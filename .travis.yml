@@ -4,7 +4,7 @@ notifications:
 language: ruby
 sudo: false
 rvm:
-  - 2.2.2
+  - 2.3.1
 
 before_install:
   - gem install bundler
@@ -16,3 +16,5 @@ notifications:
 
 global_env:
   - NOKOGIRI_USE_SYSTEM_LIBRARIES=true
+
+jdk: oraclejdk8

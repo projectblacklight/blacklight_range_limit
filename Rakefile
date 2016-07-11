@@ -1,6 +1,5 @@
 require 'rake'
 
-
 require 'bundler'
 Bundler::GemHelper.install_tasks
 
@@ -10,9 +9,7 @@ require 'engine_cart/rake_task'
 
 EngineCart.fingerprint_proc = EngineCart.rails_fingerprint_proc
 
-ZIP_URL = "https://github.com/projectblacklight/blacklight-jetty/archive/v4.10.4.zip"
-
-require 'jettywrapper'
+require 'solr_wrapper'
 
 task :default => :ci
 
@@ -21,12 +18,12 @@ RSpec::Core::RakeTask.new do |t|
 
 end
 
-task :ci => ['jetty:clean', 'engine_cart:generate'] do
-  jetty_params = Jettywrapper.load_config('test')
-  jetty_params[:startup_wait]= 60
-  error = Jettywrapper.wrap(jetty_params) do
-    Rake::Task["test:seed"].invoke
-    Rake::Task['spec'].invoke
+task :ci => ['engine_cart:generate'] do
+  SolrWrapper.wrap(port: '8983') do |solr|
+    solr.with_collection(name: 'blacklight-core', dir: File.join(File.expand_path(File.dirname(__FILE__)), "solr", "conf")) do
+      Rake::Task["test:seed"].invoke
+      Rake::Task['spec'].invoke
+    end
   end
   raise "test failures: #{error}" if error
 end

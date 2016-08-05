@@ -1,6 +1,7 @@
 <%- # requires solr_config local passed in
   field_config = range_config(solr_field)  
   label = facet_field_label(solr_field)
+  range = params.permit(:range)
   
   input_label_range_begin = field_config[:input_label_range_begin] || t("blacklight.range_limit.range_begin", field_label: label)
   input_label_range_end   = field_config[:input_label_range_end] || t("blacklight.range_limit.range_end", field_label: label)
@@ -8,11 +9,11 @@
 -%>
 
 <div class="limit_content range_limit">  
-  <% if  params["range"] &&
-         params["range"][solr_field] &&
-         ( (! params["range"][solr_field]["begin"].blank?) ||
-           (! params["range"][solr_field]["end"].blank?) ||
-           params["range"][solr_field]["missing"]) %>
+  <% if  range &&
+         range[solr_field] &&
+         ( (! range[solr_field]["begin"].blank?) ||
+           (! range[solr_field]["end"].blank?) ||
+           range[solr_field]["missing"]) %>
     <ul class="current list-unstyled facet-values">
       <li class="selected">
         <span class="facet-label">
@@ -28,7 +29,7 @@
          
   <% end %>
 
-  <% unless params["range"] && params["range"][solr_field] && params["range"][solr_field]["missing"] %>  
+  <% unless range && range[solr_field] && range[solr_field]["missing"] %>  
     <%= form_tag search_action_path, :method => :get, :class=>"range_limit subsection range_#{solr_field} form-inline" do %>
       <%= render_hash_as_hidden_fields(search_state.params_for_search) %>
       
@@ -46,7 +47,7 @@
   <% end %>
     
   <!-- no results profile if missing is selected -->
-  <% unless params["range"] && params["range"][solr_field] && params["range"][solr_field]["missing"] %>
+  <% unless range && range[solr_field] && range[solr_field]["missing"] %>
     <!-- you can hide this if you want, but it has to be on page if you want
          JS slider and calculated facets to show up, JS sniffs it. -->
     <div class="profile">
@@ -67,7 +68,7 @@
                  <%= render(:partial => "blacklight_range_limit/range_segments", :locals => {:solr_field => solr_field}) %>
                  
               <% else %> 
-                <%= link_to('View distribution', params.merge(:action => 'range_limit', :range_field => solr_field, :range_start => min, :range_end => max), :class => "load_distribution") %>
+                <%= link_to('View distribution', search_state.params_for_search.merge(:action => 'range_limit', :range_field => solr_field, :range_start => min, :range_end => max), :class => "load_distribution") %>
               <% end %>
             </div>
           <% end %>  

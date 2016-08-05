@@ -26,7 +26,17 @@ module BlacklightRangeLimit
         search_builder.except(:add_range_limit_params).append(:fetch_specific_range_limit)
       end
 
-      render('blacklight_range_limit/range_segments', :locals => {:solr_field => params[:range_field]}, :layout => !request.xhr?)
+      render('blacklight_range_limit/range_segments', :locals => {:solr_field => range_field}, :layout => !request.xhr?)
+    end
+
+    private
+
+    def range_field
+      params.permit(:range_field)
+    end
+
+    def range
+      params.permit(:range)
     end
   end
 end

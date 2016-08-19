@@ -77,6 +77,7 @@
     end
 
     def remove_range_param(solr_field, my_params = params)
+      my_params = Blacklight::SearchState.new(my_params, blacklight_config).to_h
       if ( my_params["range"] )
         my_params = my_params.dup
         my_params["range"] = my_params["range"].dup

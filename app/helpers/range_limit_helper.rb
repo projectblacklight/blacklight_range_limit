@@ -63,7 +63,7 @@ module RangeLimitHelper
   end
 
   def add_range_missing(solr_field, my_params = params)
-    my_params = Marshal.load(Marshal.dump(my_params))
+    my_params = Blacklight::SearchState.new(my_params, blacklight_config).to_h
     my_params["range"] ||= {}
     my_params["range"][solr_field] ||= {}
     my_params["range"][solr_field]["missing"] = "true"
@@ -77,7 +77,7 @@ module RangeLimitHelper
   end
 
   def add_range(solr_field, from, to, my_params = params)
-    my_params = Marshal.load(Marshal.dump(my_params))
+    my_params = Blacklight::SearchState.new(my_params, blacklight_config).to_h
     my_params["range"] ||= {}
     my_params["range"][solr_field] ||= {}
 

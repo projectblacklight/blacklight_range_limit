@@ -20,7 +20,7 @@ pkg
 Gemfile.lock
 
 ## PROJECT::SPECIFIC
-
+.internal_test_app
 /spec/internal
 /jetty
 /pkg

@@ -1,20 +1,12 @@
-require 'rubygems'
-require 'bundler/setup'
-
 ENV["RAILS_ENV"] ||= 'test'
-
 require 'rsolr'
-
 require 'engine_cart'
 EngineCart.load_application!
 
 require 'rspec/rails'
 require 'capybara/rspec'
 
-
 RSpec.configure do |config|
-
-
   # rspec-rails 3 will no longer automatically infer an example group's spec type
   # from the file location. You can explicitly opt-in to the feature using this
   # config option.
@@ -26,4 +18,3 @@ RSpec.configure do |config|
   #     end
   config.infer_spec_type_from_file_location!
 end
-

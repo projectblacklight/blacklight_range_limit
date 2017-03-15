@@ -9,20 +9,20 @@ class TestAppGenerator < Rails::Generators::Base
   end
 
   def run_blacklight_generator
-    say_status("warning", "GENERATING BL", :yellow)       
+    say_status("warning", "GENERATING BL", :yellow)
 
     generate 'blacklight:install', '--devise'
   end
 
   def run_blacklight_range_limit_generator
-    say_status("warning", "GENERATING BL", :yellow)       
+    say_status("warning", "GENERATING BL", :yellow)
 
     generate 'blacklight_range_limit:install'
   end
 
   def fixtures
     FileUtils.mkdir_p 'spec/fixtures/solr_documents'
-    directory 'solr_documents', 'spec/fixtures/solr_documents'
+    directory '../fixtures/solr_documents', 'spec/fixtures/solr_documents'
   end
 
   def inject_into_catalog_controller

@@ -2,12 +2,12 @@
 //= require blacklight/core
 
 /* A custom event "plotDrawn.blacklight.rangeLimit" will be sent when flot plot
-   is (re-)drawn on screen possibly with a new size. target of event will be the DOM element 
+   is (re-)drawn on screen possibly with a new size. target of event will be the DOM element
    containing the plot.  Used to resize slider to match. */
 
 Blacklight.onLoad(function() {
   // ratio of width to height for desired display, multiply width by this ratio
-  // to get height. hard-coded in for now. 
+  // to get height. hard-coded in for now.
   var display_ratio = 1/(1.618 * 2); // half a golden rectangle, why not
   var redrawnEvent = "plotDrawn.blacklight.rangeLimit";
 
@@ -31,7 +31,7 @@ Blacklight.onLoad(function() {
   });
 
   // Listen for twitter bootstrap collapsible open events, to render flot
-  // in previously hidden divs on open, if needed. 
+  // in previously hidden divs on open, if needed.
   $("body").on("show.bs.collapse", function(event) {
     // Was the target a .facet-content including a .chart-js?
     var container =  $(event.target).filter(".facet-content").find(".chart_js");
@@ -41,7 +41,7 @@ Blacklight.onLoad(function() {
       // be willing to wait up to 1100ms for container to
       // have width -- right away on show.bs is too soon, but
       // shown.bs is later than we want, we want to start rendering
-      // while animation is still in progress. 
+      // while animation is still in progress.
       turnIntoPlot(container, 1100);
     }
   });
@@ -51,14 +51,14 @@ Blacklight.onLoad(function() {
   // after a collapsible facet contents is fully shown,
   // resize the flot chart to current conditions. This way, if you change
   // browser window size, you can get chart resized to fit by closing and opening
-  // again, if needed. 
+  // again, if needed.
 
   function redrawPlot(container) {
     if (container && container.width() > 0) {
-      // resize the container's height, since width may have changed. 
+      // resize the container's height, since width may have changed.
       container.height( container.width() * display_ratio  );
 
-      // redraw the chart. 
+      // redraw the chart.
       var plot = container.data("plot");
       if (plot) {
         // how to redraw after possible resize?
@@ -74,7 +74,7 @@ Blacklight.onLoad(function() {
         // send our custom event to trigger redraw of slider
         $(container).trigger(redrawnEvent);
       }
-    }    
+    }
   }
 
   $("body").on("shown.bs.collapse", function(event) {
@@ -114,25 +114,25 @@ Blacklight.onLoad(function() {
   // container is finally visible. The timeout is used when we catch
   // bootstrap show event, but the animation hasn't barely begun yet -- but
   // we don't want to wait until it's finished, we want to start rendering
-  // as soon as we can. 
+  // as soon as we can.
   //
-  // We also will 
+  // We also will
   function turnIntoPlot(container, wait_for_visible) {
     // flot can only render in a a div with a defined width.
     // for instance, a hidden div can't generally be rendered in (although if you set
     // an explicit width on it, it might work)
     //
     // We'll count on later code that catch bootstrap collapse open to render
-    // on show, for currently hidden divs. 
+    // on show, for currently hidden divs.
 
     // for some reason width sometimes return negative, not sure
-    // why but it's some kind of hidden. 
-    if (container.width() > 0) {      
+    // why but it's some kind of hidden.
+    if (container.width() > 0) {
       var height = container.width() * display_ratio;
-      
-      // Need an explicit height to make flot happy.   
+
+      // Need an explicit height to make flot happy.
       container.height( height )
-      
+
       areaChart($(container));
 
       $(container).trigger(redrawnEvent);
@@ -222,7 +222,7 @@ Blacklight.onLoad(function() {
               plot.setSelection( normalized_selection(segment.from, segment.to));
             }
         });
-        $(container).bind("plotselected plotselecting", function(event, ranges) {          
+        $(container).bind("plotselected plotselecting", function(event, ranges) {
             if (ranges != null ) {
               var from = Math.floor(ranges.xaxis.from);
               var to = Math.floor(ranges.xaxis.to);
@@ -230,11 +230,11 @@ Blacklight.onLoad(function() {
               var form = $(container).closest(".limit_content").find("form.range_limit");
               form.find("input.range_begin").val(from);
               form.find("input.range_end").val(to);
-              
+
               var slider_placeholder = $(container).closest(".limit_content").find("[data-slider-placeholder]");
               if (slider_placeholder) {
-							  slider_placeholder.slider("setValue", [from, to+1]);
-              }								
+                slider_placeholder.slider("setValue", [from, to+1]);
+              }
             }
         });
 
@@ -288,10 +288,10 @@ Blacklight.onLoad(function() {
         return pointer_lookup_arr[0];
       };
     }
-        
+
     // Check if Flot is loaded, and if browser has support for
-    // canvas object, either natively or via IE excanvas. 
-    function domDependenciesMet() {    
+    // canvas object, either natively or via IE excanvas.
+    function domDependenciesMet() {
       var flotLoaded = (typeof $.plot != "undefined");
       var canvasAvailable = ((typeof(document.createElement('canvas').getContext) != "undefined") || (typeof  window.CanvasRenderingContext2D != 'undefined' || typeof G_vmlCanvasManager != 'undefined'));
 

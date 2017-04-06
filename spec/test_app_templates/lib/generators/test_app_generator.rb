@@ -1,7 +1,7 @@
 require 'rails/generators'
 
 class TestAppGenerator < Rails::Generators::Base
-  source_root File.expand_path("../../../../test_app_templates", __FILE__)
+  source_root File.expand_path("../../../spec/test_app_templates", __FILE__)
 
   def copy_blacklight_test_app_rake_task
     copy_file "lib/tasks/blacklight_test_app.rake"

@@ -3,10 +3,10 @@
   # display. 
   module BlacklightRangeLimit::ViewHelperOverride
 
-    def has_range_limit_parameters?(params = params)
-      params[:range] && 
-        params[:range].any? do |key, v| 
-          v.present? && v.respond_to?(:'[]') && 
+    def has_range_limit_parameters?(my_params = params)
+      my_params[:range] &&
+        my_params[:range].any? do |key, v|
+          v.present? && v.respond_to?(:'[]') &&
           (v["begin"].present? || v["end"].present? || v["missing"].present?)
         end
     end
@@ -16,10 +16,10 @@
       super || has_range_limit_parameters?
     end
 
-    def query_has_constraints?(params = params)         
-      super || has_range_limit_parameters?(params)
+    def query_has_constraints?(my_params = params)
+      super(my_params) || has_range_limit_parameters?(my_params)
     end
-    
+
     def facet_partial_name(display_facet)
       return "blacklight_range_limit/range_limit_panel" if range_config(display_facet.name) and should_show_limit(display_facet.name)
       super

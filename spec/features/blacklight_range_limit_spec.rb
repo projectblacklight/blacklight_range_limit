@@ -12,16 +12,16 @@ describe "Blacklight Range Limit" do
 
   it "should show the range limit facet" do
     visit '/catalog'
-    page.should have_selector 'input.range_begin'
-    page.should have_selector 'input.range_end'
+    expect(page).to have_selector 'input.range_begin'
+    expect(page).to have_selector 'input.range_end'
   end
 
   it "should provide distribution information" do
     visit '/catalog'
     click_link 'View distribution'
 
-    page.should have_content("1941 to 1944 (1)")
-    page.should have_content("2005 to 2008 (7)")
+    expect(page).to have_content("1941 to 1944 (1)")
+    expect(page).to have_content("2005 to 2008 (7)")
   end
 
   it "should limit appropriately" do
@@ -29,6 +29,6 @@ describe "Blacklight Range Limit" do
     click_link 'View distribution'
     click_link '1941 to 1944'
 
-    page.should have_content "1941 to 1944 (1) [remove]"
+    expect(page).to have_content "1941 to 1944 (1) [remove]"
   end
 end

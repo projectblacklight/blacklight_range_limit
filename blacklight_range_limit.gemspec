@@ -32,7 +32,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'launchy'
   s.add_development_dependency "jettywrapper"
   s.add_development_dependency 'engine_cart', '~> 1.0'
-  s.add_development_dependency 'devise'
+  s.add_development_dependency 'devise', '<= 3.5.3' # last version to support 1.9.3
   s.add_development_dependency 'devise-guests'
   s.add_development_dependency 'bootstrap-sass'
   s.add_development_dependency 'turbolinks'

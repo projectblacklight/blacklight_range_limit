@@ -18,8 +18,6 @@ group :test do
   else
     gem 'capybara'
   end
-  gem 'simplecov', :platform => :mri_19
-  gem 'simplecov-rcov', :platform => :mri_19
 end
 
 gem 'jettywrapper', '>= 1.2.0'

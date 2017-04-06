@@ -21,7 +21,8 @@ Gem::Specification.new do |s|
   s.add_dependency "jquery-rails" # our JS needs jquery_rails
   s.add_dependency "blacklight", "~> 4.0"
   s.add_dependency "nokogiri", "< 1.7.0" # 1.7.0 drops ruby 1.9.3 and 2.0.0 support
-  s.add_dependency "mime-types", "< 3.0" #   3.0 drops ruby 1.9.3 and 2.0.0 support
+  s.add_dependency "mime-types", "< 3.0" #   3.0 drops ruby 1.9.3 support
+  s.add_dependency "addressable", "<= 2.4.0" # avoid public_suffix dependency introduction (1.9.3 support)
 
   s.add_development_dependency "rspec", ">= 2.0"
   s.add_development_dependency "rake", "< 11.0" # old rspec needs old rake

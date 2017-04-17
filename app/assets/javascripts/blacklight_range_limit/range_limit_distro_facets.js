@@ -206,7 +206,7 @@ Blacklight.onLoad(function() {
 
           if(segment != last_segment) {
             var title = find_segment_for(pos.x).label  + ' (' + BlacklightRangeLimit.parseNum(segment.count) + ')';
-            $('.distribution').attr("title", title).tooltip("fixTitle").tooltip("show");
+            $('.distribution').attr("title", title).tooltip("_fixTitle").tooltip("show");
 
             last_segment  = segment;
            }

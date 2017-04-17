@@ -10,14 +10,14 @@
     this.options = options || {};
   }
 
-  BlacklightRangeLimit.noConflict = function noConflict() {
-    global.BlacklightRangeLimit = previousBlacklightRangeLimit;
-    return BlacklightRangeLimit;
-  };
-
   BlacklightRangeLimit.parseNum = function parseNum(str) {
     str = String(str).replace(/[^0-9]/g, '');
     return parseInt(str, 10);
+  };
+
+  BlacklightRangeLimit.noConflict = function noConflict() {
+    global.BlacklightRangeLimit = previousBlacklightRangeLimit;
+    return BlacklightRangeLimit;
   };
 
   global.BlacklightRangeLimit = BlacklightRangeLimit;

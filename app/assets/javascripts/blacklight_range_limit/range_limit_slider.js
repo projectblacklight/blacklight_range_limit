@@ -1,5 +1,4 @@
 // for Blacklight.onLoad:
-//= require blacklight/core
 
 Blacklight.onLoad(function() {
         

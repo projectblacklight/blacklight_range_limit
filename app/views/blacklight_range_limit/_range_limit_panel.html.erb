@@ -12,9 +12,9 @@
     <ul class="current list-unstyled facet-values">
       <li class="selected">
         <span class="facet-label">
-          <span class="selected"><%= range_display(field_name) %></span>
+          <span class="selected"><%= range_display(field_name) %></span> 
            <%= link_to remove_range_param(field_name), :class=>"remove", :title => t('blacklight.range_limit.remove_limit') do %>
-            <span class="remove-icon">✖</span>
+            <span class="glyphicon glyphicon-remove"></span>
             <span class="sr-only">[<%= t('blacklight.range_limit.remove_limit') %>]</span>
            <% end %>
         </span>
@@ -60,9 +60,9 @@
               <!-- if  we already fetched segments from solr, display them
                    here. Otherwise, display a link to fetch them, which JS
                    will AJAX fetch.  -->
-              <% if solr_range_queries_to_a(solr_field).length > 0 %>
+              <% if solr_range_queries_to_a(field_name).length > 0 %>
 
-                 <%= render(:partial => "blacklight_range_limit/range_segments", :locals => {:solr_field => solr_field}) %>
+                 <%= render(:partial => "blacklight_range_limit/range_segments", :locals => {:solr_field => field_name}) %>
 
               <% else %>
                 <%= link_to('View distribution', main_app.url_for(search_state.to_h.merge(action: 'range_limit', range_field: solr_field, range_start: min, range_end: max)), :class => "load_distribution") %>
@@ -70,7 +70,7 @@
             </div>
           <% end %>
         <% end %>
-        
+
 
 
         <% if (stats = stats_for_field(field_name)) && stats["missing"] > 0 %>

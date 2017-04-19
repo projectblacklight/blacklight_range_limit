@@ -4,12 +4,6 @@ module BlacklightRangeLimit
   class InstallGenerator < Rails::Generators::Base
     source_root File.expand_path('../templates', __FILE__)
 
-    def add_dependent_gems
-      add_source 'https://rails-assets.org' do
-        gem 'rails-assets-tether', '>= 1.3.3'
-      end
-    end
-
     def copy_public_assets
       generate 'blacklight_range_limit:assets'
     end

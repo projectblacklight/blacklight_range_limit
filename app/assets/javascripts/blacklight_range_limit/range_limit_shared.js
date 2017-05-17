@@ -93,6 +93,7 @@
   BlacklightRangeLimit.areaChart = function (container) {
     // flot loaded? And canvas element supported.
     if (  domDependenciesMet()  ) {
+      console.log(container)
 
       // Grab the data from the ul div
       var series_data = new Array();
@@ -139,14 +140,14 @@
 
       find_segment_for = function_for_find_segment(pointer_lookup);
       var last_segment = null;
-      $('.distribution').tooltip({'placement': 'bottom', 'trigger': 'manual', 'delay': { show: 0, hide: 100}});
+      $(container).tooltip({'placement': 'bottom', 'trigger': 'manual', 'delay': { show: 0, hide: 100}});
 
       $(container).bind("plothover", function (event, pos, item) {
         segment = find_segment_for(pos.x);
 
         if(segment != last_segment) {
           var title = find_segment_for(pos.x).label  + ' (' + BlacklightRangeLimit.parseNum(segment.count) + ')';
-          $('.distribution').attr("title", title).tooltip("_fixTitle").tooltip("show");
+          $(container).attr("title", title).tooltip("_fixTitle").tooltip("show");
 
           last_segment  = segment;
         }
@@ -154,7 +155,7 @@
 
       $(container).bind("mouseout", function() {
         last_segment = null;
-        $('.distribution').tooltip('hide');
+        $(container).tooltip('hide');
       });
       $(container).bind("plotclick", function (event, pos, item) {
           if ( plot.getSelection() == null) {

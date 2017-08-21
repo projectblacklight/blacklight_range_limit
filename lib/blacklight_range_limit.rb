@@ -10,11 +10,14 @@ module BlacklightRangeLimit
 
   autoload :Routes, 'blacklight_range_limit/routes'
 
+  # Raised when an invalid range is encountered
+  class InvalidRange < TypeError; end
+
   mattr_accessor :labels
   self.labels = {
     :missing => "Unknown"
   }
-  
+
   # Add element to array only if it's not already there
   def self.safe_arr_add(array, element)
     array << element unless array.include?(element)
@@ -22,11 +25,11 @@ module BlacklightRangeLimit
 
   # Convenience method for returning range config hash from
   # blacklight config, for a specific solr field, in a normalized
-  # way. 
+  # way.
   #
-  # Returns false if range limiting not configured. 
+  # Returns false if range limiting not configured.
   # Returns hash even if configured to 'true'
-  # for consistency. 
+  # for consistency.
   def self.range_config(blacklight_config, solr_field)
     field = blacklight_config.facet_fields[solr_field.to_s]
 

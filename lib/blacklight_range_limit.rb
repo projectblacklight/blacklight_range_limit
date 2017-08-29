@@ -13,9 +13,13 @@ module BlacklightRangeLimit
   # Raised when an invalid range is encountered
   class InvalidRange < TypeError; end
 
-  mattr_accessor :labels
+  mattr_accessor :labels, :classes
   self.labels = {
     :missing => "Unknown"
+  }
+  self.classes = {
+    form: 'range_limit subsection form-inline',
+    submit: 'submit btn btn-default'
   }
 
   # Add element to array only if it's not already there

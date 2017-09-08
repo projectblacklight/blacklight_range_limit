@@ -6,7 +6,8 @@
 
 
     def facet_partial_name(display_facet)
-      return "blacklight_range_limit/range_limit_panel" if range_config(display_facet.name) and should_show_limit(display_facet.name)
+      config = range_config(display_facet.name)
+      return config[:partial] || 'blacklight_range_limit/range_limit_panel' if config && should_show_limit(display_facet.name)
       super
     end
 

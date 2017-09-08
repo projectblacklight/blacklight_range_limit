@@ -40,7 +40,7 @@ module BlacklightRangeLimit
     return false unless field.range
 
     config = field.range
-    config = {} if config === true
+    config = { partial: field.partial } if config === true
 
     config
   end

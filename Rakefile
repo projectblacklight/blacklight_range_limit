@@ -31,4 +31,25 @@ namespace :test do
       system "rake blacklight_range_limit:seed"
     end
   end
+
+  desc 'Run Solr and Blacklight for interactive development'
+  task :server, [:rails_server_args] do |_t, args|
+    if File.exist? EngineCart.destination
+      within_test_app do
+        system "bundle update"
+      end
+    else
+      Rake::Task['engine_cart:generate'].invoke
+    end
+
+    SolrWrapper.wrap(port: '8983') do |solr|
+      solr.with_collection(name: 'blacklight-core', dir: File.join(File.expand_path(File.dirname(__FILE__)), "solr", "conf")) do
+        Rake::Task['test:seed'].invoke
+
+        within_test_app do
+          system "bundle exec rails s #{args[:rails_server_args]}"
+        end
+      end
+    end
+  end
 end

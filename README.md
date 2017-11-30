@@ -142,6 +142,21 @@ start a demo jetty server, build a clean test app, and run tests.
 
 Just `bundle exec rake spec` to just run tests against an existing test app and jetty server. 
 
+## Local Testing
+If you want to iterate on a test locally and do not want to rebuild the
+required test environment every time you run the test you can set up the
+required server by first running:
+```bash
+bundle exec rake test:server
+```
+
+Now from another shell run your individual test as needed:
+```bash
+bundle exec rspec spec/features/blacklight_range_limit_spec.rb
+```
+
+Once you are done iterating on your test you will need to stop the application server with `Ctrl-C`.
+
 # Possible future To Do
 
 * StatsComponent replacement. We use StatsComponent to get min/max of result set, as well as missing count. StatsComponent is included on every non-drilldown request, so ranges and slider can be displayed. However, StatsComponent really can slow down the solr response with a large result set. So replace StatsComponent with other strategies. No ideal ones, we can use facet.missing to get missing count instead, but RSolr makes it harder than it should be to grab this info. We can use seperate solr queries to get min/max (sort on our field, asc and desc), but this is more complicated, more solr queries, and possibly requires redesign of AJAXy stuff, so even a lone slider can have min/max. 

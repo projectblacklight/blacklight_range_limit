@@ -62,12 +62,12 @@
               <!-- if  we already fetched segments from solr, display them
                    here. Otherwise, display a link to fetch them, which JS
                    will AJAX fetch.  -->
-              <% if solr_range_queries_to_a(field_name).length > 0 %>
+              <% if solr_range_queries_to_a(solr_field).length > 0 %>
 
-                 <%= render(:partial => "blacklight_range_limit/range_segments", :locals => {:solr_field => field_name}) %>
+                 <%= render(:partial => "blacklight_range_limit/range_segments", :locals => {:solr_field => solr_field}) %>
 
               <% else %>
-                <%= link_to('View distribution', search_state.to_h.merge(action: 'range_limit', range_field: field_name, range_start: min, range_end: max), :class => "load_distribution") %>
+                <%= link_to('View distribution', main_app.url_for(search_state.to_h.merge(action: 'range_limit', range_field: solr_field, range_start: min, range_end: max)), :class => "load_distribution") %>
               <% end %>
             </div>
           <% end %>

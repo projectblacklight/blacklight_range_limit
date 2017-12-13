@@ -37,7 +37,7 @@ module BlacklightRangeLimit
   def self.range_config(blacklight_config, solr_field)
     field = blacklight_config.facet_fields[solr_field.to_s]
 
-    return false unless field.range
+    return false unless field && field.range
 
     config = field.range
     config = { partial: field.partial } if config === true

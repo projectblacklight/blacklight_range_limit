@@ -44,6 +44,15 @@ $(".range_limit .profile .range.slider_js").each(function() {
         slider_el.css("width", "100%");
       }
      }
+    
+     // Slider change should update text input values.
+     var parent = $(this).parent();
+     var form = $(parent).closest(".limit_content").find("form.range_limit");
+     $(parent).closest(".limit_content").find(".profile .range").on("slide", function(event, ui) {
+      var values = $(event.target).data("slider").getValue();
+      form.find("input.range_begin").val(values[0]);
+      form.find("input.range_end").val(values[1]);
+     });
    }
 
   begin_el.val(min);

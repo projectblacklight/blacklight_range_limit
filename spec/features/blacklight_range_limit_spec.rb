@@ -27,6 +27,14 @@ describe "Blacklight Range Limit" do
     expect(page).to have_content "2000 to 2008 [remove] 12"
   end
 
+  it "should not include page parameter" do
+    visit search_catalog_path(page: 2)
+    click_link 'View distribution'
+    click_link '2000 to 2008'
+    click_button 'Limit'
+    expect(page.current_url).not_to include('page')
+  end
+
   context 'when I18n translation is available' do
     before do
       I18n.backend.store_translations(:en, blacklight: {search: {fields: {facet: {pub_date_sort: 'Publication Date I18n'}}}})

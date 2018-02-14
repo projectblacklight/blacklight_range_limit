@@ -8,11 +8,7 @@
 -%>
 
 <div class="limit_content range_limit">
-  <% if  params["range"] &&
-         params["range"][field_name] &&
-         ( (! params["range"][field_name]["begin"].blank?) ||
-           (! params["range"][field_name]["end"].blank?) ||
-           params["range"][field_name]["missing"]) %>
+  <% if has_selected_range_limit?(solr_field) %>
     <ul class="current list-unstyled facet-values">
       <li class="selected">
         <span class="facet-label">
@@ -28,7 +24,7 @@
 
   <% end %>
 
-  <% unless params["range"] && params["range"][solr_field] && params["range"][solr_field]["missing"] %>
+  <% unless selected_missing_for_range_limit?(solr_field) %>
     <%= form_tag search_action_path, :method => :get, class: [BlacklightRangeLimit.classes[:form], "range_#{solr_field}"].join(' ') do %>
       <%= render_hash_as_hidden_fields(search_state.params_for_search.except(:page)) %>
 
@@ -46,13 +42,16 @@
   <% end %>
 
   <!-- no results profile if missing is selected -->
-  <% unless params["range"] && params["range"][field_name] && params["range"][field_name]["missing"] %>
+  <% unless selected_missing_for_range_limit?(solr_field) %>
     <!-- you can hide this if you want, but it has to be on page if you want
          JS slider and calculated facets to show up, JS sniffs it. -->
     <div class="profile">
+        <% if stats_for_field?(solr_field) %>
+          <!-- No stats information found for field  in search response -->
+        <% end %>
 
-        <% if (min = range_results_endpoint(field_name, :min)) &&
-              (max = range_results_endpoint(field_name, :max)) %>
+        <% if (min = range_results_endpoint(solr_field, :min)) &&
+              (max = range_results_endpoint(solr_field, :max)) %>
           <p class="range subsection <%= "slider_js" unless field_config[:slider_js] == false  %>">
             Current results range from <span class="min"><%= range_results_endpoint(field_name, :min) %></span> to <span class="max"><%= range_results_endpoint(field_name, :max) %></span>
           </p>

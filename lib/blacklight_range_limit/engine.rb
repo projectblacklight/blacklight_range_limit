@@ -1,7 +1,7 @@
 require 'blacklight'
 require 'blacklight_range_limit'
 require 'rails'
-require 'tether-rails'
+require 'jquery-rails'
 
 module BlacklightRangeLimit
   class Engine < Rails::Engine

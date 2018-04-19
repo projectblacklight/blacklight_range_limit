@@ -37,7 +37,7 @@ Blacklight.onLoad(function() {
     var container =  $(event.target).filter(".facet-content").find(".chart_js");
 
     // only if it doesn't already have a canvas, it isn't already drawn
-    if (container && container.find("canvas").size() == 0) {
+    if (container && container.find("canvas").length == 0) {
       // be willing to wait up to 1100ms for container to
       // have width -- right away on show.bs is too soon, but
       // shown.bs is later than we want, we want to start rendering

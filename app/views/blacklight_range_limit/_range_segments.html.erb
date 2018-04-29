@@ -1,15 +1,15 @@
-<% # must pass in local variable :solr_field
+<% # must pass in local variable :field_name
 %>
 
 <ul class="facet-values list-unstyled">
-  <% solr_range_queries_to_a(solr_field).each do |hash| %>
+  <% solr_range_queries_to_a(field_name).each do |hash| %>
     <li>
         <span class="facet-label">
             <%= link_to(
-              content_tag("span", facet_display_value(solr_field, hash[:from]), :class => "from") + 
+              content_tag("span", facet_display_value(field_name, hash[:from]), :class => "from") + 
                 " to " + 
-                content_tag("span", facet_display_value(solr_field, hash[:to]), :class => "to"), 
-                add_range(solr_field, hash[:from], hash[:to]).merge(:action => "index"),
+                content_tag("span", facet_display_value(field_name, hash[:to]), :class => "to"), 
+                add_range(field_name, hash[:from], hash[:to]).merge(:action => "index"),
                 :class => "facet_select"
               ) %> 
         </span>

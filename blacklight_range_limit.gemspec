@@ -17,15 +17,19 @@ Gem::Specification.new do |s|
   s.executables   = `git ls-files -- bin/*`.split("\n").map{ |f| File.basename(f) }
   s.require_paths = ["lib"]
 
-
   s.add_dependency "rails", ">= 3.0", "< 5.0"
   s.add_dependency "jquery-rails" # our JS needs jquery_rails
   s.add_dependency "blacklight", "~> 4.0"
 
-  s.add_development_dependency "rspec", ">= 2.0"
+  s.add_development_dependency "rspec", "~> 3.0"
   s.add_development_dependency "rspec-rails"
   s.add_development_dependency "capybara"
   s.add_development_dependency "sqlite3"
   s.add_development_dependency 'launchy'
   s.add_development_dependency "jettywrapper"
+  s.add_development_dependency 'engine_cart', '~> 2.0'
+  s.add_development_dependency 'devise'
+  s.add_development_dependency 'devise-guests'
+  s.add_development_dependency 'bootstrap-sass'
+  s.add_development_dependency 'turbolinks'
 end

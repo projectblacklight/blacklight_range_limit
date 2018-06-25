@@ -6,8 +6,8 @@ describe "Blacklight Range Limit" do
     visit search_catalog_path
     expect(page).to have_selector 'input.range_begin'
     expect(page).to have_selector 'input.range_end'
-    expect(page).to have_selector 'label.sr-only[for="range_pub_date_sort_begin"]', :text => 'Publication Date Sort range begin'
-    expect(page).to have_selector 'label.sr-only[for="range_pub_date_sort_end"]', :text => 'Publication Date Sort range end'
+    expect(page).to have_selector 'label.sr-only[for="range_pub_date_si_begin"]', :text => 'Publication Date Sort range begin'
+    expect(page).to have_selector 'label.sr-only[for="range_pub_date_si_end"]', :text => 'Publication Date Sort range end'
     expect(page).to have_button 'Limit'
   end
 
@@ -37,7 +37,7 @@ describe "Blacklight Range Limit" do
 
   context 'when I18n translation is available' do
     before do
-      I18n.backend.store_translations(:en, blacklight: {search: {fields: {facet: {pub_date_sort: 'Publication Date I18n'}}}})
+      I18n.backend.store_translations(:en, blacklight: {search: {fields: {facet: {pub_date_si: 'Publication Date I18n'}}}})
     end
 
     it 'should render the I18n label' do
@@ -55,7 +55,7 @@ describe "Blacklight Range Limit with configured input labels" do
   before do
     CatalogController.blacklight_config = Blacklight::Configuration.new
     CatalogController.configure_blacklight do |config|
-      config.add_facet_field 'pub_date_sort', range: {
+      config.add_facet_field 'pub_date_si', range: {
         input_label_range_begin: 'from publication date',
         input_label_range_end: 'to publication date',
         maxlength: 6
@@ -66,10 +66,10 @@ describe "Blacklight Range Limit with configured input labels" do
   
   it "should show the range limit facet with configured labels and maxlength" do
     visit '/catalog'
-    expect(page).to have_selector 'label.sr-only[for="range_pub_date_sort_begin"]', :text => 'from publication date'
-    expect(page).to have_selector 'label.sr-only[for="range_pub_date_sort_end"]', :text => 'to publication date'
-    expect(page).to have_selector 'input#range_pub_date_sort_begin[maxlength="6"]'
-    expect(page).to have_selector 'input#range_pub_date_sort_end[maxlength="6"]'
+    expect(page).to have_selector 'label.sr-only[for="range_pub_date_si_begin"]', :text => 'from publication date'
+    expect(page).to have_selector 'label.sr-only[for="range_pub_date_si_end"]', :text => 'to publication date'
+    expect(page).to have_selector 'input#range_pub_date_si_begin[maxlength="6"]'
+    expect(page).to have_selector 'input#range_pub_date_si_end[maxlength="6"]'
   end
 
 end

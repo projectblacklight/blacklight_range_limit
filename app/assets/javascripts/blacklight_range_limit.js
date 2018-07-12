@@ -8,6 +8,4 @@
 //= require 'flot/jquery.flot.selection.js'
 //= require 'bootstrap-slider'
 
-//= require bootstrap/tooltip
-
 //= require_tree './blacklight_range_limit'

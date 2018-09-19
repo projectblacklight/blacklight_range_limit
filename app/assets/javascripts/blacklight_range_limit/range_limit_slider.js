@@ -14,6 +14,10 @@ $(".range_limit .profile .range.slider_js").each(function() {
      
      var range_element = $(this);
      var form = $(range_element).closest(".range_limit").find("form.range_limit");
+     if (form.length == 0) {
+       form = $(range_element).closest(".range_limit")
+     }
+
      var begin_el = form.find("input.range_begin");
      var end_el = form.find("input.range_end");
 
@@ -47,6 +51,9 @@ $(".range_limit .profile .range.slider_js").each(function() {
      // Slider change should update text input values.
      var parent = $(this).parent();
      var form = $(parent).closest(".limit_content").find("form.range_limit");
+     if (form.length == 0) {
+        form = $(parent).closest(".limit_content")
+     }
      $(parent).closest(".limit_content").find(".profile .range").on("slide", function(event, ui) {
       var values = $(event.target).data("slider").getValue();
       form.find("input.range_begin").val(values[0]);

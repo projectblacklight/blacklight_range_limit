@@ -135,9 +135,9 @@ ourselves yet.
 Also not sure how well the flot select UI works on a touch screen. The slider
 is probably the best touch UI anyway, if it can be made to work well. 
 
-## Integrating with Hyrax
+## Integrating with Samvera-based applications
 
-If you are using an application based on the [Hyrax](https://github.com/samvera/hyrax) engine, there is some additional customization that is needed to get things working.
+If you are using an application based on a project from the [Samvera](https://github.com/samvera) cinnybuty, there is some additional customization that is required to get the gem up and running.
 
 Create a model called `app/models/range_limit_catalog_search_builder.rb`
 ```ruby
@@ -154,8 +154,6 @@ In `app/controllers/catalog_controller.rb` modify the following configuration en
     ...
    end
 ```
-
-This fix was tested in Hyrax version 2.3.2, but may also apply to earlier or later versions as well as related projects (such as Sufia or Hyku).  
 
 # Tests
 

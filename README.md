@@ -135,6 +135,19 @@ ourselves yet.
 Also not sure how well the flot select UI works on a touch screen. The slider
 is probably the best touch UI anyway, if it can be made to work well. 
 
+## Integrating with Hyrax
+
+If you are using an application based on the [Hyrax](https://github.com/samvera/hyrax) engine, there is some additional customization required to get this gem up and running.  You will need to create a new initializer within 
+`config/initializers/` that injects the `BlackLightRangeLimit::RangeLimitBuilder` into your CatalogController. 
+```ruby
+Rails.application.config.to_prepare do
+  klass = CatalogController.new.search_builder_class
+  klass.send(:include, BlacklightRangeLimit::RangeLimitBuilder) unless klass.ancestors.include? BlacklightRangeLimit::RangeLimitBuilder
+end
+```
+
+This workaround was tested in Hyrax version 2.3.2, but may apply to earlier or later versions as well as related projects (such as Sufia or Hyku).
+
 # Tests
 
 Test coverage is not great, but there are some tests, using rspec.  Run `bundle exec rake ci` or just `bundle exec rake` to seed and

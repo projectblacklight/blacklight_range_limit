@@ -137,7 +137,7 @@ is probably the best touch UI anyway, if it can be made to work well.
 
 ## Integrating with Hyrax
 
-If you are using an application based on the [Hyrax](https://github.com/samvera/hyrax) engine, there is some additional customization required to get this gem up and running.  You will need to create a new initializer within 
+If you are using an application based on the [Hyrax](https://github.com/samvera/hyrax) engine, there is some additional customization that is needed to get the range limit code into the proper 'SearchBuilder' class to get this gem running.  You can create a new initializer within 
 `config/initializers/` that injects the `BlackLightRangeLimit::RangeLimitBuilder` into your CatalogController. 
 ```ruby
 Rails.application.config.to_prepare do
@@ -146,7 +146,7 @@ Rails.application.config.to_prepare do
 end
 ```
 
-This workaround was tested in Hyrax version 2.3.2, but may apply to earlier or later versions as well as related projects (such as Sufia or Hyku).
+This workaround was tested in Hyrax version 2.3.2, but may apply to earlier or later versions as well as related projects (such as Sufia or Hyku).  This is not neccesarily the most elegant solution, so if you have a suggestion for improving this workaround we encourage you to submit a PR and let us know! 
 
 # Tests
 

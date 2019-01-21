@@ -18,7 +18,7 @@ Gem::Specification.new do |s|
   s.license     = 'Apache 2.0'
 
   s.add_dependency 'rails', '>= 3.0'
-  s.add_dependency 'blacklight'
+  s.add_dependency 'blacklight', '>= 7.0'
 
   s.add_development_dependency 'rspec', '~> 3.0'
   s.add_development_dependency 'rspec-rails'

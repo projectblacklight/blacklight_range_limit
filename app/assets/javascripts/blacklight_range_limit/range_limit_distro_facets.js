@@ -1,5 +1,4 @@
 // for Blacklight.onLoad:
-//= require blacklight/core
 
 /* A custom event "plotDrawn.blacklight.rangeLimit" will be sent when flot plot
    is (re-)drawn on screen possibly with a new size. target of event will be the DOM element
@@ -37,7 +36,7 @@ Blacklight.onLoad(function() {
     var container =  $(event.target).filter(".facet-content").find(".chart_js");
 
     // only if it doesn't already have a canvas, it isn't already drawn
-    if (container && container.find("canvas").size() == 0) {
+    if (container && container.find("canvas").length == 0) {
       // be willing to wait up to 1100ms for container to
       // have width -- right away on show.bs is too soon, but
       // shown.bs is later than we want, we want to start rendering
@@ -199,14 +198,14 @@ Blacklight.onLoad(function() {
 
         find_segment_for = function_for_find_segment(pointer_lookup);
         var last_segment = null;
-        $('.distribution').tooltip({'placement': 'bottom', 'trigger': 'manual', 'delay': { show: 0, hide: 100}});
+        $(container).tooltip({'placement': 'bottom', 'trigger': 'manual', 'delay': { show: 0, hide: 100}});
 
         $(container).bind("plothover", function (event, pos, item) {
           segment = find_segment_for(pos.x);
 
           if(segment != last_segment) {
             var title = find_segment_for(pos.x).label  + ' (' + BlacklightRangeLimit.parseNum(segment.count) + ')';
-            $('.distribution').attr("title", title).tooltip("fixTitle").tooltip("show");
+            $(container).attr("title", title).tooltip("_fixTitle").tooltip("show");
 
             last_segment  = segment;
            }
@@ -214,7 +213,7 @@ Blacklight.onLoad(function() {
 
         $(container).bind("mouseout", function() {
           last_segment = null;
-          $('.distribution').tooltip('hide');
+          $(container).tooltip('hide');
         });
         $(container).bind("plotclick", function (event, pos, item) {
             if ( plot.getSelection() == null) {

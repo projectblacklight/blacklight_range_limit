@@ -73,7 +73,7 @@
 
 
 
-        <% if (stats = stats_for_field(field_name)) && stats["missing"] > 0 %>
+        <% if (stats = stats_for_field(solr_field)) && stats["missing"] > 0 && solr_field != "copies_is" %>
           <ul class="missing list-unstyled facet-values subsection">
             <li>
               <span class="facet-label">

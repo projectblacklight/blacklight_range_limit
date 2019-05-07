@@ -6,8 +6,6 @@ require 'rspec/core/rake_task'
 require 'engine_cart/rake_task'
 require 'solr_wrapper'
 
-EngineCart.fingerprint_proc = EngineCart.rails_fingerprint_proc
-
 task :default => :ci
 
 desc "Run specs"

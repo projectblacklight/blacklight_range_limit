@@ -41,9 +41,6 @@ module BlacklightRangeLimit
 
 }
       end
-      inject_into_file 'app/assets/javascripts/application.js', before: '// Required by Blacklight' do
-        "\n//= require tether\n"
-      end
     end
 
 

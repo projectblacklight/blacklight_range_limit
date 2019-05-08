@@ -1,6 +1,9 @@
 notifications:
   email: false
 
+addons:
+  chrome: stable
+
 language: ruby
 sudo: false
 rvm:

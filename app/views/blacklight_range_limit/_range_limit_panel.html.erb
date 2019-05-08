@@ -79,9 +79,9 @@
               <span class="facet-label">
                 <%= link_to BlacklightRangeLimit.labels[:missing], add_range_missing(field_name) %>
               </span>
-              <span class="facet-count">
-                <%= number_with_delimiter(stats["missing"]) %>
-              </span>
+              <%# note important there be no whitespace inside facet-count to avoid
+                  bug in some versions of Blacklight (including 7.1.0.alpha) %>
+              <span class="facet-count"><%= number_with_delimiter(stats["missing"]) %></span>
             </li>
           </ul>
         <% end %>

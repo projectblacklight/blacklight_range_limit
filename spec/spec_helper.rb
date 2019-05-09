@@ -5,6 +5,9 @@ EngineCart.load_application!
 
 require 'rspec/rails'
 require 'capybara/rspec'
+require 'selenium-webdriver'
+
+Capybara.javascript_driver = :selenium_chrome_headless
 
 RSpec.configure do |config|
   # rspec-rails 3 will no longer automatically infer an example group's spec type

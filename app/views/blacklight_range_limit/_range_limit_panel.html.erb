@@ -13,10 +13,10 @@
       <li class="selected">
         <span class="facet-label">
           <span class="selected"><%= range_display(field_name) %></span>
-           <%= link_to remove_range_param(field_name), :class=>"remove", :title => t('blacklight.range_limit.remove_limit') do %>
-           <span class="remove-icon">✖</span>
+          <%= link_to remove_range_param(field_name), :class=>"remove", :title => t('blacklight.range_limit.remove_limit') do %>
+            <span class="remove-icon">✖</span>
             <span class="sr-only">[<%= t('blacklight.range_limit.remove_limit') %>]</span>
-           <% end %>
+          <% end %>
         </span>
         <span class="selected facet-count"><%= number_with_delimiter(@response.total) %></span>
       </li>

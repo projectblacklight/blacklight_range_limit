@@ -13,10 +13,10 @@
       <li class="selected">
         <span class="facet-label">
           <span class="selected"><%= range_display(field_name) %></span>
-           <%= link_to remove_range_param(field_name), :class=>"remove", :title => t('blacklight.range_limit.remove_limit') do %>
-            <span class="glyphicon glyphicon-remove"></span>
+          <%= link_to remove_range_param(field_name), :class=>"remove", :title => t('blacklight.range_limit.remove_limit') do %>
+            <span class="remove-icon">✖</span>
             <span class="sr-only">[<%= t('blacklight.range_limit.remove_limit') %>]</span>
-           <% end %>
+          <% end %>
         </span>
         <span class="selected facet-count"><%= number_with_delimiter(@response.total) %></span>
       </li>
@@ -51,7 +51,7 @@
 
         <% if (min = range_results_endpoint(field_name, :min)) &&
               (max = range_results_endpoint(field_name, :max)) %>
-          <p class="range subsection <%= "slider_js" unless field_config[:slider_js] == false  %>">
+          <p class="range subsection <%= "slider_js" unless field_config[:slider_js] == false %>">
             Current results range from <span class="min"><%= range_results_endpoint(field_name, :min) %></span> to <span class="max"><%= range_results_endpoint(field_name, :max) %></span>
           </p>
 
@@ -70,8 +70,6 @@
             </div>
           <% end %>
         <% end %>
-
-
 
         <% if (stats = stats_for_field(field_name)) && stats["missing"] > 0 %>
           <ul class="missing list-unstyled facet-values subsection">

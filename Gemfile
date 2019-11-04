@@ -1,6 +1,13 @@
+# frozen_string_literal: true
+
 source 'https://rubygems.org'
 
-gemspec
+# Please see blacklight.gemspec for dependency information.
+gemspec path: File.expand_path('..', __FILE__)
+
+group :test do
+  gem 'activerecord-jdbcsqlite3-adapter', platform: :jruby
+end
 
 # BEGIN ENGINE_CART BLOCK
 # engine_cart: 0.10.0
@@ -27,12 +34,17 @@ else
   end
 
   case ENV['RAILS_VERSION']
+  when /^5.[12]/, /^6.0/
+    gem 'sass-rails', '~> 5.0'
   when /^4.2/
     gem 'responders', '~> 2.0'
     gem 'sass-rails', '>= 5.0'
     gem 'coffee-rails', '~> 4.1.0'
+    gem 'json', '~> 1.8'
   when /^4.[01]/
     gem 'sass-rails', '< 5.0'
   end
 end
 # END ENGINE_CART BLOCK
+
+eval_gemfile File.expand_path("spec/test_app_templates/Gemfile.extra", File.dirname(__FILE__))

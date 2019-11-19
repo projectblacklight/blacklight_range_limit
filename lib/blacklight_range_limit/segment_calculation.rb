@@ -11,21 +11,22 @@ module BlacklightRangeLimit
     # by subtracting one from subsequent boundary.
     #
     # Changes solr_params passed in.
-    def add_range_segments_to_solr!(solr_params, solr_field, min, max)
+    def add_range_segments_to_solr!(solr_params, facet_field, min, max)
       raise InvalidRange, "The min date must be before the max date" if min > max
+      field_config = blacklight_config.facet_fields[facet_field.to_s]
 
-      field_config = BlacklightRangeLimit.range_config(blacklight_config, solr_field)
+      range_config = BlacklightRangeLimit.range_config(blacklight_config, facet_field)
 
       solr_params[:"facet.query"] ||= []
 
-      boundaries = boundaries_for_range_facets(min, max, (field_config[:num_segments] || 10) )
+      boundaries = boundaries_for_range_facets(min, max, (range_config[:num_segments] || 10) )
 
       # Now make the boundaries into actual filter.queries.
       0.upto(boundaries.length - 2) do |index|
         first = boundaries[index]
         last =  boundaries[index+1].to_i - 1
 
-        solr_params[:"facet.query"] << "#{solr_field}:[#{first} TO #{last}]"
+        solr_params[:"facet.query"] << "#{field_config.field}:[#{first} TO #{last}]"
       end
 
       return solr_params

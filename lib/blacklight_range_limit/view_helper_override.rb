@@ -97,7 +97,7 @@
       array = []
 
       @response["facet_counts"]["facet_queries"].each_pair do |query, count|
-        if query =~ /#{solr_field}: *\[ *(\d+) *TO *(\d+) *\]/
+        if query =~ /#{solr_field}: *\[ *(-?\d+) *TO *(-?\d+) *\]/
           array << {:from => $1, :to => $2, :count => count}
         end
       end

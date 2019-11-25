@@ -68,7 +68,7 @@
       <ul class="missing list-unstyled facet-values subsection">
         <li>
           <span class="facet-label">
-            <%= link_to BlacklightRangeLimit.labels[:missing], search_action_url(add_range_missing(field_name).except(:controller, :action)) %>
+            <%= link_to t('blacklight.range_limit.missing'), search_action_url(add_range_missing(field_name).except(:controller, :action)) %>
           </span>
           <%# note important there be no whitespace inside facet-count to avoid
               bug in some versions of Blacklight (including 7.1.0.alpha) %>

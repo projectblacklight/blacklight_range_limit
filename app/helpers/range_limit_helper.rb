@@ -32,7 +32,7 @@ module RangeLimitHelper
     hash = my_params[:range][solr_field]
     
     if hash["missing"]
-      return BlacklightRangeLimit.labels[:missing]
+      return t('blacklight.range_limit.missing')
     elsif hash["begin"] || hash["end"]
       if hash["begin"] == hash["end"]
         return "<span class='single'>#{h(hash["begin"])}</span>".html_safe

@@ -17,17 +17,7 @@ Blacklight.onLoad(function() {
       turnIntoPlot($(this).parent());
   });
 
-
-  // Add AJAX fetched range facets if needed, and add a chart to em
-  $(".range_limit .profile .distribution a.load_distribution").each(function() {
-      var container = $(this).parent('div.distribution');
-
-      $(container).load($(this).attr('href'), function(response, status) {
-          if ($(container).hasClass("chart_js") && status == "success" ) {
-            turnIntoPlot(container);
-          }
-      });
-  });
+  checkForNeededFacetsToFetch();
 
   // Listen for twitter bootstrap collapsible open events, to render flot
   // in previously hidden divs on open, if needed.
@@ -50,8 +40,23 @@ Blacklight.onLoad(function() {
     $(this).find(".range_limit .profile .distribution.chart_js ul").each(function() {
       turnIntoPlot($(this).parent());
     });
+
+    // Case when there is no currently selected range
+    checkForNeededFacetsToFetch();
   });
 
+  // Add AJAX fetched range facets if needed, and add a chart to em
+  function checkForNeededFacetsToFetch() {
+    $(".range_limit .profile .distribution a.load_distribution").each(function() {
+      var container = $(this).parent('div.distribution');
+
+      $(container).load($(this).attr('href'), function(response, status) {
+        if ($(container).hasClass("chart_js") && status == "success" ) {
+          turnIntoPlot(container);
+          }
+      });
+    });
+  }
 
 
   // after a collapsible facet contents is fully shown,

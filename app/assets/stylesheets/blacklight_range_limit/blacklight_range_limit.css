@@ -21,6 +21,14 @@ form.range_limit {
   background: #e8cfac;
 }
 
-.modal-body .load_distribution {
+.modal-body .load_distribution, .facet-values {
   display: none;
+}
+
+form .range_limit_label {
+  display: none;
+}
+
+.modal-body .range_limit_label {
+  display: flex;
 }

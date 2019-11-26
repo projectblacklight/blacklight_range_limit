@@ -7,3 +7,4 @@ en:
       remove_limit: 'remove'
       missing: 'Unknown'
       view_larger: 'View larger »'
+      date_range_label: 'Date range:'

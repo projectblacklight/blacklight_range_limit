@@ -13,7 +13,7 @@
       <li class="selected">
         <span class="facet-label">
           <span class="selected"><%= range_display(field_name) %></span>
-          <%= link_to remove_range_param(field_name), :class=>"remove", :title => t('blacklight.range_limit.remove_limit') do %>
+          <%= link_to search_action_url(remove_range_param(field_name).except(:controller, :action)), :class=>"remove", :title => t('blacklight.range_limit.remove_limit') do %>
             <span class="remove-icon">✖</span>
             <span class="sr-only">[<%= t('blacklight.range_limit.remove_limit') %>]</span>
           <% end %>
@@ -58,7 +58,7 @@
                  <%= render(:partial => "blacklight_range_limit/range_segments", :locals => {:solr_field => field_name}) %>
 
               <% else %>
-                <%= link_to('View distribution', main_app.url_for(search_state.to_h.merge(action: 'range_limit', range_field: field_name, range_start: min, range_end: max)), :class => "load_distribution") %>
+                <%= link_to('View distribution', search_action_url(search_state.to_h.merge(action: 'range_limit', range_field: field_name, range_start: min, range_end: max)), :class => "load_distribution") %>
               <% end %>
             </div>
           <% end %>
@@ -68,7 +68,7 @@
           <ul class="missing list-unstyled facet-values subsection">
             <li>
               <span class="facet-label">
-                <%= link_to BlacklightRangeLimit.labels[:missing], add_range_missing(field_name) %>
+                <%= link_to BlacklightRangeLimit.labels[:missing], search_action_url(add_range_missing(field_name).except(:controller, :action)) %>
               </span>
               <%# note important there be no whitespace inside facet-count to avoid
                   bug in some versions of Blacklight (including 7.1.0.alpha) %>

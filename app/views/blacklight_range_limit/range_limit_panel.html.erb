@@ -1,0 +1,10 @@
+<div class="modal-header">
+  <h1 class="modal-title"><%= facet_field_label(@facet.key) %></h1>
+  <button type="button" class="blacklight-modal-close close" data-dismiss="modal" aria-label="<%= t('blacklight.modal.close') %>">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+
+<div class="modal-body">
+  <%= render :partial => "blacklight_range_limit/range_limit_panel", :locals => {field_name: @facet.key} %>
+</div>

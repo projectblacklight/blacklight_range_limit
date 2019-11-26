@@ -45,6 +45,13 @@ Blacklight.onLoad(function() {
     }
   });
 
+  // When loaded in a modal
+  $(Blacklight.modal.modalSelector).on('shown.bs.modal', function() {
+    $(this).find(".range_limit .profile .distribution.chart_js ul").each(function() {
+      turnIntoPlot($(this).parent());
+    });
+  });
+
 
 
   // after a collapsible facet contents is fully shown,

@@ -6,6 +6,12 @@ Blacklight.onLoad(function() {
     buildSlider(this);
   });
 
+  $(Blacklight.modal.modalSelector).on('shown.bs.modal', function() {
+    $(this).find(".range_limit .profile .range.slider_js").each(function() {
+      buildSlider(this);
+    });
+  });
+
 // catch event for redrawing chart, to redraw slider to match width
 $("body").on("plotDrawn.blacklight.rangeLimit", function(event) {
   var area       = $(event.target).closest(".limit_content.range_limit");

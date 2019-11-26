@@ -20,3 +20,28 @@ form.range_limit {
   /* color from flot selection */
   background: #e8cfac;
 }
+
+.modal-body .view_larger, .facet-values {
+  display: none;
+}
+
+form .range_limit_label {
+  display: none;
+}
+
+.modal-body .range_limit_label {
+  display: flex;
+}
+
+.modal-body .range_limit {
+  justify-content: center;
+}
+
+.view_larger {
+  display: block;
+  text-align: center;
+}
+
+.range_limit .chart_js {
+  min-height: 80px;
+}

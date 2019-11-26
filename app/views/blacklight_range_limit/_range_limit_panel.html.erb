@@ -24,15 +24,6 @@
 
   <% end %>
 
-  <% unless selected_missing_for_range_limit?(field_name) %>
-    <%= form_tag search_action_path, :method => :get, class: [BlacklightRangeLimit.classes[:form], "range_#{field_name}"].join(' ') do %>
-      <%= render_hash_as_hidden_fields(search_state.params_for_search.except(:page)) %>
-
-      <%= render_range_input(field_name, :begin, input_label_range_begin, maxlength) %> – <%= render_range_input(field_name, :end, input_label_range_end, maxlength) %>
-      <%= submit_tag t('blacklight.range_limit.submit_limit'), class: BlacklightRangeLimit.classes[:submit] %>
-    <% end %>
-  <% end %>
-
   <!-- no results profile if missing is selected -->
   <% unless selected_missing_for_range_limit?(field_name) %>
     <!-- you can hide this if you want, but it has to be on page if you want
@@ -44,9 +35,6 @@
 
         <% if (min = range_results_endpoint(field_name, :min)) &&
               (max = range_results_endpoint(field_name, :max)) %>
-          <p class="range subsection <%= "slider_js" unless field_config[:slider_js] == false %>">
-            Current results range from <span class="min"><%= range_results_endpoint(field_name, :min) %></span> to <span class="max"><%= range_results_endpoint(field_name, :max) %></span>
-          </p>
 
           <% if field_config[:segments] != false %>
             <div class="distribution subsection <%= 'chart_js' unless field_config[:chart_js] == false %>">
@@ -62,20 +50,35 @@
               <% end %>
             </div>
           <% end %>
-        <% end %>
-
-        <% if (stats = stats_for_field(field_name)) && stats["missing"] > 0 %>
-          <ul class="missing list-unstyled facet-values subsection">
-            <li>
-              <span class="facet-label">
-                <%= link_to BlacklightRangeLimit.labels[:missing], search_action_url(add_range_missing(field_name).except(:controller, :action)) %>
-              </span>
-              <%# note important there be no whitespace inside facet-count to avoid
-                  bug in some versions of Blacklight (including 7.1.0.alpha) %>
-              <span class="facet-count"><%= number_with_delimiter(stats["missing"]) %></span>
-            </li>
-          </ul>
+          <p class="range subsection <%= "slider_js" unless field_config[:slider_js] == false %>">
+            Current results range from <span class="min"><%= range_results_endpoint(field_name, :min) %></span> to <span class="max"><%= range_results_endpoint(field_name, :max) %></span>
+          </p>
         <% end %>
     </div>
+
+    <%= form_tag search_action_path, :method => :get, class: [BlacklightRangeLimit.classes[:form], "range_#{field_name}"].join(' ') do %>
+      <%= render_hash_as_hidden_fields(search_state.params_for_search.except(:page)) %>
+      <%= content_tag :label, t('blacklight.range_limit.date_range_label'), class: 'range_limit_label' %>
+      <%= render_range_input(field_name, :begin, input_label_range_begin, maxlength) %> – <%= render_range_input(field_name, :end, input_label_range_end, maxlength) %>
+      <%= submit_tag t('blacklight.range_limit.submit_limit'), class: BlacklightRangeLimit.classes[:submit] %>
+    <% end %>
+
+    <%= link_to t('blacklight.range_limit.view_larger', field_name: label),
+        main_app.url_for(search_state.to_h.merge(action: 'range_limit_panel', id: field_name, range_start: 0, range_end: 2019)),
+        class: 'view_larger mt-1',
+        data: { blacklight_modal: 'trigger' } %>
+
+    <% if (stats = stats_for_field(field_name)) && stats["missing"] > 0 %>
+      <ul class="missing list-unstyled facet-values subsection">
+        <li>
+          <span class="facet-label">
+            <%= link_to t('blacklight.range_limit.missing'), search_action_url(add_range_missing(field_name).except(:controller, :action)) %>
+          </span>
+          <%# note important there be no whitespace inside facet-count to avoid
+              bug in some versions of Blacklight (including 7.1.0.alpha) %>
+          <span class="facet-count"><%= number_with_delimiter(stats["missing"]) %></span>
+        </li>
+      </ul>
+    <% end %>
   <% end %>
 </div>

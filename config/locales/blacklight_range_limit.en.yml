@@ -5,3 +5,6 @@ en:
       range_end: "%{field_label} range end"
       submit_limit: 'Limit'
       remove_limit: 'remove'
+      missing: 'Unknown'
+      view_larger: 'View larger »'
+      date_range_label: 'Date range:'

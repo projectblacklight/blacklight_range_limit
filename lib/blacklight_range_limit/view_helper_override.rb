@@ -11,19 +11,6 @@
       super
     end
 
-    def has_range_limit_parameters?(my_params = params)
-      my_params[:range] &&
-        my_params[:range].to_unsafe_h.any? do |key, v|
-          v.present? && v.respond_to?(:'[]') &&
-          (v["begin"].present? || v["end"].present? || v["missing"].present?)
-        end
-    end
-
-    # over-ride, call super, but make sure our range limits count too
-    def has_search_parameters?
-      super || has_range_limit_parameters?
-    end
-
     def query_has_constraints?(my_params = params)
       super || has_range_limit_parameters?(my_params)
     end

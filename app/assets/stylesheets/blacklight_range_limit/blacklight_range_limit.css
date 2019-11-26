@@ -20,3 +20,7 @@ form.range_limit {
   /* color from flot selection */
   background: #e8cfac;
 }
+
+.modal-body .load_distribution {
+  display: none;
+}

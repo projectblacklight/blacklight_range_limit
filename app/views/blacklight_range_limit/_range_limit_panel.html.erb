@@ -63,6 +63,10 @@
       <%= submit_tag t('blacklight.range_limit.submit_limit'), class: BlacklightRangeLimit.classes[:submit] %>
     <% end %>
 
+    <%= link_to t('blacklight.range_limit.view_larger', field_name: label), 
+        main_app.url_for(search_state.to_h.merge(action: 'range_limit_panel', id: field_name, range_start: 0, range_end: 2019)),
+        class: 'load_distribution',
+        data: { blacklight_modal: 'trigger' } %>
 
     <% if (stats = stats_for_field(field_name)) && stats["missing"] > 0 %>
       <ul class="missing list-unstyled facet-values subsection">

@@ -36,3 +36,7 @@ form .range_limit_label {
 .modal-body .range_limit {
   justify-content: center;
 }
+
+.range_limit .chart_js {
+  min-height: 80px;
+}

@@ -64,7 +64,7 @@
     <% end %>
 
     <%= link_to t('blacklight.range_limit.view_larger', field_name: label),
-        main_app.url_for(search_state.to_h.merge(action: 'range_limit_panel', id: field_name, range_start: 0, range_end: 2019)),
+        search_action_url(search_state.to_h.merge(action: 'range_limit_panel', id: field_name, range_start: 0, range_end: 2019)),
         class: 'view_larger mt-1',
         data: { blacklight_modal: 'trigger' } %>
 

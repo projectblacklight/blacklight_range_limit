@@ -46,12 +46,12 @@
                  <%= render(:partial => "blacklight_range_limit/range_segments", :locals => {:solr_field => field_name}) %>
 
               <% else %>
-                <%= link_to('View distribution', search_action_url(search_state.to_h.merge(action: 'range_limit', range_field: field_name, range_start: min, range_end: max)), :class => "load_distribution") %>
+                <%= link_to(t('blacklight.range_limit.view_distribution'), search_action_url(search_state.to_h.merge(action: 'range_limit', range_field: field_name, range_start: min, range_end: max)), :class => "load_distribution") %>
               <% end %>
             </div>
           <% end %>
           <p class="range subsection <%= "slider_js" unless field_config[:slider_js] == false %>">
-            Current results range from <span class="min"><%= range_results_endpoint(field_name, :min) %></span> to <span class="max"><%= range_results_endpoint(field_name, :max) %></span>
+            <%= t('blacklight.range_limit.results_range_html', min: range_results_endpoint(field_name, :min), max: range_results_endpoint(field_name, :max)) %>
           </p>
         <% end %>
     </div>
@@ -64,7 +64,7 @@
     <% end %>
 
     <%= link_to t('blacklight.range_limit.view_larger', field_name: label),
-        main_app.url_for(search_state.to_h.merge(action: 'range_limit_panel', id: field_name, range_start: 0, range_end: 2019)),
+        search_action_url(search_state.to_h.merge(action: 'range_limit_panel', id: field_name, range_start: 0, range_end: 2019)),
         class: 'view_larger mt-1',
         data: { blacklight_modal: 'trigger' } %>
 

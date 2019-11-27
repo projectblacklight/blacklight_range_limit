@@ -35,9 +35,9 @@ module RangeLimitHelper
       return t('blacklight.range_limit.missing')
     elsif hash["begin"] || hash["end"]
       if hash["begin"] == hash["end"]
-        return "<span class='single'>#{h(hash["begin"])}</span>".html_safe
+        return t('blacklight.range_limit.single_html', begin: h(hash['begin']))
       else
-        return "<span class='from'>#{h(hash['begin'])}</span> to <span class='to'>#{h(hash['end'])}</span>".html_safe
+        return t('blacklight.range_limit.range_html', begin: h(hash['begin']), end: h(hash['end']))
       end
     end
 

@@ -1,5 +1,12 @@
-# Additional helper methods used by view templates inside this plugin. 
+# Additional helper methods used by view templates inside this plugin.
 module RangeLimitHelper
+  def range_limit_url(options = {})
+    main_app.url_for(search_state.to_h.merge(action: 'range_limit').merge(options))
+  end
+
+  def range_limit_panel_url(options = {})
+    main_app.url_for(search_state.to_h.merge(action: 'range_limit').merge(options))
+  end
 
   # type is 'begin' or 'end'
   def render_range_input(solr_field, type, input_label = nil, maxlength=4)
@@ -14,10 +21,10 @@ module RangeLimitHelper
 
   # type is 'min' or 'max'
   # Returns smallest and largest value in current result set, if available
-  # from stats component response. 
+  # from stats component response.
   def range_results_endpoint(solr_field, type)
     stats = stats_for_field(solr_field)
-        
+
     return nil unless stats
     # StatsComponent returns weird min/max when there are in
     # fact no values
@@ -30,7 +37,7 @@ module RangeLimitHelper
     return "" unless my_params[:range] && my_params[:range][solr_field]
 
     hash = my_params[:range][solr_field]
-    
+
     if hash["missing"]
       return t('blacklight.range_limit.missing')
     elsif hash["begin"] || hash["end"]
@@ -48,10 +55,10 @@ module RangeLimitHelper
   # 1) we have a limit already set
   # OR
   # 2) stats show max > min, OR
-  # 3) count > 0 if no stats available. 
+  # 3) count > 0 if no stats available.
   def should_show_limit(solr_field)
     stats = stats_for_field(solr_field)
-    
+
     (params["range"] && params["range"][solr_field]) ||
     (  stats &&
       stats["max"] > stats["min"]) ||

@@ -21,7 +21,12 @@ form.range_limit {
   background: #e8cfac;
 }
 
-.modal-body .view_larger, .facet-values {
+.modal-body .view_larger {
+  display: none;
+}
+
+/* Prevent an unstyled flash of content for values we'll replace with a chart */
+.js .distribution .facet-values {
   display: none;
 }
 

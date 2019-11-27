@@ -59,7 +59,9 @@
     <%= form_tag search_action_path, :method => :get, class: [BlacklightRangeLimit.classes[:form], "range_#{field_name}"].join(' ') do %>
       <%= render_hash_as_hidden_fields(search_state.params_for_search.except(:page)) %>
       <%= content_tag :label, t('blacklight.range_limit.date_range_label'), class: 'range_limit_label' %>
-      <%= render_range_input(field_name, :begin, input_label_range_begin, maxlength) %> – <%= render_range_input(field_name, :end, input_label_range_end, maxlength) %>
+      <div class="d-inline-block">
+        <%= render_range_input(field_name, :begin, input_label_range_begin, maxlength) %> – <%= render_range_input(field_name, :end, input_label_range_end, maxlength) %>
+      </div>
       <%= submit_tag t('blacklight.range_limit.submit_limit'), class: BlacklightRangeLimit.classes[:submit] %>
     <% end %>
 

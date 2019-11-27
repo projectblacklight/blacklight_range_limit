@@ -5,7 +5,7 @@ module RangeLimitHelper
   end
 
   def range_limit_panel_url(options = {})
-    main_app.url_for(search_state.to_h.merge(action: 'range_limit').merge(options))
+    main_app.url_for(search_state.to_h.merge(action: 'range_limit_panel').merge(options))
   end
 
   # type is 'begin' or 'end'

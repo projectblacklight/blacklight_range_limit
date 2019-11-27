@@ -6,7 +6,14 @@
 // JS to work, expect host app to load it.
 
 
+//= require 'flot/jquery.canvaswrapper.js'
+//= require 'flot/jquery.colorhelpers.js'
 //= require 'flot/jquery.flot.js'
+//= require 'flot/jquery.flot.browser.js'
+//= require 'flot/jquery.flot.saturated.js'
+//= require 'flot/jquery.flot.drawSeries.js'
+//= require 'flot/jquery.flot.hover.js'
+//= require 'flot/jquery.flot.uiConstants.js'
 //= require 'flot/jquery.flot.selection.js'
 //= require 'bootstrap-slider'
 

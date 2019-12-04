@@ -3,7 +3,7 @@ en:
     range_limit:
       range_begin: "%{field_label} range begin"
       range_end: "%{field_label} range end"
-      submit_limit: 'Limit'
+      submit_limit: 'Apply'
       remove_limit: 'remove'
       missing: 'Unknown'
       view_distribution: 'View distribution'

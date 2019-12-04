@@ -8,7 +8,7 @@ describe "Blacklight Range Limit" do
     expect(page).to have_selector 'input.range_end'
     expect(page).to have_selector 'label.sr-only[for="range_pub_date_si_begin"]', :text => 'Publication Date Sort range begin'
     expect(page).to have_selector 'label.sr-only[for="range_pub_date_si_end"]', :text => 'Publication Date Sort range end'
-    expect(page).to have_button 'Limit'
+    expect(page).to have_button 'Apply'
   end
 
   it "should provide distribution information" do
@@ -31,7 +31,7 @@ describe "Blacklight Range Limit" do
     visit search_catalog_path(page: 2)
     click_link 'View distribution'
     click_link '2000 to 2008'
-    click_button 'Limit'
+    click_button 'Apply'
     expect(page.current_url).not_to include('page')
   end
 

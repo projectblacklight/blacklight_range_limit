@@ -9,7 +9,7 @@ form.range_limit {
 }
 
 .limit_content .subsection {
-  margin-top: 1em;
+  margin-top: 0.5em;
 }
 
 .hover_legend {
@@ -19,6 +19,14 @@ form.range_limit {
 .slider_js .slider-selection {
   /* color from flot selection */
   background: #e8cfac;
+}
+
+.slider_js .slider-horizontal {
+  width: 100% !important;
+}
+
+.chart_js .flot-x-axis {
+  font-size: 14px;
 }
 
 .modal-body .view_larger {

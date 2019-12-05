@@ -200,7 +200,7 @@ Blacklight.onLoad(function() {
             //xaxis: { ticks: x_ticks },
             xaxis: { tickDecimals: 0 }, // force integer ticks
             series: { lines: { fill: true, steps: true }},
-            grid: {clickable: true, hoverable: true, autoHighlight: false},
+            grid: {clickable: true, hoverable: true, autoHighlight: false, margin: { left: -14, right: -12 }},
             selection: {mode: "x"}
           }));
         }

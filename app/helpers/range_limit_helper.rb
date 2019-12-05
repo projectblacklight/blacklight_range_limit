@@ -14,9 +14,9 @@ module RangeLimitHelper
 
     default = params["range"][solr_field][type] if params["range"] && params["range"][solr_field] && params["range"][solr_field][type]
 
-    html = label_tag("range[#{solr_field}][#{type}]", input_label, class: 'sr-only') if input_label.present?
-    html ||= ''.html_safe
-    html += text_field_tag("range[#{solr_field}][#{type}]", default, :maxlength=>maxlength, :class => "form-control range_#{type}")
+    html = text_field_tag("range[#{solr_field}][#{type}]", default, :maxlength=>maxlength, :class => "form-control text-center range_#{type}")
+    html += label_tag("range[#{solr_field}][#{type}]", input_label, class: 'sr-only') if input_label.present?
+    html
   end
 
   # type is 'min' or 'max'

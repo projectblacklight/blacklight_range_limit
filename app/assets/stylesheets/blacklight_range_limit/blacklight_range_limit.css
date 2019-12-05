@@ -3,6 +3,11 @@ form.range_limit {
   line-height: 3;
 }
 
+.range_limit .range-limit-input-group {
+  max-width: 350px;
+  width: 100% !important;
+}
+
 .range_limit input.range_begin, .range_limit input.range_end {
   display: inline-block;
   width: 4.5em;

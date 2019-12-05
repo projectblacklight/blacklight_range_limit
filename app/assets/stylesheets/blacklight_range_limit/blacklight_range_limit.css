@@ -21,6 +21,10 @@ form.range_limit {
   background: #e8cfac;
 }
 
+.chart_js .flot-x-axis {
+  font-size: 14px;
+}
+
 .modal-body .view_larger {
   display: none;
 }

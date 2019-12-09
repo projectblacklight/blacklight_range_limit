@@ -56,10 +56,10 @@
         <% end %>
     </div>
 
-    <%= form_tag search_action_path, :method => :get, class: [BlacklightRangeLimit.classes[:form], "range_#{field_name}"].join(' ') do %>
+    <%= form_tag search_action_path, :method => :get, class: [BlacklightRangeLimit.classes[:form], "range_#{field_name} d-flex justify-content-center"].join(' ') do %>
       <%= render_hash_as_hidden_fields(search_state.params_for_search.except(:page)) %>
       <%= content_tag :label, t('blacklight.range_limit.date_range_label'), class: 'range_limit_label sr-only' %>
-      <div class="input-group input-group-sm w-100 mb-3">
+      <div class="input-group input-group-sm mb-3 flex-nowrap range-limit-input-group">
         <%= render_range_input(field_name, :begin, input_label_range_begin, maxlength) %>
         <%= render_range_input(field_name, :end, input_label_range_end, maxlength) %>
         <div class="input-group-append">
@@ -73,17 +73,19 @@
         class: 'view_larger mt-1',
         data: { blacklight_modal: 'trigger' } %>
 
-    <% if (stats = stats_for_field(field_name)) && stats["missing"] > 0 %>
-      <ul class="missing list-unstyled facet-values subsection">
-        <li>
-          <span class="facet-label">
-            <%= link_to t('blacklight.range_limit.missing'), search_action_url(add_range_missing(field_name).except(:controller, :action)) %>
-          </span>
-          <%# note important there be no whitespace inside facet-count to avoid
-              bug in some versions of Blacklight (including 7.1.0.alpha) %>
-          <span class="facet-count"><%= number_with_delimiter(stats["missing"]) %></span>
-        </li>
-      </ul>
+    <% unless request.xhr? %>
+      <% if (stats = stats_for_field(field_name)) && stats["missing"] > 0 %>
+        <ul class="missing list-unstyled facet-values subsection">
+          <li>
+            <span class="facet-label">
+              <%= link_to t('blacklight.range_limit.missing'), search_action_url(add_range_missing(field_name).except(:controller, :action)) %>
+            </span>
+            <%# note important there be no whitespace inside facet-count to avoid
+                bug in some versions of Blacklight (including 7.1.0.alpha) %>
+            <span class="facet-count"><%= number_with_delimiter(stats["missing"]) %></span>
+          </li>
+        </ul>
+      <% end %>
     <% end %>
   <% end %>
 </div>

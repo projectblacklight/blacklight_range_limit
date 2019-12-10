@@ -72,7 +72,7 @@ function isInt(n) {
       var begin_el = form.find("input.range_begin");
       var end_el = form.find("input.range_end");
 
-      var placeholder_input = $('<input type="hidden" data-slider-placeholder="true" style="width:100%;">').appendTo(range_element);
+      var placeholder_input = $('<input type="hidden" data-slider-placeholder="true" />').appendTo(range_element);
 
       // make sure slider is loaded
       if (placeholder_input.slider !== undefined) {

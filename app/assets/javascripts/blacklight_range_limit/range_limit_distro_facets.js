@@ -183,7 +183,7 @@ Blacklight.onLoad(function() {
 
             x_ticks.push(from);
 
-            pointer_lookup.push({'from': from, 'to': to, 'count': count, 'label': $(this).find(".facet_select").text() });
+            pointer_lookup.push({'from': from, 'to': to, 'count': count, 'label': $(this).find(".facet_select").html() });
         });
         var max_plus_one = BlacklightRangeLimit.parseNum($(container).find("ul li:last-child span.to").text())+1;
         x_ticks.push( max_plus_one );
@@ -210,7 +210,7 @@ Blacklight.onLoad(function() {
 
         find_segment_for = function_for_find_segment(pointer_lookup);
         var last_segment = null;
-        $(container).tooltip({'placement': 'bottom', 'trigger': 'manual', 'delay': { show: 0, hide: 100}});
+        $(container).tooltip({'html': true, 'placement': 'bottom', 'trigger': 'manual', 'delay': { show: 0, hide: 100}});
 
         $(container).bind("plothover", function (event, pos, item) {
           segment = find_segment_for(pos.x);

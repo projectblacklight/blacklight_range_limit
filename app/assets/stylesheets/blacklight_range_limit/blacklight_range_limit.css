@@ -62,4 +62,6 @@ form .range_limit_label {
 
 .range_limit .chart_js {
   min-height: 80px;
+  margin-left: -12px;
+  margin-right: -14px;
 }

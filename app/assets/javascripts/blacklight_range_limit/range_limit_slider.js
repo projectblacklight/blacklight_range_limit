@@ -21,8 +21,6 @@ $("body").on("plotDrawn.blacklight.rangeLimit", function(event) {
   if (plot && slider_el) {
       slider_el.width(plot.width());
       slider_el.css("display", "block")
-      slider_el.css('margin-right', 'auto');
-      slider_el.css('margin-left', 'auto'); 
   }
 });
 
@@ -91,8 +89,6 @@ function isInt(n) {
         if (plot && slider_el) {
           slider_el.width(plot.width());
           slider_el.css("display", "block")
-          slider_el.css('margin-right', 'auto');
-          slider_el.css('margin-left', 'auto');
         } else if (slider_el) {
           slider_el.css("width", "100%");
         }

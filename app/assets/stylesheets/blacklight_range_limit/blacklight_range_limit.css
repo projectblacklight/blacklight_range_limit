@@ -27,7 +27,8 @@ form.range_limit {
 }
 
 .slider_js .slider-horizontal {
-  width: 100% !important;
+  margin-left: 5px;
+  margin-right: 5px;
 }
 
 .chart_js .flot-x-axis {
@@ -62,4 +63,6 @@ form .range_limit_label {
 
 .range_limit .chart_js {
   min-height: 80px;
+  margin-left: -12px;
+  margin-right: -14px;
 }

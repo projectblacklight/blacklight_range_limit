@@ -63,7 +63,7 @@ function isInt(n) {
     var max = boundaries[1];
 
     if (isInt(min) && isInt(max)) {
-      $(thisContext).contents().wrapAll('<div style="display:none" />');
+      $(thisContext).contents().wrapAll('<div class="sr-only" />');
 
       var range_element = $(thisContext);
       var form = $(range_element).closest(".range_limit").find("form.range_limit");

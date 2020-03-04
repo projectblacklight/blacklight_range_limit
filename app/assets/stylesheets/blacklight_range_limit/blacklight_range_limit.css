@@ -44,14 +44,6 @@ form.range_limit {
   display: none;
 }
 
-form .range_limit_label {
-  display: none;
-}
-
-.modal-body .range_limit_label {
-  display: flex;
-}
-
 .modal-body .range_limit {
   justify-content: center;
 }

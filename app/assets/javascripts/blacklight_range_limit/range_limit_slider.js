@@ -83,8 +83,17 @@ function isInt(n) {
 
         // try to make slider width/orientation match chart's
         var container = range_element.closest(".range_limit");
-        var plot = container.find(".chart_js").data("plot");
+        var plot_el = container.find(".chart_js");
+        var plot = plot_el.data("plot");
         var slider_el = container.find(".slider");
+
+        if (plot_el) {
+          plot_el.attr('aria-hidden', 'true');
+        }
+
+        if (slider_el) {
+          slider_el.attr('aria-hidden', 'true');
+        }
 
         if (plot && slider_el) {
           slider_el.width(plot.width());

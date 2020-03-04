@@ -8,7 +8,6 @@ ar:
       missing: 'غير معروف'
       view_distribution: 'عرض التوزيع'
       view_larger: 'عرض بحجم أكبر »'
-      date_range_label: 'الفترة التاريخية:'
       results_range_html: 'تمتد النتائج الحالية من <span class="min">%{min}</span> إلى<span class="max">%{max}</span>'
       single_html: '<span class="single">%{begin}</span>'
       range_html: '<span class="from">%{begin}</span> إلى<span class="to">%{end}</span>'

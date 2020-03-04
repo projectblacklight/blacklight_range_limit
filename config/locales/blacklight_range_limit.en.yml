@@ -8,7 +8,6 @@ en:
       missing: 'Unknown'
       view_distribution: 'View distribution'
       view_larger: 'View larger »'
-      date_range_label: 'Date range:'
       results_range_html: 'Current results range from <span class="min">%{min}</span> to <span class="max">%{max}</span>'
       single_html: '<span class="single">%{begin}</span>'
       range_html: '<span class="from">%{begin}</span> to <span class="to">%{end}</span>'

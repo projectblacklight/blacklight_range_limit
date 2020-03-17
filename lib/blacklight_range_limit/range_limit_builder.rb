@@ -45,8 +45,8 @@ module BlacklightRangeLimit
             add_range_segments_to_solr!(solr_params, field_key, start.to_i, finish.to_i)
           end
 
-        elsif (config.segments != false &&
-               boundaries = config.assumed_boundaries)
+        elsif (config.range[:segments] != false &&
+               boundaries = config.range[:assumed_boundaries])
           # assumed_boundaries in config
           add_range_segments_to_solr!(solr_params, field_key, boundaries[0], boundaries[1])
         end

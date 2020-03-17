@@ -40,7 +40,7 @@ module BlacklightRangeLimit
           solr_params[:fq] ||= []
           solr_params[:fq] << "#{config.field}: [#{start} TO #{finish}]"
 
-          if (config.segments != false && start != "*" && finish != "*")
+          if (config.range[:segments] != false && start != "*" && finish != "*")
             # Add in our calculated segments, can only do with both boundaries.
             add_range_segments_to_solr!(solr_params, field_key, start.to_i, finish.to_i)
           end

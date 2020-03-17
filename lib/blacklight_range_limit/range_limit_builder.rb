@@ -23,6 +23,8 @@ module BlacklightRangeLimit
         solr_params["stats.field"] ||= []
         solr_params["stats.field"] << config.field
 
+        range_config = BlacklightRangeLimit.range_config(blacklight_config, config.field)
+
         hash =  blacklight_params["range"] && blacklight_params["range"][field_key] ?
           blacklight_params["range"][field_key] :
           {}
@@ -40,13 +42,13 @@ module BlacklightRangeLimit
           solr_params[:fq] ||= []
           solr_params[:fq] << "#{config.field}: [#{start} TO #{finish}]"
 
-          if (config.segments != false && start != "*" && finish != "*")
+          if (range_config[:segments] != false && start != "*" && finish != "*")
             # Add in our calculated segments, can only do with both boundaries.
             add_range_segments_to_solr!(solr_params, field_key, start.to_i, finish.to_i)
           end
 
-        elsif (config.segments != false &&
-               boundaries = config.assumed_boundaries)
+        elsif (range_config[:segments] != false &&
+               boundaries = range_config[:assumed_boundaries])
           # assumed_boundaries in config
           add_range_segments_to_solr!(solr_params, field_key, boundaries[0], boundaries[1])
         end

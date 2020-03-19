@@ -4,6 +4,10 @@ RSpec.describe BlacklightRangeLimit::SegmentCalculation do
   let(:dummy_class) do
     Class.new do
       include BlacklightRangeLimit::SegmentCalculation
+
+      def blacklight_config
+        Blacklight::Configuration.new
+      end
     end
   end
 
@@ -43,6 +47,16 @@ RSpec.describe BlacklightRangeLimit::SegmentCalculation do
       it 'raises an error' do
         expect { subject }.to raise_error BlacklightRangeLimit::InvalidRange,
                                           'The min date must be before the max date'
+      end
+    end
+
+    context 'when a field that does not exist is passed in' do
+      let(:min) { 100 }
+      let(:max) { 800 }
+      let(:solr_field) { 'i_am_not_real' }
+
+      it 'returns the original solr_params (and does not raise an error)' do
+        expect(subject).to eq({})
       end
     end
   end

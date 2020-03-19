@@ -16,6 +16,8 @@ module BlacklightRangeLimit
 
       field_config = BlacklightRangeLimit.range_config(blacklight_config, solr_field)
 
+      return solr_params unless field_config
+
       solr_params[:"facet.query"] ||= []
 
       boundaries = boundaries_for_range_facets(min, max, (field_config[:num_segments] || 10) )
@@ -28,7 +30,7 @@ module BlacklightRangeLimit
         solr_params[:"facet.query"] << "#{solr_field}:[#{first} TO #{last}]"
       end
 
-      return solr_params
+      solr_params
     end
 
     # returns an array of 'boundaries' for producing approx num_div

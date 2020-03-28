@@ -44,7 +44,7 @@
     def render_constraints_filters(my_params = params)
       content = super(my_params)
       # add a constraint for ranges?
-      unless my_params[:range].blank?
+      if my_params[:range].present? && my_params[:range].respond_to?(:each_pair)
         my_params[:range].each_pair do |solr_field, hash|
 
           next unless hash["missing"] || (!hash["begin"].blank?) || (!hash["end"].blank?)
@@ -62,7 +62,7 @@
     def render_search_to_s_filters(my_params)
       content = super(my_params)
       # add a constraint for ranges?
-      unless my_params[:range].blank?
+      if my_params[:range].present? && my_params[:range].respond_to?(:each_pair)
         my_params[:range].each_pair do |solr_field, hash|
           next unless hash["missing"] || (!hash["begin"].blank?) || (! hash["end"].blank?)
 

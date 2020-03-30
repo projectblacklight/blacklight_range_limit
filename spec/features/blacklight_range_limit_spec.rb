@@ -40,6 +40,10 @@ describe "Blacklight Range Limit" do
       I18n.backend.store_translations(:en, blacklight: {search: {fields: {facet: {pub_date_si: 'Publication Date I18n'}}}})
     end
 
+    after do
+      I18n.backend.store_translations(:en, blacklight: {search: {fields: {facet: {pub_date_si: 'Publication Date Sort'}}}})
+    end
+
     it 'should render the I18n label' do
       visit search_catalog_path
       click_link 'View distribution'

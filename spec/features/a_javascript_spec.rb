@@ -21,6 +21,25 @@ describe 'JavaScript', js: true do
     end
   end
 
+  context 'when assumed boundaries configured' do
+    before do
+      CatalogController.blacklight_config.facet_fields['pub_date_si'].range = {
+        assumed_boundaries: [1990, 2000]
+      }
+    end
+
+    after do
+      CatalogController.blacklight_config.facet_fields['pub_date_si'].range = true
+    end
+
+    it 'should show the range limit with set boundaries' do
+      visit '/catalog'
+      click_button 'Publication Date Sort'
+      expect(page).to have_field :range_pub_date_si_begin, with: '1990'
+      expect(page).to have_field :range_pub_date_si_end, with: '2000'
+    end
+  end
+
   describe '"Unknown" link' do
     context 'when in the facet (e.g. non-xhr)' do
       it 'is displayed' do

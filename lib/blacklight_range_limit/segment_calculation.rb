@@ -15,6 +15,8 @@ module BlacklightRangeLimit
       raise InvalidRange, "The min date must be before the max date" if min > max
       field_config = blacklight_config.facet_fields[facet_field.to_s]
 
+      return solr_params unless field_config
+
       range_config = BlacklightRangeLimit.range_config(blacklight_config, facet_field)
 
       solr_params[:"facet.query"] ||= []
@@ -29,7 +31,7 @@ module BlacklightRangeLimit
         solr_params[:"facet.query"] << "#{field_config.field}:[#{first} TO #{last}]"
       end
 
-      return solr_params
+      solr_params
     end
 
     # returns an array of 'boundaries' for producing approx num_div

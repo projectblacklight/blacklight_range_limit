@@ -28,7 +28,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'sqlite3'
   s.add_development_dependency 'launchy'
   s.add_development_dependency 'selenium-webdriver'
-  s.add_development_dependency 'solr_wrapper', '~> 0.14'
+  s.add_development_dependency 'solr_wrapper', '~> 2.2'
   s.add_development_dependency 'engine_cart', '~> 1.0'
   s.add_development_dependency 'webdrivers'
 end

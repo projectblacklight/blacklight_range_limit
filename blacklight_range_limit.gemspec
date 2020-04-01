@@ -17,15 +17,17 @@ Gem::Specification.new do |s|
 
   s.license     = 'Apache 2.0'
 
-  s.add_dependency 'rails', '>= 3.0'
+  s.add_dependency 'rails', '>= 4.2', '< 6'
   s.add_dependency 'jquery-rails' # our JS needs jquery_rails
-  s.add_dependency 'blacklight', '>= 6.0.2'
+  s.add_dependency 'blacklight', '>= 6.10.0', '< 7.0.0'
 
+  s.add_development_dependency 'chromedriver-helper'
   s.add_development_dependency 'rspec', '~> 3.0'
   s.add_development_dependency 'rspec-rails'
   s.add_development_dependency 'capybara'
   s.add_development_dependency 'sqlite3'
   s.add_development_dependency 'launchy'
+  s.add_development_dependency 'selenium-webdriver'
   s.add_development_dependency 'solr_wrapper', '~> 0.14'
   s.add_development_dependency 'engine_cart', '~> 1.0'
 end

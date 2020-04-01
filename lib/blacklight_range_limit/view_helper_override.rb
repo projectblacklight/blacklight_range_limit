@@ -42,39 +42,26 @@
     end
 
     def render_constraints_filters(my_params = params)
-      content = super(my_params)
       # add a constraint for ranges?
-      unless my_params[:range].blank?
-        my_params[:range].each_pair do |solr_field, hash|
-
-          next unless hash["missing"] || (!hash["begin"].blank?) || (!hash["end"].blank?)
-          content << render_constraint_element(
-            facet_field_label(solr_field),
-            range_display(solr_field, my_params),
-            :escape_value => false,
-            :remove => remove_range_param(solr_field, my_params)
-          )
-        end
+      range_params(my_params).keys.each_with_object(super) do |solr_field, content|
+        content << render_constraint_element(
+          facet_field_label(solr_field),
+          range_display(solr_field, my_params),
+          escape_value: false,
+          remove: remove_range_param(solr_field, my_params)
+        )
       end
-      return content
     end
 
     def render_search_to_s_filters(my_params)
-      content = super(my_params)
       # add a constraint for ranges?
-      unless my_params[:range].blank?
-        my_params[:range].each_pair do |solr_field, hash|
-          next unless hash["missing"] || (!hash["begin"].blank?) || (! hash["end"].blank?)
-
-          content << render_search_to_s_element(
-            facet_field_label(solr_field),
-            range_display(solr_field, my_params),
-            :escape_value => false
-          )
-
-        end
+      range_params(my_params).keys.each_with_object(super) do |solr_field, content|
+        content << render_search_to_s_element(
+          facet_field_label(solr_field),
+          range_display(solr_field, my_params),
+          escape_value: false
+        )
       end
-      return content
     end
 
     def remove_range_param(solr_field, my_params = params)
@@ -110,4 +97,17 @@
       BlacklightRangeLimit.range_config(blacklight_config, solr_field)
     end
 
+    private
+
+    def range_params(my_params = params)
+      return {} unless my_params[:range].is_a?(ActionController::Parameters)
+
+      my_params[:range].select do |_solr_field, range_options|
+        next unless range_options
+
+        [range_options['missing'],
+         range_options['begin'],
+         range_options['end']].any?
+      end
+    end
   end

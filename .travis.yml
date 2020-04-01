@@ -4,10 +4,10 @@ notifications:
 language: ruby
 sudo: false
 rvm:
-  - 2.3.1
+  - 2.5.8
+  - 2.6.5
 
 before_install:
-  - gem install bundler
   - google-chrome-stable --headless --disable-gpu --remote-debugging-port=9222 http://localhost &
 
 notifications:

@@ -52,7 +52,7 @@ config.add_facet_field 'pub_date', label: 'Publication Year', range: true
 You should now get range limit display. More complicated configuration is available if desired, see Range Facet Configuration below.
 
 
-You can also configure the look and feel of the Flot chart using the jQuery .data() method. On the `.facet-limit` container you want to configure, add a Flot options associative array (documented at http://people.iola.dk/olau/flot/API.txt) as the `plot-config` key. The `plot-config` key to set the `plot-config` key on the appropriate `.facet-limit` container. In order to customize the plot colors, for example, you could use this code:
+You can also configure the look and feel of the Flot chart using the jQuery .data() method. On the `.blrl-plot-config` or `.facet-limit` container you want to configure, add a Flot options associative array (documented at http://people.iola.dk/olau/flot/API.txt) as the `plot-config` key. The `plot-config` key to set the `plot-config` key on the appropriate `.blrl-plot-config` or `.facet-limit` container. In order to customize the plot colors, for example, you could use this code:
 
 ```javascript
 $('.blacklight-year_i').data('plot-config', {

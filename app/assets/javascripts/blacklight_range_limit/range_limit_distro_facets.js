@@ -191,7 +191,7 @@ Blacklight.onLoad(function() {
 
 
         var plot;
-        var config = $(container).closest('.facet-limit').data('plot-config') || {};
+        var config = $(container).closest('.blrl-plot-config').data('plot-config') || $(container).closest('.facet-limit').data('plot-config') || {};
 
         try {
           plot = $.plot($(container), [series_data],

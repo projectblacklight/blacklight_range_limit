@@ -7,7 +7,7 @@
   maxlength = field_config[:maxlength]
 -%>
 
-<div class="limit_content range_limit">
+<div class="limit_content range_limit <%= field_name %>-config blrl-plot-config">
   <% if has_selected_range_limit?(field_name) %>
     <ul class="current list-unstyled facet-values">
       <li class="selected">

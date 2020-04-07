@@ -9,5 +9,5 @@ en:
       view_distribution: 'View distribution'
       view_larger: 'View larger »'
       results_range_html: 'Current results range from <span class="min">%{min}</span> to <span class="max">%{max}</span>'
-      single_html: '<span class="single">%{begin}</span>'
-      range_html: '<span class="from">%{begin}</span> to <span class="to">%{end}</span>'
+      single_html: '<span class="single" data-blrl-single="%{begin}">%{begin}</span>'
+      range_html: '<span class="from" data-blrl-begin="%{begin}">%{begin}</span> to <span class="to" data-blrl-end="%{end}">%{end}</span>'

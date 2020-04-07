@@ -33,10 +33,10 @@ function min_max(range_element) {
    
    
    
-   var min = max = BlacklightRangeLimit.parseNum(current_limit.find(".single").text())
+   var min = max = BlacklightRangeLimit.parseNum(current_limit.find(".single").data('blrl-single'))
    if ( isNaN(min)) {
-     min = BlacklightRangeLimit.parseNum(current_limit.find(".from").first().text());
-     max = BlacklightRangeLimit.parseNum(current_limit.find(".to").first().text());
+     min = BlacklightRangeLimit.parseNum(current_limit.find(".from").first().data('blrl-begin'));
+     max = BlacklightRangeLimit.parseNum(current_limit.find(".to").first().data('blrl-end'));
    }
   
    if (isNaN(min) || isNaN(max)) {

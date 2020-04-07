@@ -9,5 +9,5 @@ ar:
       view_distribution: 'عرض التوزيع'
       view_larger: 'عرض بحجم أكبر »'
       results_range_html: 'تمتد النتائج الحالية من <span class="min">%{min}</span> إلى<span class="max">%{max}</span>'
-      single_html: '<span class="single">%{begin}</span>'
-      range_html: '<span class="from">%{begin}</span> إلى<span class="to">%{end}</span>'
+      single_html: '<span class="single" data-blrl-single="%{begin}">%{begin}</span>'
+      range_html: '<span class="from" data-blrl-begin="%{begin}">%{begin}</span> إلى<span class="to">%{end}</span>'

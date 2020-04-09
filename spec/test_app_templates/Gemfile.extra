@@ -1,3 +1,2 @@
-gem 'blacklight', github: 'projectblacklight/blacklight', branch: 'master'
 gem 'rails-controller-testing'
 gem 'thor', '~> 0.20'

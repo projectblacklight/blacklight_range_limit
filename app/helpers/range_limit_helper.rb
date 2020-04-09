@@ -42,13 +42,30 @@ module RangeLimitHelper
       return t('blacklight.range_limit.missing')
     elsif hash["begin"] || hash["end"]
       if hash["begin"] == hash["end"]
-        return t('blacklight.range_limit.single_html', begin: h(hash['begin']))
+        return t(
+          'blacklight.range_limit.single_html',
+          begin: format_range_display_value(hash['begin'], solr_field),
+          begin_value: hash['begin']
+        )
       else
-        return t('blacklight.range_limit.range_html', begin: h(hash['begin']), end: h(hash['end']))
+        return t(
+          'blacklight.range_limit.range_html',
+          begin: format_range_display_value(hash['begin'], solr_field),
+          begin_value: hash['begin'],
+          end: format_range_display_value(hash['end'], solr_field),
+          end_value: hash['end']
+        )
       end
     end
 
-    return ""
+    ''
+  end
+
+  ##
+  # A method that is meant to be overridden downstream to format how a range
+  # label might be displayed to a user. By default it just returns the value.
+  def format_range_display_value(value, _solr_field)
+    value
   end
 
   # Show the limit area if:

@@ -166,12 +166,12 @@ Blacklight.onLoad(function() {
         var series_data = new Array();
         var pointer_lookup = new Array();
         var x_ticks = new Array();
-        var min = BlacklightRangeLimit.parseNum($(container).find("ul li:first-child span.from").text());
-        var max = BlacklightRangeLimit.parseNum($(container).find("ul li:last-child span.to").text());
+        var min = BlacklightRangeLimit.parseNum($(container).find("ul li:first-child span.from").first().data('blrlBegin'));
+        var max = BlacklightRangeLimit.parseNum($(container).find("ul li:last-child span.to").first().data('blrlEnd'));
 
         $(container).find("ul li").each(function() {
-            var from = BlacklightRangeLimit.parseNum($(this).find("span.from").text());
-            var to = BlacklightRangeLimit.parseNum($(this).find("span.to").text());
+            var from = BlacklightRangeLimit.parseNum($(this).find("span.from").first().data('blrlBegin'));
+            var to = BlacklightRangeLimit.parseNum($(this).find("span.to").first().data('blrlEnd'));
             var count = BlacklightRangeLimit.parseNum($(this).find("span.count").text());
             var avg = (count / (to - from + 1));
 

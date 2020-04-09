@@ -7,8 +7,10 @@
         <span class="facet-label">
             <%= link_to(
                   t('blacklight.range_limit.range_html',
-                  begin: facet_display_value(solr_field, hash[:from]),
-                  end: facet_display_value(solr_field, hash[:to])),
+                  begin: format_range_display_value(facet_display_value(solr_field, hash[:from]), solr_field),
+                  begin_value: facet_display_value(solr_field, hash[:from]),
+                  end: format_range_display_value(facet_display_value(solr_field, hash[:to]), solr_field),
+                  end_value: facet_display_value(solr_field, hash[:to])),
                   search_action_url(add_range(solr_field, hash[:from], hash[:to]).except(:controller, :action)),
                   class: 'facet_select'
               ) %>

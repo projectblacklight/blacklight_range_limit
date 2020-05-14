@@ -10,4 +10,4 @@ ar:
       view_larger: 'عرض بحجم أكبر »'
       results_range_html: 'تمتد النتائج الحالية من <span class="min">%{min}</span> إلى<span class="max">%{max}</span>'
       single_html: '<span class="single" data-blrl-single="%{begin_value}">%{begin}</span>'
-      range_html: '<span class="from" data-blrl-begin="%{begin_value}">%{begin}</span> إلى<span class="to" data-blrl-end="%{end_value}">%{end}</span>'
+      range_html: '<span class="from" data-blrl-begin="%{begin_value}">%{begin}</span> الى <span class="to" data-blrl-end="%{end_value}">%{end}</span>'

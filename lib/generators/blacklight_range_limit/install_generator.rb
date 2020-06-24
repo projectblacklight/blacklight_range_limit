@@ -9,7 +9,7 @@ module BlacklightRangeLimit
     end
 
     def install_catalog_controller_mixin
-      inject_into_class 'app/controllers/catalog_controller.rb', CatalogController do
+      inject_into_file 'app/controllers/catalog_controller.rb', after: /include Blacklight::Catalog.*$/ do
         "\n  include BlacklightRangeLimit::ControllerOverride\n"
       end
     end

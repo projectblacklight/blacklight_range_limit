@@ -87,7 +87,7 @@
     private
 
     def range_params(my_params = params)
-      return {} unless my_params[:range].is_a?(ActionController::Parameters)
+      return {} unless my_params[:range].is_a?(ActionController::Parameters) || my_params[:range].is_a?(Hash)
 
       my_params[:range].select do |_solr_field, range_options|
         next unless range_options

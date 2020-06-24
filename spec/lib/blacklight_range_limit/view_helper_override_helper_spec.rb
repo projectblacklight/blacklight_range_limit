@@ -87,6 +87,13 @@ RSpec.describe BlacklightRangeLimit::ViewHelperOverride, type: :helper do
           ActionController::Parameters.new(range: { field_name: { 'wrong' => 'data' } })
         )
       ).to eq({})
+
+      expect(
+        helper.send(
+          :range_params,
+          ActionController::Parameters.new(range: { field_name: { 'begin' => '', 'end' => '' } })
+        )
+      ).to eq({})
     end
 
     it 'returns the range parameters that are present' do

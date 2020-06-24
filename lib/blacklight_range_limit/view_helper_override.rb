@@ -35,7 +35,7 @@
           facet_field_label(solr_field),
           range_display(solr_field, my_params),
           escape_value: false,
-          remove: remove_range_param(solr_field, my_params)
+          remove: search_action_path(remove_range_param(solr_field, my_params))
         )
       end
     end

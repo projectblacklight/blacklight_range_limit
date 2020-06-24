@@ -5,7 +5,8 @@ RSpec.describe BlacklightRangeLimit::ViewHelperOverride, type: :helper do
     before do
       allow(helper).to receive_messages(
         facet_field_label: 'Date Range',
-        remove_range_param: '/remove'
+        remove_range_param: {},
+        search_action_path: '/catalog'
       )
     end
 

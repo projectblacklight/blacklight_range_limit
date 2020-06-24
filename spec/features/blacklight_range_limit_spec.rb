@@ -24,7 +24,15 @@ describe "Blacklight Range Limit" do
     click_link 'View distribution'
     click_link '2000 to 2008'
 
-    expect(page).to have_content "2000 to 2008 ✖ [remove] 12"
+    within '.blacklight-pub_date_si' do
+      expect(page).to have_content "2000 to 2008 ✖ [remove] 12"
+    end
+
+    within '.constraints-container'  do
+      expect(page).to have_content '2000 to 2008'
+    end
+
+    expect(page).to have_content '1 - 10 of 12'
   end
 
   it "should not include page parameter" do

@@ -92,9 +92,9 @@
       my_params[:range].select do |_solr_field, range_options|
         next unless range_options
 
-        [range_options['missing'],
-         range_options['begin'],
-         range_options['end']].any?
+        [range_options['missing'].presence,
+         range_options['begin'].presence,
+         range_options['end'].presence].any?
       end
     end
   end

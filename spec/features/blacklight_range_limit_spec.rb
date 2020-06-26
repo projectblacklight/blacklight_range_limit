@@ -24,7 +24,15 @@ describe "Blacklight Range Limit" do
     click_link 'View distribution'
     click_link '2000 to 2008'
 
-    expect(page).to have_content "2000 to 2008 [remove] 12"
+    within '.blacklight-pub_date_sort' do
+      expect(page).to have_content "2000 to 2008 [remove] 12"
+    end
+
+    within '#appliedParams'  do
+      expect(page).to have_content '2000 to 2008'
+    end
+
+    expect(page).to have_content '1 - 10 of 12'
   end
 
   it "should not include page parameter" do
@@ -61,9 +69,9 @@ describe "Blacklight Range Limit with configured input labels" do
         maxlength: 6
       }
       config.default_solr_params[:'facet.field'] = config.facet_fields.keys
-    end  
-  end    
-  
+    end
+  end
+
   it "should show the range limit facet with configured labels and maxlength" do
     visit '/catalog'
     expect(page).to have_selector 'label.sr-only[for="range_pub_date_sort_begin"]', :text => 'from publication date'

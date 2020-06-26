@@ -11,19 +11,6 @@
       super
     end
 
-    def has_range_limit_parameters?(my_params = params)
-      my_params[:range] &&
-        my_params[:range].to_unsafe_h.any? do |key, v|
-          v.present? && v.respond_to?(:'[]') &&
-          (v["begin"].present? || v["end"].present? || v["missing"].present?)
-        end
-    end
-
-    # over-ride, call super, but make sure our range limits count too
-    def has_search_parameters?
-      super || has_range_limit_parameters?
-    end
-
     def query_has_constraints?(my_params = params)
       super || has_range_limit_parameters?(my_params)
     end
@@ -100,14 +87,14 @@
     private
 
     def range_params(my_params = params)
-      return {} unless my_params[:range].is_a?(ActionController::Parameters)
+      return {} unless my_params[:range].is_a?(ActionController::Parameters) || my_params[:range].is_a?(Hash)
 
       my_params[:range].select do |_solr_field, range_options|
         next unless range_options
 
-        [range_options['missing'],
-         range_options['begin'],
-         range_options['end']].any?
+        [range_options['missing'].presence,
+         range_options['begin'].presence,
+         range_options['end'].presence].any?
       end
     end
   end

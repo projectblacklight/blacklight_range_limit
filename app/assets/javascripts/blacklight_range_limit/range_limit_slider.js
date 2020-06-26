@@ -44,7 +44,6 @@ function min_max(range_element) {
       min = BlacklightRangeLimit.parseNum($(range_element).find(".min").first().text());
       max = BlacklightRangeLimit.parseNum($(range_element).find(".max").first().text());
    }
-   console.log(min, max)
    return [min, max]
 }
 

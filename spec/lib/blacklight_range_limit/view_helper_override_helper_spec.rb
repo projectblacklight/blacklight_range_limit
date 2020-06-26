@@ -7,7 +7,8 @@ RSpec.describe BlacklightRangeLimit::ViewHelperOverride, type: :helper do
         facet_field_label: 'Date Range',
         remove_range_param: {},
         search_action_path: '/catalog',
-        blacklight_config: CatalogController.blacklight_config
+        blacklight_config: CatalogController.blacklight_config,
+        search_state: {},
       )
       allow(controller).to receive_messages(
         search_state_class: Blacklight::SearchState,
@@ -37,7 +38,11 @@ RSpec.describe BlacklightRangeLimit::ViewHelperOverride, type: :helper do
 
   describe 'render_search_to_s_filters' do
     before do
-      allow(helper).to receive_messages(facet_field_label: 'Date Range')
+      allow(helper).to receive_messages(
+        facet_field_label: 'Date Range',
+        blacklight_config: CatalogController.blacklight_config,
+        search_state: {},
+      )
     end
 
     it 'does not return any content when the range parameter invalid' do

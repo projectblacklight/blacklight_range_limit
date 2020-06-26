@@ -17,14 +17,14 @@ Gem::Specification.new do |s|
 
   s.license     = 'Apache 2.0'
 
-  s.add_dependency 'blacklight', '>= 7.0'
+  s.add_dependency 'blacklight', '>= 7.8'
 
   s.add_development_dependency 'rspec', '~> 3.0'
   s.add_development_dependency 'rspec-rails'
   s.add_development_dependency 'capybara', '~> 3'
   s.add_development_dependency 'sqlite3'
   s.add_development_dependency 'launchy'
-  s.add_development_dependency 'solr_wrapper', '~> 0.14'
+  s.add_development_dependency 'solr_wrapper', '~> 2.0'
   s.add_development_dependency 'engine_cart', '~> 2.1'
   s.add_development_dependency 'selenium-webdriver', '>= 3.13.1'
   s.add_development_dependency 'webdrivers', '~>3.0'

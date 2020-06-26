@@ -9,6 +9,7 @@ module BlacklightRangeLimit
     included do
       helper BlacklightRangeLimit::ViewHelperOverride
       helper RangeLimitHelper
+      helper_method :has_range_limit_parameters?
     end
 
     # Action method of our own!
@@ -27,6 +28,19 @@ module BlacklightRangeLimit
       end
 
       render('blacklight_range_limit/range_segments', :locals => {:solr_field => params[:range_field]}, :layout => !request.xhr?)
+    end
+
+    # over-ride, call super, but make sure our range limits count too
+    def has_search_parameters?
+      super || has_range_limit_parameters?
+    end
+
+    def has_range_limit_parameters?(my_params = params)
+      my_params[:range] &&
+        my_params[:range].to_unsafe_h.any? do |key, v|
+          v.present? && v.respond_to?(:'[]') &&
+          (v["begin"].present? || v["end"].present? || v["missing"].present?)
+        end
     end
   end
 end

@@ -63,9 +63,14 @@ module RangeLimitHelper
 
   ##
   # A method that is meant to be overridden downstream to format how a range
-  # label might be displayed to a user. By default it just returns the value.
-  def format_range_display_value(value, _solr_field)
-    value
+  # label might be displayed to a user. By default it just returns the value
+  # as rendered by the presenter
+  def format_range_display_value(value, solr_field)
+    if respond_to?(:facet_item_presenter)
+      facet_item_presenter(facet_configuration_for_field(solr_field), value, solr_field).label
+    else
+      facet_display_value(solr_field, value)
+    end
   end
 
   # Show the limit area if:

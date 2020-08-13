@@ -7,7 +7,9 @@ module BlacklightRangeLimit
     # Need to tell asset pipeline to precompile the excanvas
     # we use for IE.
     initializer "blacklight_range_limit.assets", :after => "assets" do
-      Rails.application.config.assets.precompile += %w( flot/excanvas.min.js )
+      if defined? Sprockets
+        Rails.application.config.assets.precompile += %w( flot/excanvas.min.js )
+      end
     end
 
     config.action_dispatch.rescue_responses.merge!(

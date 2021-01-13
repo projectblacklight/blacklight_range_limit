@@ -3,65 +3,64 @@
 Blacklight.onLoad(function() {
 
   $(".range_limit .profile .range.slider_js").each(function() {
-    buildSlider(this);
+    BlacklightRangeLimit.buildSlider(this);
   });
 
   $(Blacklight.modal.modalSelector).on('shown.bs.modal', function() {
     $(this).find(".range_limit .profile .range.slider_js").each(function() {
-      buildSlider(this);
+      BlacklightRangeLimit.buildSlider(this);
     });
   });
 
-// catch event for redrawing chart, to redraw slider to match width
-$("body").on("plotDrawn.blacklight.rangeLimit", function(event) {
-  var area       = $(event.target).closest(".limit_content.range_limit");
-  var plot       = area.find(".chart_js").data("plot");
-  var slider_el  = area.find(".slider");
+  // catch event for redrawing chart, to redraw slider to match width
+  $("body").on("plotDrawn.blacklight.rangeLimit", function(event) {
+    var area       = $(event.target).closest(".limit_content.range_limit");
+    var plot       = area.find(".chart_js").data("plot");
+    var slider_el  = area.find(".slider");
 
-  if (plot && slider_el) {
+    if (plot && slider_el) {
       slider_el.width(plot.width());
       slider_el.css("display", "block")
-  }
+    }
+  });
 });
 
 // returns two element array min/max as numbers. If there is a limit applied,
 // it's boundaries are are limits. Otherwise, min/max in current result
 // set as sniffed from HTML. Pass in a DOM element for a div.range
 // Will return NaN as min or max in case of error or other weirdness. 
-function min_max(range_element) {
-   var current_limit =  $(range_element).closest(".limit_content.range_limit").find(".current")
-   
-   
-   
-   var min = max = BlacklightRangeLimit.parseNum(current_limit.find(".single").data('blrlSingle'))
-   if ( isNaN(min)) {
-     min = BlacklightRangeLimit.parseNum(current_limit.find(".from").first().data('blrlBegin'));
-     max = BlacklightRangeLimit.parseNum(current_limit.find(".to").first().data('blrlEnd'));
-   }
-  
-   if (isNaN(min) || isNaN(max)) {
-      //no current limit, take from results min max included in spans
-      min = BlacklightRangeLimit.parseNum($(range_element).find(".min").first().text());
-      max = BlacklightRangeLimit.parseNum($(range_element).find(".max").first().text());
-   }
-   return [min, max]
+BlacklightRangeLimit.min_max = function min_max(range_element) {
+  var current_limit =  $(range_element).closest(".limit_content.range_limit").find(".current")
+
+  var min = max = BlacklightRangeLimit.parseNum(current_limit.find(".single").data('blrlSingle'))
+  if ( isNaN(min)) {
+    min = BlacklightRangeLimit.parseNum(current_limit.find(".from").first().data('blrlBegin'));
+    max = BlacklightRangeLimit.parseNum(current_limit.find(".to").first().data('blrlEnd'));
+  }
+
+  if (isNaN(min) || isNaN(max)) {
+    //no current limit, take from results min max included in spans
+    min = BlacklightRangeLimit.parseNum($(range_element).find(".min").first().text());
+    max = BlacklightRangeLimit.parseNum($(range_element).find(".max").first().text());
+  }
+  return [min, max]
 }
 
 
 // Check to see if a value is an Integer
 // see: http://stackoverflow.com/questions/3885817/how-to-check-if-a-number-is-float-or-integer
-function isInt(n) {
+BlacklightRangeLimit.isInt = function isInt(n) {
   return n % 1 === 0;
 }
 
-  function buildSlider(thisContext) {
+BlacklightRangeLimit.buildSlider = function buildSlider(thisContext) {
     var range_element = $(thisContext);
 
-    var boundaries = min_max(thisContext);
+    var boundaries = BlacklightRangeLimit.min_max(thisContext);
     var min = boundaries[0];
     var max = boundaries[1];
 
-    if (isInt(min) && isInt(max)) {
+    if (BlacklightRangeLimit.isInt(min) && BlacklightRangeLimit.isInt(max)) {
       $(thisContext).contents().wrapAll('<div class="sr-only" />');
 
       var range_element = $(thisContext);
@@ -137,4 +136,3 @@ function isInt(n) {
       placeholder_input.slider("setValue", values);
     });
   }
-});

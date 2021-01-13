@@ -133,6 +133,33 @@ ourselves yet.
 Also not sure how well the flot select UI works on a touch screen. The slider
 is probably the best touch UI anyway, if it can be made to work well.
 
+## JavaScript Customization
+
+There are two main types of JavaScript implemented for BlacklightRangeLimit:
+ - Initialization and refresh of Range Limit plugin based off of events
+ - Range Limit plugin functionality called from event listeners
+ 
+ The second class of range limit functionality is customizable in your local application by overriding the specified function.
+ 
+ A simple example of this is overriding the display ratio used to create the histogram
+ 
+ ```javascript
+ BlacklightRangeLimit.display_ratio = 1
+```
+
+This will now create a square histogram.
+
+Not only these variables and functions be customized, you can call them based off of custom events in your application.
+
+```javascript
+$('.custom-class').on('doSomething', function() {
+  BlacklightRangeLimit.checkForNeededFacetsToFetch();
+  $(".range_limit .profile .range.slider_js").each(function() {
+    BlacklightRangeLimit.buildSlider(this);
+  });
+});
+```
+
 # Tests
 
 Test coverage is not great, but there are some tests, using rspec.  Run `bundle exec rake ci` or just `bundle exec rake` to seed and

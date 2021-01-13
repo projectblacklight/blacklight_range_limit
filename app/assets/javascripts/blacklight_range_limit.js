@@ -17,4 +17,8 @@
 //= require 'flot/jquery.flot.selection.js'
 //= require 'bootstrap-slider'
 
-//= require_tree './blacklight_range_limit'
+// Ensure that range_limit_shared is loaded first
+//= require 'blacklight_range_limit/range_limit_shared'
+//= require 'blacklight_range_limit/range_limit_plotting'
+//= require 'blacklight_range_limit/range_limit_slider'
+//= require 'blacklight_range_limit/range_limit_distro_facets'

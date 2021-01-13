@@ -1,6 +1,6 @@
 BlacklightRangeLimit:  integer range limiting and profiling for Blacklight applications
 
-[![Build Status](https://travis-ci.org/projectblacklight/blacklight_range_limit.png?branch=v5.0.0)](https://travis-ci.org/projectblacklight/blacklight_range_limit) [![Gem Version](https://badge.fury.io/rb/blacklight_range_limit.png)](http://badge.fury.io/rb/blacklight_range_limit)
+![Build Status](https://github.com/projectblacklight/blacklight/workflows/CI/badge.svg) [![Gem Version](https://badge.fury.io/rb/blacklight_range_limit.png)](http://badge.fury.io/rb/blacklight_range_limit)
 
 ![Screen shot](doc/example-screenshot.png)
 

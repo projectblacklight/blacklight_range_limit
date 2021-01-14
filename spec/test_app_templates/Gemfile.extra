@@ -1,1 +1,2 @@
-gem 'blacklight', github: 'projectblacklight/blacklight', branch: 'master'
+gem 'rails-controller-testing'
+gem 'blacklight', ENV['BLACKLIGHT_VERSION'] if ENV['BLACKLIGHT_VERSION']

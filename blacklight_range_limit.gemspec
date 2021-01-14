@@ -27,7 +27,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'capybara'
   s.add_development_dependency 'sqlite3'
   s.add_development_dependency 'launchy'
-  s.add_development_dependency 'solr_wrapper', '~> 2.0'
+  s.add_development_dependency 'solr_wrapper'
   s.add_development_dependency 'engine_cart', '~> 2.1'
   s.add_development_dependency 'selenium-webdriver', '>= 3.13.1'
   s.add_development_dependency 'webdrivers', '~>3.0'

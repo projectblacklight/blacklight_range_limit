@@ -28,4 +28,5 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'engine_cart', '~> 2.1'
   s.add_development_dependency 'selenium-webdriver', '>= 3.13.1'
   s.add_development_dependency 'webdrivers', '~>3.0'
+  s.add_development_dependency 'rexml' # pending https://github.com/SeleniumHQ/selenium/issues/9001
 end

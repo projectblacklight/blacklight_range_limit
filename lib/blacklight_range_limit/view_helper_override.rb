@@ -89,8 +89,8 @@
     def range_params(my_params = params)
       return {} unless my_params[:range].is_a?(ActionController::Parameters) || my_params[:range].is_a?(Hash)
 
-      my_params[:range].select do |_solr_field, range_options|
-        next unless range_options
+      my_params[:range].select do |solr_field, range_options|
+        next unless range_options && blacklight_config.facet_fields[solr_field].present?
 
         [range_options['missing'].presence,
          range_options['begin'].presence,

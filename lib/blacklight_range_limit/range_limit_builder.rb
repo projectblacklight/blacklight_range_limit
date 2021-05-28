@@ -78,6 +78,7 @@ module BlacklightRangeLimit
       # Remove all field faceting for efficiency, we won't be using it.
       solr_params.delete("facet.field")
       solr_params.delete("facet.field".to_sym)
+      solr_params["facet.field"] = []
 
       # We don't need any actual rows either
       solr_params[:rows] = 0      

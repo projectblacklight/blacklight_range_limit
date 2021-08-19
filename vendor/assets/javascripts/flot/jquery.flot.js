@@ -826,8 +826,8 @@ Licensed under the MIT license.
                         var expectedPs = s.datapoints.pointsize != null ? s.datapoints.pointsize : (s.data && s.data[0] && s.data[0].length ? s.data[0].length : 3);
                         if (expectedPs > 2) {
                             format.push({
-                                x: false,
-                                y: true,
+                                x: s.bars.horizontal,
+                                y: !s.bars.horizontal,
                                 number: true,
                                 required: false,
                                 computeRange: s.yaxis.options.autoScale !== 'none',
@@ -1761,7 +1761,7 @@ Licensed under the MIT license.
             }
             if (axis.options.showTickLabels === 'all') {
                 var associatedSeries = series.filter(function(s) {
-                        return s.xaxis === axis;
+                        return s.bars.horizontal ? s.yaxis === axis : s.xaxis === axis;
                     }),
                     notAllBarSeries = associatedSeries.some(function(s) {
                         return !s.bars.show;

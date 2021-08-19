@@ -12,6 +12,7 @@
 //= require 'flot/jquery.flot.browser.js'
 //= require 'flot/jquery.flot.saturated.js'
 //= require 'flot/jquery.flot.drawSeries.js'
+//= require 'flot/jquery.event.drag.js'
 //= require 'flot/jquery.flot.hover.js'
 //= require 'flot/jquery.flot.uiConstants.js'
 //= require 'flot/jquery.flot.selection.js'

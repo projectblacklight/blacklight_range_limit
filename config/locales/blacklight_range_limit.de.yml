@@ -1,0 +1,13 @@
+de:
+  blacklight:
+    range_limit:
+      range_begin: "%{field_label} Bereichsanfang"
+      range_end: "%{field_label} Bereichsende"
+      submit_limit: 'Anwenden'
+      remove_limit: 'Entfernen'
+      missing: 'Unbekannt'
+      view_distribution: 'Verteilung Anzeigen'
+      view_larger: 'Größer anzeigen »'
+      results_range_html: 'Aktuelle Ergebnisse reichen von <span class="min">%{min}</span> bis <span class="max">%{max}</span>'
+      single_html: '<span class="single" data-blrl-single="%{begin_value}">%{begin}</span>'
+      range_html: '<span class="from" data-blrl-begin="%{begin_value}">%{begin}</span> bis <span class="to" data-blrl-end="%{end_value}">%{end}</span>'

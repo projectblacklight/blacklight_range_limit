@@ -61,7 +61,7 @@ BlacklightRangeLimit.buildSlider = function buildSlider(thisContext) {
     var max = boundaries[1];
 
     if (BlacklightRangeLimit.isInt(min) && BlacklightRangeLimit.isInt(max)) {
-      $(thisContext).contents().wrapAll('<div class="sr-only" />');
+      $(thisContext).contents().wrapAll('<div class="sr-only visually-hidden" />');
 
       var range_element = $(thisContext);
       var form = $(range_element).closest(".range_limit").find("form.range_limit");

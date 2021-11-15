@@ -15,7 +15,7 @@
           <span class="selected"><%= range_display(field_name) %></span>
           <%= link_to search_action_url(remove_range_param(field_name).except(:controller, :action)), :class=>"remove", :title => t('blacklight.range_limit.remove_limit') do %>
             <span class="remove-icon">✖</span>
-            <span class="sr-only">[<%= t('blacklight.range_limit.remove_limit') %>]</span>
+            <span class="sr-only visually-hidden">[<%= t('blacklight.range_limit.remove_limit') %>]</span>
           <% end %>
         </span>
         <span class="selected facet-count"><%= number_with_delimiter(@response.total) %></span>
@@ -61,9 +61,10 @@
       <div class="input-group input-group-sm mb-3 flex-nowrap range-limit-input-group">
         <%= render_range_input(field_name, :begin, input_label_range_begin, maxlength) %>
         <%= render_range_input(field_name, :end, input_label_range_end, maxlength) %>
-        <div class="input-group-append">
+        <div class="input-group-append visually-hidden">
           <%= submit_tag t('blacklight.range_limit.submit_limit'), class: BlacklightRangeLimit.classes[:submit] %>
         </div>
+        <%= submit_tag t('blacklight.range_limit.submit_limit'), class: BlacklightRangeLimit.classes[:submit] + " sr-only", "aria-hidden": "true" %>
       </div>
     <% end %>
 

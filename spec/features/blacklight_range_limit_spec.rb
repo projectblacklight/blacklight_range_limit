@@ -39,7 +39,7 @@ describe "Blacklight Range Limit" do
     visit search_catalog_path(page: 2)
     click_link 'View distribution'
     click_link '2000 to 2008'
-    click_button 'Apply'
+    click_button 'Apply', match: :first
     expect(page.current_url).not_to include('page')
   end
 

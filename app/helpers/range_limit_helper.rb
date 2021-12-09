@@ -91,45 +91,4 @@ module RangeLimitHelper
     stats_for_field(solr_field).present?
   end
 
-  def add_range_missing(solr_field, my_params = params)
-    my_params = Blacklight::SearchState.new(my_params.except(:page), blacklight_config).to_h
-    my_params["range"] ||= {}
-    my_params["range"][solr_field] ||= {}
-    my_params["range"][solr_field]["missing"] = "true"
-
-    my_params
-  end
-
-  def add_range(solr_field, from, to, my_params = params)
-    my_params = Blacklight::SearchState.new(my_params.except(:page), blacklight_config).to_h
-    my_params["range"] ||= {}
-    my_params["range"][solr_field] ||= {}
-
-    my_params["range"][solr_field]["begin"] = from
-    my_params["range"][solr_field]["end"] = to
-    my_params["range"][solr_field].delete("missing")
-
-    # eliminate temporary range status params that were just
-    # for looking things up
-    my_params.delete("range_field")
-    my_params.delete("range_start")
-    my_params.delete("range_end")
-
-    return my_params
-  end
-
-  def has_selected_range_limit?(solr_field)
-    params["range"] &&
-    params["range"][solr_field] &&
-    (
-      params["range"][solr_field]["begin"].present? ||
-      params["range"][solr_field]["end"].present? ||
-      params["range"][solr_field]["missing"]
-    )
-  end
-
-  def selected_missing_for_range_limit?(solr_field)
-    params["range"] && params["range"][solr_field] && params["range"][solr_field]["missing"]
-  end
-
 end

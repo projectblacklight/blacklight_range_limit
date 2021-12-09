@@ -6,17 +6,14 @@ module BlacklightRangeLimit
   module ControllerOverride
     extend ActiveSupport::Concern
 
-    included do
-      helper BlacklightRangeLimit::ViewHelperOverride
-      helper RangeLimitHelper
-      helper_method :has_range_limit_parameters?
-    end
-
     # Action method of our own!
     # Delivers a _partial_ that's a display of a single fields range facets.
     # Used when we need a second Solr query to get range facets, after the
     # first found min/max from result set.
     def range_limit
+      @facet = blacklight_config.facet_fields[params[:range_field]]
+      raise ActionController::RoutingError, 'Not Found' unless @facet&.range
+
       # We need to swap out the add_range_limit_params search param filter,
       # and instead add in our fetch_specific_range_limit filter,
       # to fetch only the range limit segments for only specific
@@ -26,24 +23,18 @@ module BlacklightRangeLimit
       @response, _ = search_service.search_results do |search_builder|
         search_builder.except(:add_range_limit_params).append(:fetch_specific_range_limit)
       end
-      render('blacklight_range_limit/range_segments', :locals => {:solr_field => params[:range_field]}, :layout => !request.xhr?)
+
+      display_facet = @response.aggregations[@facet.field] || Blacklight::Solr::Response::Facets::FacetField.new(@facet.key, [], response: @response)
+
+      @presenter = (@facet.presenter || BlacklightRangeLimit::FacetFieldPresenter).new(@facet, display_facet, view_context)
+
+      render 'blacklight_range_limit/range_segments', locals: { facet_field: @presenter }, layout: !request.xhr?
     end
 
-    # over-ride, call super, but make sure our range limits count too
-    def has_search_parameters?
-      super || has_range_limit_parameters?
-    end
-
-    def has_range_limit_parameters?(my_params = params)
-      my_params[:range] &&
-        my_params[:range].to_unsafe_h.any? do |key, v|
-          v.present? && v.respond_to?(:'[]') &&
-          (v["begin"].present? || v["end"].present? || v["missing"].present?)
-        end
-    end
-
-
-
+    class_methods do
+      def default_range_config
+        BlacklightRangeLimit.default_range_config
+      end
     end
   end
 end

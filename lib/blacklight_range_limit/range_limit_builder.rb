@@ -22,7 +22,7 @@ module BlacklightRangeLimit
       ranged_facet_configs.each do |field_key, config|
         solr_params["stats.field"] << config.field
 
-        range_config = BlacklightRangeLimit.range_config(blacklight_config, config.field)
+        range_config = config.range_config
 
         selected_value = search_state.filter(config.key).values.first
         range = (selected_value if selected_value.is_a? Range) || range_config[:assumed_boundaries]

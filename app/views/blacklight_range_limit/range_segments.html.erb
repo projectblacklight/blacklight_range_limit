@@ -1,1 +1,1 @@
-<%= render :partial => "blacklight_range_limit/range_segments", :locals => {:solr_field => solr_field} %>
+<%= render BlacklightRangeLimit::RangeSegmentsComponent.new(facet_field: facet_field) %>

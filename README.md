@@ -46,7 +46,7 @@ This will install some asset references in your application.js and application.c
 You have at least one solr field you want to display as a range limit, that's why you've installed this plugin. In your CatalogController, the facet configuration should look like:
 
 ```ruby
-config.add_facet_field 'pub_date', label: 'Publication Year', range: true
+config.add_facet_field 'pub_date', label: 'Publication Year', **default_range_config
 ```
 
 You should now get range limit display. More complicated configuration is available if desired, see Range Facet Configuration below.
@@ -138,11 +138,11 @@ is probably the best touch UI anyway, if it can be made to work well.
 There are two main types of JavaScript implemented for BlacklightRangeLimit:
  - Initialization and refresh of Range Limit plugin based off of events
  - Range Limit plugin functionality called from event listeners
- 
+
  The second class of range limit functionality is customizable in your local application by overriding the specified function.
- 
+
  A simple example of this is overriding the display ratio used to create the histogram
- 
+
  ```javascript
  BlacklightRangeLimit.display_ratio = 1
 ```

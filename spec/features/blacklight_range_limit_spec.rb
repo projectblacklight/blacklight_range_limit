@@ -14,9 +14,8 @@ describe "Blacklight Range Limit" do
   it "should provide distribution information" do
     visit search_catalog_path
     click_link 'View distribution'
-
-    expect(page).to have_content("1500 to 1599 0")
-    expect(page).to have_content("2000 to 2008 12")
+    expect(page).to have_content("1500 to 15990")
+    expect(page).to have_content("2000 to 200812")
   end
 
   it "should limit appropriately" do
@@ -25,7 +24,7 @@ describe "Blacklight Range Limit" do
     click_link '2000 to 2008'
 
     within '.blacklight-pub_date_si' do
-      expect(page).to have_content "2000 to 2008 ✖ [remove] 12"
+      expect(page).to have_content "2000 to 2008✖[remove]12"
     end
 
     within '.constraints-container'  do
@@ -67,7 +66,7 @@ describe "Blacklight Range Limit with configured input labels" do
   before do
     CatalogController.blacklight_config = Blacklight::Configuration.new
     CatalogController.configure_blacklight do |config|
-      config.add_facet_field 'pub_date_si', range: {
+      config.add_facet_field 'pub_date_si', **CatalogController.default_range_config, range_config: {
         input_label_range_begin: 'from publication date',
         input_label_range_end: 'to publication date',
         maxlength: 6

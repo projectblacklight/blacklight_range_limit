@@ -65,9 +65,9 @@ BlacklightRangeLimit.areaChart = function areaChart(container) {
         var segment = BlacklightRangeLimit.parseSegment(this);
         var from = segment[0];
         var to = segment[1];
-        var count = BlacklightRangeLimit.parseNum($(this).find("span.count").text());
-        var avg = (count / (to - from + 1));
 
+        var count = BlacklightRangeLimit.parseNum($(this).find("span.facet-count").text());
+        var avg = (count / (to - from + 1));
 
         //We use the avg as the y-coord, to make the area of each
         //segment proportional to how many documents it holds.
@@ -76,7 +76,7 @@ BlacklightRangeLimit.areaChart = function areaChart(container) {
 
         x_ticks.push(from);
 
-        pointer_lookup.push({'from': from, 'to': to, 'count': count, 'label': $(this).find(".facet_select").html() });
+        pointer_lookup.push({'from': from, 'to': to, 'count': count, 'label': $(this).find(".facet-select").html() });
     });
 
     x_ticks.push( max + 1 );

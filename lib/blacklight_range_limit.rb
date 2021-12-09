@@ -20,11 +20,6 @@ module BlacklightRangeLimit
     submit: 'submit btn btn-secondary'
   }
 
-  # Add element to array only if it's not already there
-  def self.safe_arr_add(array, element)
-    array << element unless array.include?(element)
-  end
-
   # Convenience method for returning range config hash from
   # blacklight config, for a specific solr field, in a normalized
   # way.

@@ -42,18 +42,8 @@ module BlacklightRangeLimit
         end
     end
 
-    def range_limit_panel
-      @facet = blacklight_config.facet_fields[params[:id]]
-      raise ActionController::RoutingError, 'Not Found' unless @facet
 
-      @response = search_service.search_results.first
 
-      respond_to do |format|
-        format.html do
-          # Draw the partial for the "more" facet modal window:
-          return render 'blacklight_range_limit/range_limit_panel', layout: !request.xhr?
-        end
-      end
     end
   end
 end

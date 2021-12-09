@@ -4,10 +4,6 @@ module RangeLimitHelper
     main_app.url_for(search_state.to_h.merge(action: 'range_limit').merge(options))
   end
 
-  def range_limit_panel_url(options = {})
-    main_app.url_for(search_state.to_h.merge(action: 'range_limit_panel').merge(options))
-  end
-
   # type is 'begin' or 'end'
   def render_range_input(solr_field, type, input_label = nil, maxlength=4)
     type = type.to_s

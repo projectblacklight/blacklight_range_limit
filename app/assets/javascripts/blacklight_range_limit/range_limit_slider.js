@@ -28,7 +28,7 @@ Blacklight.onLoad(function() {
 // returns two element array min/max as numbers. If there is a limit applied,
 // it's boundaries are are limits. Otherwise, min/max in current result
 // set as sniffed from HTML. Pass in a DOM element for a div.range
-// Will return NaN as min or max in case of error or other weirdness. 
+// Will return NaN as min or max in case of error or other weirdness.
 BlacklightRangeLimit.min_max = function min_max(range_element) {
   var current_limit =  $(range_element).closest(".limit_content.range_limit").find(".current")
 
@@ -117,7 +117,7 @@ BlacklightRangeLimit.buildSlider = function buildSlider(thisContext) {
     begin_el.change(function() {
       var val = BlacklightRangeLimit.parseNum($(thisContext).val());
       if (isNaN(val) || val < min) {
-        //for weird data, set slider at min           
+        //for weird data, set slider at min
         val = min;
       }
       var values = placeholder_input.data("slider").getValue();

@@ -3,7 +3,7 @@
 /**
  * Closure functions in this file are mainly concerned with initializing, resizing, and updating
  * range limit functionality based off of page load, facet opening, page resizing, and otherwise
- * events.  
+ * events.
  */
 
 Blacklight.onLoad(function() {

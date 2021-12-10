@@ -1,0 +1,6 @@
+<%
+  facet = blacklight_config.facet_fields[solr_field]
+  display_facet = @response.aggregations[facet.field] || Blacklight::Solr::Response::Facets::FacetField.new(facet.key, [], response: @response)
+  presenter = (facet.presenter || BlacklightRangeLimit::FacetFieldPresenter).new(facet, display_facet, self)
+%>
+<%= render BlacklightRangeLimit::RangeSegmentsComponent.new(facet_field: presenter) %>

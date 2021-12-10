@@ -8,6 +8,8 @@ module BlacklightRangeLimit
     end
 
     def normalize_range!
+      self.had_existing_component_configuration = component.present?
+
       if range.is_a? Hash
         self.range_config = range
         self.range = true

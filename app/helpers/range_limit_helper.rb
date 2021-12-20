@@ -13,7 +13,7 @@ module RangeLimitHelper
 
   # type is 'begin' or 'end'
   def render_range_input(solr_field, type, input_label = nil, maxlength=4)
-    range_facet_field_component(solr_field).render_range_input(type, input_label, maxlength)
+    range_form_component(solr_field).render_range_input(type, input_label, maxlength)
   end
   deprecation_deprecate :render_range_input
 
@@ -122,9 +122,9 @@ module RangeLimitHelper
     facet_field_presenter(facet_config, Blacklight::Solr::Response::Facets::FacetField.new(key, [], response: @response))
   end
 
-  def range_facet_field_component(key)
+  def range_form_component(key)
     presenter = range_facet_field_presenter(key)
 
-    BlacklightRangeLimit::FacetFieldComponent.new(facet_field: presenter)
+    BlacklightRangeLimit::RangeFormComponent.new(facet_field: presenter)
   end
 end

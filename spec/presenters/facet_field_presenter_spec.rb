@@ -116,7 +116,7 @@ RSpec.describe BlacklightRangeLimit::FacetFieldPresenter, type: :presenter do
     end
   end
 
-  describe '#missing' do
+  describe '#missing_facet_item' do
     let(:some_field_stats) do
       {
         missing: 5
@@ -124,7 +124,7 @@ RSpec.describe BlacklightRangeLimit::FacetFieldPresenter, type: :presenter do
     end
 
     it 'extracts the missing stat' do
-      expect(presenter.missing).to eq 5
+      expect(presenter.missing_facet_item.hits).to eq 5
     end
   end
 

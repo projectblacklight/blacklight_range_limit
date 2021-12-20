@@ -35,8 +35,23 @@ module BlacklightRangeLimit
       search_state.filter(key).values.first
     end
 
-    def missing
-      stats_for_field.fetch('missing', 0)
+    def selected_range_facet_item
+      return unless selected_range
+
+      Blacklight::Solr::Response::Facets::FacetItem.new(value: selected_range, hits: response.total)
+    end
+
+    def missing_facet_item
+      return unless missing.positive?
+
+      Blacklight::Solr::Response::Facets::FacetItem.new(
+        value: Blacklight::SearchState::FilterField::MISSING,
+        hits: missing
+      )
+    end
+
+    def missing_selected?
+      selected_range == Blacklight::SearchState::FilterField::MISSING
     end
 
     def range_config
@@ -44,6 +59,10 @@ module BlacklightRangeLimit
     end
 
     private
+
+    def missing
+      stats_for_field.fetch('missing', 0)
+    end
 
     def stats_for_field
       response.dig('stats', 'stats_fields', facet_field.field) || {}

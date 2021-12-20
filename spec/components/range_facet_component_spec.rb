@@ -21,11 +21,13 @@ RSpec.describe BlacklightRangeLimit::RangeFacetComponent, type: :component do
       in_modal?: false,
       label: 'My facet field',
       selected_range: nil,
+      selected_range_facet_item: nil,
+      missing_facet_item: nil,
+      missing_selected?: false,
       min: nil,
       max: nil,
       search_state: Blacklight::SearchState.new({}, nil),
       range_config: {},
-      missing: 0,
       modal_path: nil,
       facet_field: facet_config,
       **facet_field_params
@@ -93,7 +95,13 @@ RSpec.describe BlacklightRangeLimit::RangeFacetComponent, type: :component do
   end
 
   context 'with missing documents' do
-    let(:facet_field_params) { { missing: 50 } }
+    let(:facet_field_params) { { missing_facet_item: facet_item } }
+    let(:facet_item) do
+      Blacklight::Solr::Response::Facets::FacetItem.new(
+        value: Blacklight::SearchState::FilterField::MISSING,
+        hits: 50
+      )
+    end
 
     it 'renders a facet value for the documents that are missing the field data' do
       expected_facet_query_param = Regexp.new(Regexp.escape({ f: { '-key': ['[* TO *]'] } }.to_param))

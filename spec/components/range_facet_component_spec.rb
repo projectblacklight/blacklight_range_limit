@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-RSpec.describe BlacklightRangeLimit::FacetFieldComponent, type: :component do
+RSpec.describe BlacklightRangeLimit::RangeFacetComponent, type: :component do
   subject(:component) do
     described_class.new(facet_field: facet_field)
   end

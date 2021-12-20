@@ -5,12 +5,12 @@
 
   <% component.body do %>
     <div class="limit_content range_limit <%= @facet_field.key %>-config blrl-plot-config">
-      <% if @facet_field.selected_range %>
-        <%= render BlacklightRangeLimit::RangeSegmentsComponent.new(facet_field: @facet_field, facet_items: [Blacklight::Solr::Response::Facets::FacetItem.new(value: @facet_field.selected_range, hits: @facet_field.response.total)], classes: ['current']) %>
+      <% if @facet_field.selected_range_facet_item %>
+        <%= render BlacklightRangeLimit::RangeSegmentsComponent.new(facet_field: @facet_field, facet_items: [@facet_field.selected_range_facet_item], classes: ['current']) %>
       <% end %>
 
       <!-- no results profile if missing is selected -->
-      <% if @facet_field.selected_range != Blacklight::SearchState::FilterField::MISSING %>
+      <% if @facet_field.missing_selected? %>
         <!-- you can hide this if you want, but it has to be on page if you want
              JS slider and calculated facets to show up, JS sniffs it. -->
         <div class="profile">
@@ -35,23 +35,12 @@
           <% end %>
         </div>
 
-        <%= form_tag search_action_path, method: :get, class: [@classes[:form], "range_#{@facet_field.key} d-flex justify-content-center"].join(' ') do %>
-          <%= render Blacklight::HiddenSearchStateComponent.new(params: @facet_field.search_state.params_for_search.except(:utf8, :page)) %>
-
-          <div class="input-group input-group-sm mb-3 flex-nowrap range-limit-input-group">
-            <%= render_range_input(:begin, begin_label) %>
-            <%= render_range_input(:end, end_label) %>
-            <div class="input-group-append visually-hidden">
-              <%= submit_tag t('blacklight.range_limit.submit_limit'), class: @classes[:submit] %>
-            </div>
-            <%= submit_tag t('blacklight.range_limit.submit_limit'), class: @classes[:submit] + " sr-only", "aria-hidden": "true" %>
-          </div>
-        <% end %>
+        <%= render BlacklightRangeLimit::RangeFormComponent.new(facet_field: @facet_field, classes: @classes) %>
 
         <%= more_link(key: @facet_field.key, label: @facet_field.label) unless @facet_field.in_modal? %>
 
-        <% if @facet_field.missing.positive? && !request.xhr? %>
-          <%= render BlacklightRangeLimit::RangeSegmentsComponent.new(facet_field: @facet_field, facet_items: [Blacklight::Solr::Response::Facets::FacetItem.new(value: Blacklight::SearchState::FilterField::MISSING, hits: @facet_field.missing)], classes: ['missing', 'subsection']) %>
+        <% if @facet_field.missing_facet_item && !request.xhr? %>
+          <%= render BlacklightRangeLimit::RangeSegmentsComponent.new(facet_field: @facet_field, facet_items: [@facet_field.missing_facet_item], classes: ['missing', 'subsection']) %>
         <% end %>
       <% end %>
     </div>

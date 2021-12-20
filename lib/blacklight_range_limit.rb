@@ -58,7 +58,7 @@ module BlacklightRangeLimit
       filter_class: BlacklightRangeLimit::FilterField,
       presenter: BlacklightRangeLimit::FacetFieldPresenter,
       item_presenter: BlacklightRangeLimit::FacetItemPresenter,
-      component: BlacklightRangeLimit::FacetFieldComponent
+      component: BlacklightRangeLimit::RangeFacetComponent
     }
   end
 end

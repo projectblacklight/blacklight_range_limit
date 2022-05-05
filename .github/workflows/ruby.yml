@@ -16,61 +16,29 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    name: test (ruby ${{ matrix.ruby }} / rails ${{ matrix.rails_version }})
     strategy:
       matrix:
-        rails_version: [6.1.1]
-        ruby: [2.7, 3.0]
+        ruby: [2.7, '3.0']
+        rails_version: ['6.1.5', '7.0.2.3']
+        additional_engine_cart_rails_options: ['']
+        include:
+        - ruby: '2.7'
+          rails_version: '5.2.4.2'
+        - ruby: '3.1'
+          rails_version: '7.0.2.3'
+        - ruby: '3.0'
+          rails_version: '7.0.2.3'
     env:
       RAILS_VERSION: ${{ matrix.rails_version }}
+      ENGINE_CART_RAILS_OPTIONS: "--skip-git --skip-listen --skip-spring --skip-keeps --skip-action-cable --skip-coffee --skip-test ${{ matrix.engine_cart_rails_options }}"
     steps:
-    - uses: actions/checkout@v2
-    - name: Set up Ruby
-      uses: ruby/setup-ruby@v1
-      with:
-        ruby-version: ${{ matrix.ruby }}
-    - name: Install dependencies with Rails ${{ matrix.rails_version }}
-      run: bundle install
-    - name: Run tests
-      run: bundle exec rake
-      env:
-        ENGINE_CART_RAILS_OPTIONS: '--skip-git --skip-listen --skip-spring --skip-keeps --skip-action-cable --skip-coffee --skip-test'
-  test_rails6_0:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        ruby: [2.6]
-    steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - name: Set up Ruby
       uses: ruby/setup-ruby@v1
       with:
         ruby-version: ${{ matrix.ruby }}
     - name: Install dependencies
       run: bundle install
-      env:
-        RAILS_VERSION: 6.0.3.4
     - name: Run tests
-      run: bundle exec rake
-      env:
-        RAILS_VERSION: 6.0.3.4
-        ENGINE_CART_RAILS_OPTIONS: '--skip-git --skip-listen --skip-spring --skip-keeps --skip-action-cable --skip-coffee --skip-test'
-  test_rails5_2:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        ruby: [2.5]
-    steps:
-    - uses: actions/checkout@v2
-    - name: Set up Ruby
-      uses: ruby/setup-ruby@v1
-      with:
-        ruby-version: ${{ matrix.ruby }}
-    - name: Install dependencies
-      run: bundle install
-      env:
-        RAILS_VERSION: 5.2.4.2
-    - name: Run tests
-      run: bundle exec rake
-      env:
-        RAILS_VERSION: 5.2.4.2
-        ENGINE_CART_RAILS_OPTIONS: '--skip-git --skip-listen --skip-spring --skip-keeps --skip-action-cable --skip-coffee --skip-test'
+      run: bundle exec rake ci

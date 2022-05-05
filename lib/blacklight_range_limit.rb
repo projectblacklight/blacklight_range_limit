@@ -1,9 +1,12 @@
 # BlacklightRangeLimit
+require 'deprecation'
 
 module BlacklightRangeLimit
+  extend Deprecation
+
+  require 'blacklight_range_limit/facet_field_config_override'
   require 'blacklight_range_limit/range_limit_builder'
   require 'blacklight_range_limit/controller_override'
-  require 'blacklight_range_limit/view_helper_override'
 
   require 'blacklight_range_limit/version'
   require 'blacklight_range_limit/engine'
@@ -22,24 +25,40 @@ module BlacklightRangeLimit
 
   # Add element to array only if it's not already there
   def self.safe_arr_add(array, element)
+    Deprecation.warn(BlacklightRangeLimit, 'BlacklightRangeLimit.safe_arr_add is deprecated without replacement')
     array << element unless array.include?(element)
   end
 
-  # Convenience method for returning range config hash from
-  # blacklight config, for a specific solr field, in a normalized
-  # way.
-  #
-  # Returns false if range limiting not configured.
-  # Returns hash even if configured to 'true'
-  # for consistency.
   def self.range_config(blacklight_config, solr_field)
+    Deprecation.warn(BlacklightRangeLimit, 'BlacklightRangeLimit.range_config is deprecated without replacement')
     field = blacklight_config.facet_fields[solr_field.to_s]
 
-    return false unless field && field.range
+    return false unless field&.range
 
-    config = field.range
-    config = { partial: field.partial } if config === true
+    if field.range == true
+      default_range_config
+    else
+      field.range.merge(partial: field.partial)
+    end
+  end
 
-    config
+  def self.default_range_config
+    {
+      range: true,
+      range_config: {
+        num_segments: 10,
+        chart_js: true,
+        slider_js: true,
+        segments: true,
+        assumed_boundaries: nil,
+        maxlength: nil,
+        input_label_range_begin: nil,
+        input_label_range_end: nil
+      },
+      filter_class: BlacklightRangeLimit::FilterField,
+      presenter: BlacklightRangeLimit::FacetFieldPresenter,
+      item_presenter: BlacklightRangeLimit::FacetItemPresenter,
+      component: BlacklightRangeLimit::RangeFacetComponent
+    }
   end
 end

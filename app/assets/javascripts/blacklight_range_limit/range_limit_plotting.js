@@ -34,6 +34,19 @@ BlacklightRangeLimit.turnIntoPlot = function turnIntoPlot(container, wait_for_vi
   }
 }
 
+BlacklightRangeLimit.parseSegment = function parseSegment(el) {
+  if ($(el).find("span.single").first().data('blrlSingle')) {
+    var val = BlacklightRangeLimit.parseNum($(el).find("span.single").first().data('blrlSingle'));
+
+    return [val, val];
+  } else {
+    var from = BlacklightRangeLimit.parseNum($(el).find("span.from").first().data('blrlBegin'));
+    var to = BlacklightRangeLimit.parseNum($(el).find("span.to").first().data('blrlEnd'));
+
+    return [from, to];
+  }
+}
+
 // Takes a div holding a ul of distribution segments produced by
 // blacklight_range_limit/_range_facets and makes it into
 // a flot area chart.
@@ -45,15 +58,16 @@ BlacklightRangeLimit.areaChart = function areaChart(container) {
     var series_data = new Array();
     var pointer_lookup = new Array();
     var x_ticks = new Array();
-    var min = BlacklightRangeLimit.parseNum($(container).find("ul li:first-child span.from").first().data('blrlBegin'));
-    var max = BlacklightRangeLimit.parseNum($(container).find("ul li:last-child span.to").first().data('blrlEnd'));
+    var min = BlacklightRangeLimit.parseSegment($(container).find("ul li:first-child").first())[0];
+    var max = BlacklightRangeLimit.parseSegment($(container).find("ul li:last-child").first())[1];
 
     $(container).find("ul li").each(function() {
-        var from = BlacklightRangeLimit.parseNum($(this).find("span.from").first().data('blrlBegin'));
-        var to = BlacklightRangeLimit.parseNum($(this).find("span.to").first().data('blrlEnd'));
-        var count = BlacklightRangeLimit.parseNum($(this).find("span.count").text());
-        var avg = (count / (to - from + 1));
+        var segment = BlacklightRangeLimit.parseSegment(this);
+        var from = segment[0];
+        var to = segment[1];
 
+        var count = BlacklightRangeLimit.parseNum($(this).find("span.facet-count,span.count").text());
+        var avg = (count / (to - from + 1));
 
         //We use the avg as the y-coord, to make the area of each
         //segment proportional to how many documents it holds.
@@ -62,12 +76,10 @@ BlacklightRangeLimit.areaChart = function areaChart(container) {
 
         x_ticks.push(from);
 
-        pointer_lookup.push({'from': from, 'to': to, 'count': count, 'label': $(this).find(".facet_select").html() });
+        pointer_lookup.push({'from': from, 'to': to, 'count': count, 'label': $(this).find(".facet-select,.facet_select").html() });
     });
-    var max_plus_one = BlacklightRangeLimit.parseNum($(container).find("ul li:last-child span.to").text())+1;
-    x_ticks.push( max_plus_one );
 
-
+    x_ticks.push( max + 1 );
 
     var plot;
     var config = $(container).closest('.blrl-plot-config').data('plot-config') || $(container).closest('.facet-limit').data('plot-config') || {};

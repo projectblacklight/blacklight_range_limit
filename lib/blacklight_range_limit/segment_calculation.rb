@@ -17,11 +17,11 @@ module BlacklightRangeLimit
 
       return solr_params unless field_config
 
-      range_config = BlacklightRangeLimit.range_config(blacklight_config, facet_field)
+      range_config = field_config.range_config
 
       solr_params[:"facet.query"] ||= []
 
-      boundaries = boundaries_for_range_facets(min, max, (range_config[:num_segments] || 10) )
+      boundaries = boundaries_for_range_facets(min, max, range_config[:num_segments] || 10)
 
       # Now make the boundaries into actual filter.queries.
       0.upto(boundaries.length - 2) do |index|

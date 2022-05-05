@@ -25,22 +25,6 @@ module BlacklightRangeLimit
       end
     end
 
-    # Adds range limit behavior to search history controller
-    def install_search_history_controller
-      path = 'app/controllers/search_history_controller.rb'
-
-      # If local copy of search history controller exists, add range limit helpers
-      if File.exist? path
-        inject_into_file path, after: /include Blacklight::SearchHistory.*$/ do
-          "\n  helper BlacklightRangeLimit::ViewHelperOverride"\
-          "\n  helper RangeLimitHelper"
-        end
-      # Otherwise copies search history controller to application
-      else
-        copy_file 'search_history_controller.rb', path
-      end
-    end
-
     def install_routing_concern
       route('concern :range_searchable, BlacklightRangeLimit::Routes::RangeSearchable.new')
     end

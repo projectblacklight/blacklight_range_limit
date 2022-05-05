@@ -4,12 +4,29 @@
 require 'blacklight_range_limit/segment_calculation'
 module BlacklightRangeLimit
   module ControllerOverride
+    extend Deprecation
     extend ActiveSupport::Concern
 
     included do
-      helper BlacklightRangeLimit::ViewHelperOverride
-      helper RangeLimitHelper
-      helper_method :has_range_limit_parameters?
+      before_action do
+        template = lookup_context.find_all('blacklight_range_limit/range_limit_panel', lookup_context.prefixes + [""], true, [:field_name], {}).first
+
+        if template
+          fields = blacklight_config.facet_fields.select { |_k, v| v.range && !v.had_existing_component_configuration }
+
+          fields.each_value do |facet_config|
+            Deprecation.warn(BlacklightRangeLimit, 'Found partial blacklight_range_limit/range_limit_panel, so falling back to legacy behavior.') unless facet_config.partial
+            facet_config.partial ||= 'blacklight_range_limit/range_limit_panel'
+            facet_config.component = nil
+          end
+        else
+          fields = blacklight_config.facet_fields.select { |_k, v| v.partial == 'blacklight_range_limit/range_limit_panel' }
+          fields.each_value do |facet_config|
+            Deprecation.warn(BlacklightRangeLimit, 'Ignoring partial configuration for missing blacklight_range_limit/range_limit_panel partial')
+            facet_config.partial = nil
+          end
+        end
+      end
     end
 
     # Action method of our own!
@@ -17,6 +34,9 @@ module BlacklightRangeLimit
     # Used when we need a second Solr query to get range facets, after the
     # first found min/max from result set.
     def range_limit
+      @facet = blacklight_config.facet_fields[params[:range_field]]
+      raise ActionController::RoutingError, 'Not Found' unless @facet&.range
+
       # We need to swap out the add_range_limit_params search param filter,
       # and instead add in our fetch_specific_range_limit filter,
       # to fetch only the range limit segments for only specific
@@ -26,33 +46,22 @@ module BlacklightRangeLimit
       @response, _ = search_service.search_results do |search_builder|
         search_builder.except(:add_range_limit_params).append(:fetch_specific_range_limit)
       end
-      render('blacklight_range_limit/range_segments', :locals => {:solr_field => params[:range_field]}, :layout => !request.xhr?)
-    end
 
-    # over-ride, call super, but make sure our range limits count too
-    def has_search_parameters?
-      super || has_range_limit_parameters?
-    end
+      display_facet = @response.aggregations[@facet.field] || Blacklight::Solr::Response::Facets::FacetField.new(@facet.key, [], response: @response)
 
-    def has_range_limit_parameters?(my_params = params)
-      my_params[:range] &&
-        my_params[:range].to_unsafe_h.any? do |key, v|
-          v.present? && v.respond_to?(:'[]') &&
-          (v["begin"].present? || v["end"].present? || v["missing"].present?)
-        end
+      @presenter = (@facet.presenter || BlacklightRangeLimit::FacetFieldPresenter).new(@facet, display_facet, view_context)
+
+      render 'blacklight_range_limit/range_segments', locals: { facet_field: @presenter }, layout: !request.xhr?
     end
 
     def range_limit_panel
-      @facet = blacklight_config.facet_fields[params[:id]]
-      raise ActionController::RoutingError, 'Not Found' unless @facet
+      Deprecation.warn(BlacklightRangeLimit::ControllerOverride, 'range_limit_panel is deprecated; use the normal facet modal route instead')
+      facet
+    end
 
-      @response = search_service.search_results.first
-
-      respond_to do |format|
-        format.html do
-          # Draw the partial for the "more" facet modal window:
-          return render 'blacklight_range_limit/range_limit_panel', layout: !request.xhr?
-        end
+    class_methods do
+      def default_range_config
+        BlacklightRangeLimit.default_range_config
       end
     end
   end

@@ -12,59 +12,35 @@ module BlacklightRangeLimit
 
     # Method added to to fetch proper things for date ranges.
     def add_range_limit_params(solr_params)
-       ranged_facet_configs =
-         blacklight_config.facet_fields.select { |key, config| config.range }
-       # In ruby 1.8, hash.select returns an array of pairs, in ruby 1.9
-       # it returns a hash. Turn it into a hash either way.
-       ranged_facet_configs = Hash[ ranged_facet_configs ] unless ranged_facet_configs.kind_of?(Hash)
+      ranged_facet_configs = blacklight_config.facet_fields.select { |_key, config| config.range }
+      return solr_params unless ranged_facet_configs.any?
 
-       ranged_facet_configs.each_pair do |field_key, config|
-        solr_params["stats"] = "true"
-        solr_params["stats.field"] ||= []
+      solr_params["stats"] = "true"
+      solr_params["stats.field"] ||= []
+
+      ranged_facet_configs.each do |field_key, config|
         solr_params["stats.field"] << config.field
 
-        range_config = BlacklightRangeLimit.range_config(blacklight_config, config.field)
+        range_config = config.range_config
+        next if range_config[:segments] == false
 
-        hash =  blacklight_params["range"] && blacklight_params["range"][field_key] ?
-          blacklight_params["range"][field_key] :
-          {}
+        selected_value = search_state.filter(config.key).values.first
+        range = (selected_value if selected_value.is_a? Range) || range_config[:assumed_boundaries]
 
-        if !hash["missing"].blank?
-          # missing specified in request params
-          solr_params[:fq] ||= []
-          solr_params[:fq] << "-#{config.field}:[* TO *]"
-
-        elsif !(hash["begin"].blank? && hash["end"].blank?)
-          # specified in request params, begin and/or end, might just have one
-          start = hash["begin"].blank? ? "*" : hash["begin"]
-          finish = hash["end"].blank? ? "*" : hash["end"]
-
-          solr_params[:fq] ||= []
-          solr_params[:fq] << "#{config.field}: [#{start} TO #{finish}]"
-
-          if (range_config[:segments] != false && start != "*" && finish != "*")
-            # Add in our calculated segments, can only do with both boundaries.
-            add_range_segments_to_solr!(solr_params, field_key, start.to_i, finish.to_i)
-          end
-
-        elsif (range_config[:segments] != false &&
-               boundaries = range_config[:assumed_boundaries])
-          # assumed_boundaries in config
-          add_range_segments_to_solr!(solr_params, field_key, boundaries[0], boundaries[1])
-        end
+        add_range_segments_to_solr!(solr_params, field_key, range.first, range.last) if range.present?
       end
 
-      return solr_params
+      solr_params
     end
 
 
     # Another processing method, this one is NOT included in default processing chain,
     # it is specifically swapped in *instead of* add_range_limit_params for
     # certain ajax requests that only want to fetch range limit segments for
-    # ONE field. 
+    # ONE field.
     #
     # It turns off facetting and sets rows to 0 as well, only results for
-    # single specified field are needed. 
+    # single specified field are needed.
     #
     # Specified field and parameters are specified in incoming parameters
     # range_field, range_start, range_end
@@ -80,7 +56,7 @@ module BlacklightRangeLimit
       solr_params.delete("facet.field".to_sym)
 
       # We don't need any actual rows either
-      solr_params[:rows] = 0      
+      solr_params[:rows] = 0
 
       return solr_params
     end

@@ -23,13 +23,13 @@ describe 'JavaScript', js: true do
 
   context 'when assumed boundaries configured' do
     before do
-      CatalogController.blacklight_config.facet_fields['pub_date_si'].range = {
-        assumed_boundaries: [1990, 2000]
+      CatalogController.blacklight_config.facet_fields['pub_date_si'].range_config = {
+        assumed_boundaries: 1990...2000
       }
     end
 
     after do
-      CatalogController.blacklight_config.facet_fields['pub_date_si'].range = true
+      CatalogController.blacklight_config.facet_fields['pub_date_si'].range_config = {}
     end
 
     it 'should show the range limit with set boundaries' do
@@ -48,7 +48,7 @@ describe 'JavaScript', js: true do
         click_button 'Publication Date Sort'
 
         within 'ul.subsection.missing' do
-          expect(page).to have_link 'Unknown'
+          expect(page).to have_link '[Missing]'
         end
       end
     end

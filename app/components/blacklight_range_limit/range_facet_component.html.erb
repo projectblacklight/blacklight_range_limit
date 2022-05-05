@@ -1,0 +1,48 @@
+<%= render(@layout.new(facet_field: @facet_field)) do |component| %>
+  <% component.label do %>
+    <%= @facet_field.label %>
+  <% end %>
+
+  <% component.body do %>
+    <div class="limit_content range_limit <%= @facet_field.key %>-config blrl-plot-config">
+      <% if @facet_field.selected_range_facet_item %>
+        <%= render BlacklightRangeLimit::RangeSegmentsComponent.new(facet_field: @facet_field, facet_items: [@facet_field.selected_range_facet_item], classes: ['current']) %>
+      <% end %>
+
+      <!-- no results profile if missing is selected -->
+      <% unless @facet_field.missing_selected? %>
+        <!-- you can hide this if you want, but it has to be on page if you want
+             JS slider and calculated facets to show up, JS sniffs it. -->
+        <div class="profile">
+          <% if (min = @facet_field.min) &&
+                (max = @facet_field.max) %>
+
+            <% if range_config[:segments] != false %>
+              <div class="distribution subsection <%= 'chart_js' unless range_config[:chart_js] == false %>">
+                <!-- if  we already fetched segments from solr, display them
+                     here. Otherwise, display a link to fetch them, which JS
+                     will AJAX fetch.  -->
+                <% if @facet_field.range_queries.any? %>
+                  <%= render BlacklightRangeLimit::RangeSegmentsComponent.new(facet_field: @facet_field) %>
+                <% else %>
+                  <%= link_to(t('blacklight.range_limit.view_distribution'), range_limit_url(range_start: min, range_end: max), class: "load_distribution") %>
+                <% end %>
+              </div>
+            <% end %>
+            <p class="range subsection <%= "slider_js" unless range_config[:slider_js] == false %>">
+              <%= t('blacklight.range_limit.results_range_html', min: min, max: max) %>
+            </p>
+          <% end %>
+        </div>
+
+        <%= render BlacklightRangeLimit::RangeFormComponent.new(facet_field: @facet_field, classes: @classes) %>
+
+        <%= more_link(key: @facet_field.key, label: @facet_field.label) unless @facet_field.in_modal? %>
+
+        <% if @facet_field.missing_facet_item && !request.xhr? %>
+          <%= render BlacklightRangeLimit::RangeSegmentsComponent.new(facet_field: @facet_field, facet_items: [@facet_field.missing_facet_item], classes: ['missing', 'subsection']) %>
+        <% end %>
+      <% end %>
+    </div>
+  <% end %>
+<% end %>

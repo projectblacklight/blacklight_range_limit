@@ -1,6 +1,11 @@
 require "spec_helper"
 
 describe "Blacklight Range Limit Helper" do
+  let(:config) { Blacklight::Configuration.new }
+  before do
+    allow(helper).to receive(:blacklight_config).and_return(config)
+    allow(helper).to receive(:search_state).and_return(Blacklight::SearchState.new({}, config))
+  end
 
   it "should render range text fields with/without labels" do
     begin_html = Capybara.string(helper.render_range_input('pub_date', 'begin'))
@@ -17,11 +22,6 @@ describe "Blacklight Range Limit Helper" do
   end
 
   context "when building requests" do
-    let(:config) { Blacklight::Configuration.new }
-    before do
-      allow(helper).to receive(:blacklight_config).and_return(config)
-    end
-
     it "should exclude page when adding a range" do
       params = { q: '', page: '2' }
       updated_params = helper.add_range('test', '1900', '1995', params)

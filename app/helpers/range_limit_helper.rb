@@ -1,76 +1,55 @@
-# Additional helper methods used by view templates inside this plugin.
 module RangeLimitHelper
+  extend Deprecation
+
   def range_limit_url(options = {})
     main_app.url_for(search_state.to_h.merge(action: 'range_limit').merge(options))
   end
+  deprecation_deprecate :range_limit_url
 
   def range_limit_panel_url(options = {})
-    main_app.url_for(search_state.to_h.merge(action: 'range_limit_panel').merge(options))
+    search_facet_path(id: options[:id])
   end
+  deprecation_deprecate :range_limit_panel_url
 
   # type is 'begin' or 'end'
   def render_range_input(solr_field, type, input_label = nil, maxlength=4)
-    type = type.to_s
-
-    default = params["range"][solr_field][type] if params["range"] && params["range"][solr_field] && params["range"][solr_field][type]
-
-    html = number_field_tag("range[#{solr_field}][#{type}]", default, :maxlength=>maxlength, :class => "form-control text-center range_#{type}")
-    html += label_tag("range[#{solr_field}][#{type}]", input_label, class: 'sr-only visually-hidden') if input_label.present?
-    html
+    range_form_component(solr_field).render_range_input(type, input_label, maxlength)
   end
+  deprecation_deprecate :render_range_input
 
   # type is 'min' or 'max'
   # Returns smallest and largest value in current result set, if available
   # from stats component response.
   def range_results_endpoint(solr_field, type)
-    stats = stats_for_field(solr_field)
+    presenter = range_facet_field_presenter(solr_field)
 
-    return nil unless stats
-    # StatsComponent returns weird min/max when there are in
-    # fact no values
-    return nil if @response.total == stats["missing"]
-
-    return stats[type].to_s.gsub(/\.0+/, '')
+    case type.to_s
+    when 'min'
+      presenter.min
+    when 'max'
+      presenter.max
+    end
   end
+  deprecation_deprecate :range_results_endpoint
 
   def range_display(solr_field, my_params = params)
-    return "" unless my_params[:range] && my_params[:range][solr_field]
+    facet_config = blacklight_config.facet_fields[solr_field]
+    presenter = range_facet_field_presenter(solr_field)
+    return unless presenter.selected_range
 
-    hash = my_params[:range][solr_field]
+    facet_item = Blacklight::Solr::Response::Facets::FacetItem.new(value: presenter.selected_range, hits: presenter.response.total)
 
-    if hash["missing"]
-      return t('blacklight.range_limit.missing')
-    elsif hash["begin"] || hash["end"]
-      if hash["begin"] == hash["end"]
-        return t(
-          'blacklight.range_limit.single_html',
-          begin: format_range_display_value(hash['begin'], solr_field),
-          begin_value: hash['begin']
-        )
-      else
-        return t(
-          'blacklight.range_limit.range_html',
-          begin: format_range_display_value(hash['begin'], solr_field),
-          begin_value: hash['begin'],
-          end: format_range_display_value(hash['end'], solr_field),
-          end_value: hash['end']
-        )
-      end
-    end
-
-    ''
+    facet_config.item_presenter.new(facet_item, facet_config, self, solr_field).label
   end
+  deprecation_deprecate :range_display
 
   ##
   # A method that is meant to be overridden downstream to format how a range
   # label might be displayed to a user. By default it just returns the value
   # as rendered by the presenter
   def format_range_display_value(value, solr_field)
-    if respond_to?(:facet_item_presenter)
-      facet_item_presenter(facet_configuration_for_field(solr_field), value, solr_field).label
-    else
-      facet_display_value(solr_field, value)
-    end
+    Deprecation.warn(RangeLimitHelper, 'Helper #format_range_display_value is deprecated without replacement')
+    facet_item_presenter(facet_configuration_for_field(solr_field), value, solr_field).label
   end
 
   # Show the limit area if:
@@ -79,61 +58,73 @@ module RangeLimitHelper
   # 2) stats show max > min, OR
   # 3) count > 0 if no stats available.
   def should_show_limit(solr_field)
-    stats = stats_for_field(solr_field)
+    presenter = range_facet_field_presenter(solr_field)
 
-    (params["range"] && params["range"][solr_field]) ||
-    (  stats &&
-      stats["max"] > stats["min"]) ||
-    ( !stats  && @response.total > 0 )
+    presenter.selected_range ||
+      (presenter.max && presenter.min && presenter.max > presenter.min) ||
+      @response.total.positive?
   end
 
   def stats_for_field(solr_field)
-    @response["stats"]["stats_fields"][solr_field] if @response["stats"] && @response["stats"]["stats_fields"]
+    range_facet_field_presenter(solr_field).send(:stats_for_field)
   end
+  deprecation_deprecate :stats_for_field
 
   def stats_for_field?(solr_field)
     stats_for_field(solr_field).present?
   end
+  deprecation_deprecate :stats_for_field?
 
   def add_range_missing(solr_field, my_params = params)
-    my_params = Blacklight::SearchState.new(my_params.except(:page), blacklight_config).to_h
-    my_params["range"] ||= {}
-    my_params["range"][solr_field] ||= {}
-    my_params["range"][solr_field]["missing"] = "true"
-
-    my_params
+    Blacklight::SearchState.new(my_params.except(:page), blacklight_config).filter(solr_field).add(Blacklight::SearchState::FilterField::MISSING)
   end
+  deprecation_deprecate :add_range_missing
 
   def add_range(solr_field, from, to, my_params = params)
-    my_params = Blacklight::SearchState.new(my_params.except(:page), blacklight_config).to_h
-    my_params["range"] ||= {}
-    my_params["range"][solr_field] ||= {}
-
-    my_params["range"][solr_field]["begin"] = from
-    my_params["range"][solr_field]["end"] = to
-    my_params["range"][solr_field].delete("missing")
-
-    # eliminate temporary range status params that were just
-    # for looking things up
-    my_params.delete("range_field")
-    my_params.delete("range_start")
-    my_params.delete("range_end")
-
-    return my_params
+    Blacklight::SearchState.new(my_params.except(:page), blacklight_config).filter(solr_field).add(from..to)
   end
+  deprecation_deprecate :add_range
 
   def has_selected_range_limit?(solr_field)
-    params["range"] &&
-    params["range"][solr_field] &&
-    (
-      params["range"][solr_field]["begin"].present? ||
-      params["range"][solr_field]["end"].present? ||
-      params["range"][solr_field]["missing"]
-    )
+    range_facet_field_presenter(solr_field).selected_range.present?
   end
+  deprecation_deprecate :has_selected_range_limit?
 
   def selected_missing_for_range_limit?(solr_field)
-    params["range"] && params["range"][solr_field] && params["range"][solr_field]["missing"]
+    search_state.filter(solr_field).values.first == Blacklight::SearchState::FilterField::MISSING
+  end
+  deprecation_deprecate :selected_missing_for_range_limit?
+
+  def remove_range_param(solr_field, my_params = params)
+    Blacklight::SearchState.new(my_params.except(:page), blacklight_config).filter(solr_field).remove(0..0)
   end
 
+  # Looks in the solr @response for ["facet_counts"]["facet_queries"][solr_field], for elements
+  # expressed as "solr_field:[X to Y]", turns them into
+  # a list of hashes with [:from, :to, :count], sorted by
+  # :from. Assumes integers for sorting purposes.
+  def solr_range_queries_to_a(solr_field)
+    range_facet_field_presenter(solr_field).range_queries.map do |item|
+      { from: item.value.first, to: item.value.last, count: item.hits }
+    end
+  end
+  deprecation_deprecate :solr_range_queries_to_a
+
+  def range_config(solr_field)
+    BlacklightRangeLimit.range_config(blacklight_config, solr_field)
+  end
+  deprecation_deprecate :range_config
+
+  private
+
+  def range_facet_field_presenter(key)
+    facet_config = blacklight_config.facet_fields[key] || Blacklight::Configuration::FacetField.new(key: key, **BlacklightRangeLimit.default_range_config)
+    facet_field_presenter(facet_config, Blacklight::Solr::Response::Facets::FacetField.new(key, [], response: @response))
+  end
+
+  def range_form_component(key)
+    presenter = range_facet_field_presenter(key)
+
+    BlacklightRangeLimit::RangeFormComponent.new(facet_field: presenter)
+  end
 end

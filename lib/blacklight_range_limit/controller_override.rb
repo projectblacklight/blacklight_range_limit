@@ -7,6 +7,8 @@ module BlacklightRangeLimit
     extend Deprecation
     extend ActiveSupport::Concern
 
+    RANGE_LIMIT_FIELDS = [:range_end, :range_field, :range_start].freeze
+
     included do
       before_action do
         template = lookup_context.find_all('blacklight_range_limit/range_limit_panel', lookup_context.prefixes + [""], true, [:field_name], {}).first
@@ -25,6 +27,12 @@ module BlacklightRangeLimit
             Deprecation.warn(BlacklightRangeLimit, 'Ignoring partial configuration for missing blacklight_range_limit/range_limit_panel partial')
             facet_config.partial = nil
           end
+        end
+
+        # Blacklight 7.25+: Allow range limit params if necessary
+        if blacklight_config.search_state_fields
+          missing_keys = RANGE_LIMIT_FIELDS - blacklight_config.search_state_fields
+          blacklight_config.search_state_fields.concat(missing_keys)
         end
       end
     end

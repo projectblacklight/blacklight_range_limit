@@ -25,13 +25,13 @@ describe "Blacklight Range Limit Helper" do
     it "should exclude page when adding a range" do
       params = { q: '', page: '2' }
       updated_params = helper.add_range('test', '1900', '1995', params)
-      expect(updated_params).not_to include(:page)
+      expect(updated_params.to_h).not_to include(:page)
     end
 
     it "should exclude page when adding a missing range" do
       params = { q: '', page: '2' }
       updated_params = helper.add_range_missing('test', params)
-      expect(updated_params).not_to include(:page)
+      expect(updated_params.to_h).not_to include(:page)
     end
   end
 end

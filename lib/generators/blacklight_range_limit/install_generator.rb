@@ -4,6 +4,8 @@ module BlacklightRangeLimit
   class InstallGenerator < Rails::Generators::Base
     source_root File.expand_path('../templates', __FILE__)
 
+    class_option :'builder-path', type: :string, default: 'app/models/search_builder.rb', aliases: "-b", desc: "Set the path, relative to Rails root, to the Blacklight app's search builder class"
+
     def copy_public_assets
       generate 'blacklight_range_limit:assets'
     end
@@ -15,7 +17,7 @@ module BlacklightRangeLimit
     end
 
     def install_search_builder
-      path = 'app/models/search_builder.rb'
+      path = options[:'builder-path']
       if File.exist? path
         inject_into_file path, after: /include Blacklight::Solr::SearchBuilderBehavior.*$/ do
           "\n  include BlacklightRangeLimit::RangeLimitBuilder\n"

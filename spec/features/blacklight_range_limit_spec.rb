@@ -14,7 +14,6 @@ describe "Blacklight Range Limit" do
   it "should provide distribution information" do
     visit search_catalog_path
     click_link 'View distribution'
-    expect(page).to have_content("1500 to 15990")
     expect(page).to have_selector('a.facet-select', text: "1500 to 1599")
     expect(page.find('a.facet-select', text: "1500 to 1599").ancestor('li')).to have_selector('span.facet-count', text: "0")
     expect(page).to have_selector('a.facet-select', text: "2000 to 2008")

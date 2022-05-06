@@ -47,10 +47,10 @@ module BlacklightRangeLimit
     end
 
     # @return [Array] an array of applied filters
-    def values
+    def values(except: [])
       params = search_state.params
       param_key = filters_key
-      return super unless params.dig(param_key, config.key)
+      return [] unless params.dig(param_key, config.key)
 
       range = if params.dig(param_key, config.key).is_a? Range
         params.dig(param_key, config.key)
@@ -58,7 +58,11 @@ module BlacklightRangeLimit
         params.dig(param_key, config.key, :begin).to_i..params.dig(param_key, config.key, :end).to_i
       end
 
-      return super + [range]
+      f = except.include?(:filters) ? [] : [range]
+      f_missing = [] if except.include?(:missing)
+      f_missing ||= [Blacklight::SearchState::FilterField::MISSING] if params.dig(filters_key, "-#{key}")&.any? { |v| v == Blacklight::Engine.config.blacklight.facet_missing_param }
+
+      f + (f_missing || [])
     end
 
     # @param [String,#value] a filter to remove from the url

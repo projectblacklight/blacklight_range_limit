@@ -55,10 +55,12 @@ module BlacklightRangeLimit
       range = if params.dig(param_key, config.key).is_a? Range
         params.dig(param_key, config.key)
       else
-        params.dig(param_key, config.key, :begin).to_i..params.dig(param_key, config.key, :end).to_i
+        begins = Array(params.dig(param_key, config.key, :begin)).map(&:to_i)
+        ends = Array(params.dig(param_key, config.key, :end)).map(&:to_i)
+        begins.zip(ends).map { |b_bound, e_bound|  Range.new(b_bound, e_bound) }
       end
 
-      f = except.include?(:filters) ? [] : [range]
+      f = except.include?(:filters) ? [] : Array(range)
       f_missing = [] if except.include?(:missing)
       f_missing ||= [Blacklight::SearchState::FilterField::MISSING] if params.dig(filters_key, "-#{key}")&.any? { |v| v == Blacklight::Engine.config.blacklight.facet_missing_param }
 
@@ -69,18 +71,15 @@ module BlacklightRangeLimit
     # @return [Boolean] whether the provided filter is currently applied/selected
     delegate :include?, to: :values
 
-    # @since Blacklight v7.25.0
+    # @since Blacklight v7.25.2
     # normal filter fields demangle when they encounter a hash, which they assume to be a number-indexed map
     # this filter should allow (expect) hashes if the keys include 'begin' or 'end'
-    def needs_normalization?(value_params)
-      value_params.is_a?(Hash) && (value_params.keys.map(&:to_s) & ['begin', 'end']).blank?
-    end
-
-    # @since Blacklight v7.25.0
-    # value should be the first value from a mangled hash,
-    # otherwise return the value as-is
-    def normalize(value_params)
-      needs_normalization?(value_params) ? value_params.values.first : value_params
+    def permitted_params
+      {
+        # { begin: [], end: [] } or [:begin, :end]
+        filters_key => { config.key => { begin: [], end: [] }, "-#{config.key}" => [] },
+        inclusive_filters_key => { config.key => { begin: [], end: [] } }
+      }
     end
   end
 end

@@ -3,12 +3,14 @@
 require 'spec_helper'
 
 RSpec.describe BlacklightRangeLimit::FilterField do
-  let(:search_state) { Blacklight::SearchState.new(params.with_indifferent_access, blacklight_config, controller) }
+  let(:search_state) { Blacklight::SearchState.new(params, blacklight_config, controller) }
 
-  let(:params) { {} }
+  let(:param_values) { {} }
+  let(:params) { ActionController::Parameters.new(param_values) }
   let(:blacklight_config) do
     Blacklight::Configuration.new.configure do |config|
       config.add_facet_field 'some_field', filter_class: described_class
+      config.filter_search_state_fields = true
     end
   end
   let(:controller) { double }
@@ -23,7 +25,7 @@ RSpec.describe BlacklightRangeLimit::FilterField do
   end
 
   context 'with some existing data' do
-    let(:params) { { range: { some_field: { begin: '2013', end: '2022' } } } }
+    let(:param_values) { { range: { some_field: { begin: '2013', end: '2022' } } } }
 
     describe '#add' do
       it 'replaces the existing range' do
@@ -54,19 +56,14 @@ RSpec.describe BlacklightRangeLimit::FilterField do
       end
     end
 
-    describe '#needs_normalization?' do
-      it 'returns false for the expected keyed representation of the range' do
-        expect(filter.needs_normalization?(search_state.params.dig(:range, 'some_field'))).to be false
-      end
-    end
   end
 
-  context 'with some existing data' do
-    let(:params) { { range: { some_field: { '0' => { begin: '2013', end: '2022' } } } } }
+  context 'with array-mangled data' do
+    let(:param_values) { { range: { some_field: { begin: { '0' => '2013' }, end: { '0' => '2022' } } } } }
 
-    describe '#needs_normalization?' do
-      it 'returns false for the expected keyed representation of the range' do
-        expect(filter.needs_normalization?(search_state.params.dig(:range, 'some_field'))).to be true
+    describe '#values' do
+      it 'converts the parameters to a Range' do
+        expect(filter.values).to eq [2013..2022]
       end
     end
   end

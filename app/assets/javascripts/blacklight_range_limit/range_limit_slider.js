@@ -135,4 +135,24 @@ BlacklightRangeLimit.buildSlider = function buildSlider(thisContext) {
       values[1] = val;
       placeholder_input.slider("setValue", values);
     });
+
+    begin_el.change(function() {
+      var val1 = BlacklightRangeLimit.parseNum(begin_el.val());
+      var val2 = BlacklightRangeLimit.parseNum(end_el.val());
+
+      if (val2 < val1) {
+        begin_el.val(val2);
+        end_el.val(val1);
+      }
+    });
+
+    end_el.change(function() {
+      var val1 = BlacklightRangeLimit.parseNum(begin_el.val());
+      var val2 = BlacklightRangeLimit.parseNum(end_el.val());
+
+      if (val2 < val1) {
+        begin_el.val(val2);
+        end_el.val(val1);
+      }
+    });
   }

@@ -114,7 +114,7 @@ BlacklightRangeLimit.buildSlider = function buildSlider(thisContext) {
     begin_el.val(min);
     end_el.val(max);
 
-    begin_el.change(function() {
+    begin_el.on('input', function() {
       var val = BlacklightRangeLimit.parseNum($(thisContext).val());
       if (isNaN(val) || val < min) {
         //for weird data, set slider at min
@@ -125,7 +125,7 @@ BlacklightRangeLimit.buildSlider = function buildSlider(thisContext) {
       placeholder_input.slider("setValue", values);
     });
 
-    end_el.change(function() {
+    end_el.on('input', function() {
       var val = BlacklightRangeLimit.parseNum($(thisContext).val());
       if (isNaN(val) || val > max) {
         //weird entry, set slider to max

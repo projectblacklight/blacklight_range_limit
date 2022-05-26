@@ -141,8 +141,8 @@ BlacklightRangeLimit.areaChart = function areaChart(container) {
     });
 
     var form = $(container).closest(".limit_content").find("form.range_limit");
-    form.find("input.range_begin, input.range_end").change(function () {
-       plot.setSelection( BlacklightRangeLimit.form_selection(form, min, max) , true );
+    form.find("input.range_begin, input.range_end").on('input', function () {
+      plot.setSelection( BlacklightRangeLimit.form_selection(form, min, max), true );
     });
     $(container).closest(".limit_content").find(".profile .range").on("slide", function(event, ui) {
       var values = $(event.target).data("slider").getValue();

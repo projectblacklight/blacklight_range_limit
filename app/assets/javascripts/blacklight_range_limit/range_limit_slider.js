@@ -74,8 +74,8 @@ BlacklightRangeLimit.buildSlider = function buildSlider(thisContext) {
       if (placeholder_input.slider !== undefined) {
         placeholder_input.slider({
           min: min,
-          max: max + 1,
-          value: [min, max + 1],
+          max: max,
+          value: [min, max],
           tooltip: "hide"
         });
 

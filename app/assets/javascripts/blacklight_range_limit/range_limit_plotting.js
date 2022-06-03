@@ -135,24 +135,24 @@ BlacklightRangeLimit.areaChart = function areaChart(container) {
 
         var slider_placeholder = $(container).closest(".limit_content").find("[data-slider-placeholder]");
         if (slider_placeholder) {
-          slider_placeholder.slider("setValue", [from, to+1]);
+          slider_placeholder.slider("setValue", [from, to]);
         }
       }
     });
 
     var form = $(container).closest(".limit_content").find("form.range_limit");
-    form.find("input.range_begin, input.range_end").change(function () {
-       plot.setSelection( BlacklightRangeLimit.form_selection(form, min, max) , true );
+    form.find("input.range_begin, input.range_end").on('input', function () {
+      plot.setSelection( BlacklightRangeLimit.form_selection(form, min, max), true );
     });
     $(container).closest(".limit_content").find(".profile .range").on("slide", function(event, ui) {
       var values = $(event.target).data("slider").getValue();
       form.find("input.range_begin").val(values[0]);
       form.find("input.range_end").val(values[1]);
-      plot.setSelection(BlacklightRangeLimit.normalized_selection(values[0], Math.max(values[0], values[1]-1)), true);
+      plot.setSelection(BlacklightRangeLimit.normalized_selection(values[0], Math.max(values[0], values[1])), true);
     });
 
     // initially entirely selected, to match slider
-    plot.setSelection( {xaxis: { from:min, to:max+0.9999}}  );
+    plot.setSelection(BlacklightRangeLimit.normalized_selection(min, max));
   }
 }
 

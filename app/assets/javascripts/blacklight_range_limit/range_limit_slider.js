@@ -74,8 +74,8 @@ BlacklightRangeLimit.buildSlider = function buildSlider(thisContext) {
       if (placeholder_input.slider !== undefined) {
         placeholder_input.slider({
           min: min,
-          max: max + 1,
-          value: [min, max + 1],
+          max: max,
+          value: [min, max],
           tooltip: "hide"
         });
 
@@ -114,8 +114,8 @@ BlacklightRangeLimit.buildSlider = function buildSlider(thisContext) {
     begin_el.val(min);
     end_el.val(max);
 
-    begin_el.change(function() {
-      var val = BlacklightRangeLimit.parseNum($(thisContext).val());
+    begin_el.on('input', function() {
+      var val = BlacklightRangeLimit.parseNum(this.value);
       if (isNaN(val) || val < min) {
         //for weird data, set slider at min
         val = min;
@@ -125,8 +125,8 @@ BlacklightRangeLimit.buildSlider = function buildSlider(thisContext) {
       placeholder_input.slider("setValue", values);
     });
 
-    end_el.change(function() {
-      var val = BlacklightRangeLimit.parseNum($(thisContext).val());
+    end_el.on('input', function() {
+      var val = BlacklightRangeLimit.parseNum(this.value);
       if (isNaN(val) || val > max) {
         //weird entry, set slider to max
         val = max;
@@ -134,5 +134,25 @@ BlacklightRangeLimit.buildSlider = function buildSlider(thisContext) {
       var values = placeholder_input.data("slider").getValue();
       values[1] = val;
       placeholder_input.slider("setValue", values);
+    });
+
+    begin_el.change(function() {
+      var val1 = BlacklightRangeLimit.parseNum(begin_el.val());
+      var val2 = BlacklightRangeLimit.parseNum(end_el.val());
+
+      if (val2 < val1) {
+        begin_el.val(val2);
+        end_el.val(val1);
+      }
+    });
+
+    end_el.change(function() {
+      var val1 = BlacklightRangeLimit.parseNum(begin_el.val());
+      var val2 = BlacklightRangeLimit.parseNum(end_el.val());
+
+      if (val2 < val1) {
+        begin_el.val(val2);
+        end_el.val(val1);
+      }
     });
   }

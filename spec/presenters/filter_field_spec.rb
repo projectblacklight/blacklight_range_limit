@@ -55,7 +55,16 @@ RSpec.describe BlacklightRangeLimit::FilterField do
         expect(filter.include?(1234..2345)).to eq false
       end
     end
+  end
 
+  context 'with missing data' do
+    let(:param_values) { { range: { some_field: { begin: '', end: '' } } } }
+
+    describe '#values' do
+      it 'drops the empty range' do
+        expect(filter.values).to be_empty
+      end
+    end
   end
 
   context 'with array-mangled data' do

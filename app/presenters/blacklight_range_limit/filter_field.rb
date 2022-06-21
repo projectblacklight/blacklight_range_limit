@@ -55,9 +55,9 @@ module BlacklightRangeLimit
       range = if params.dig(param_key, config.key).is_a? Range
         params.dig(param_key, config.key)
       else
-        begins = Array(params.dig(param_key, config.key, :begin)).map(&:to_i)
-        ends = Array(params.dig(param_key, config.key, :end)).map(&:to_i)
-        begins.zip(ends).map { |b_bound, e_bound|  Range.new(b_bound, e_bound) }
+        begins = Array(params.dig(param_key, config.key, :begin)).map(&:presence)
+        ends = Array(params.dig(param_key, config.key, :end)).map(&:presence)
+        begins.zip(ends).map { |b_bound, e_bound|  Range.new(b_bound&.to_i, e_bound&.to_i) if b_bound && e_bound }.compact
       end
 
       f = except.include?(:filters) ? [] : Array(range)

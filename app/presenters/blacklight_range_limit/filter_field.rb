@@ -50,17 +50,16 @@ module BlacklightRangeLimit
     def values(except: [])
       params = search_state.params
       param_key = filters_key
-      return [] unless params.dig(param_key, config.key)
-
       range = if params.dig(param_key, config.key).is_a? Range
         params.dig(param_key, config.key)
-      else
+      elsif params.dig(param_key, config.key).is_a? Hash
         begins = Array(params.dig(param_key, config.key, :begin)).map(&:presence)
         ends = Array(params.dig(param_key, config.key, :end)).map(&:presence)
         begins.zip(ends).map { |b_bound, e_bound|  Range.new(b_bound&.to_i, e_bound&.to_i) if b_bound && e_bound }.compact
       end
 
       f = except.include?(:filters) ? [] : Array(range)
+
       f_missing = [] if except.include?(:missing)
       f_missing ||= [Blacklight::SearchState::FilterField::MISSING] if params.dig(filters_key, "-#{key}")&.any? { |v| v == Blacklight::Engine.config.blacklight.facet_missing_param }
 

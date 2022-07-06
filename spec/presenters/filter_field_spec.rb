@@ -57,7 +57,7 @@ RSpec.describe BlacklightRangeLimit::FilterField do
     end
   end
 
-  context 'with missing data' do
+  context 'with empty data' do
     let(:param_values) { { range: { some_field: { begin: '', end: '' } } } }
 
     describe '#values' do
@@ -66,6 +66,17 @@ RSpec.describe BlacklightRangeLimit::FilterField do
       end
     end
   end
+
+  context 'with missing data' do
+    let(:param_values) { { range: { '-some_field': ['[* TO *]']} } }
+
+    describe '#values' do
+      it 'uses the missing special value' do
+        expect(filter.values).to eq [Blacklight::SearchState::FilterField::MISSING]
+      end
+    end
+  end
+
 
   context 'with array-mangled data' do
     let(:param_values) { { range: { some_field: { begin: { '0' => '2013' }, end: { '0' => '2022' } } } } }

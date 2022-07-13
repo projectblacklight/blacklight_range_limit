@@ -60,7 +60,7 @@ RSpec.describe BlacklightRangeLimit::FilterField do
       let(:rails_params) { ActionController::Parameters.new(param_values) }
       let(:blacklight_params) { Blacklight::Parameters.new(rails_params, search_state) }
       let(:permitted_params) { blacklight_params.permit_search_params.to_h }
-      pending 'sanitizes single begin/end values as scalars' do
+      it 'sanitizes single begin/end values as scalars' do
         expect(permitted_params.dig(:range, 'some_field')).to include 'begin' => '2013', 'end' => '2022'
       end
     end
@@ -82,17 +82,6 @@ RSpec.describe BlacklightRangeLimit::FilterField do
     describe '#values' do
       it 'uses the missing special value' do
         expect(filter.values).to eq [Blacklight::SearchState::FilterField::MISSING]
-      end
-    end
-  end
-
-
-  context 'with array-mangled data' do
-    let(:param_values) { { range: { some_field: { begin: { '0' => '2013' }, end: { '0' => '2022' } } } } }
-
-    describe '#values' do
-      it 'converts the parameters to a Range' do
-        expect(filter.values).to eq [2013..2022]
       end
     end
   end

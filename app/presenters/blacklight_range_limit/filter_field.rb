@@ -53,12 +53,12 @@ module BlacklightRangeLimit
       range = if params.dig(param_key, config.key).is_a? Range
         params.dig(param_key, config.key)
       elsif params.dig(param_key, config.key).is_a? Hash
-        begins = Array(params.dig(param_key, config.key, :begin)).map(&:presence)
-        ends = Array(params.dig(param_key, config.key, :end)).map(&:presence)
-        begins.zip(ends).map { |b_bound, e_bound|  Range.new(b_bound&.to_i, e_bound&.to_i) if b_bound && e_bound }.compact
+        b_bound = params.dig(param_key, config.key, :begin).presence
+        e_bound = params.dig(param_key, config.key, :end).presence
+        Range.new(b_bound&.to_i, e_bound&.to_i) if b_bound && e_bound
       end
 
-      f = except.include?(:filters) ? [] : Array(range)
+      f = except.include?(:filters) ? [] : [range].compact
 
       f_missing = [] if except.include?(:missing)
       f_missing ||= [Blacklight::SearchState::FilterField::MISSING] if params.dig(filters_key, "-#{key}")&.any? { |v| v == Blacklight::Engine.config.blacklight.facet_missing_param }
@@ -75,9 +75,8 @@ module BlacklightRangeLimit
     # this filter should allow (expect) hashes if the keys include 'begin' or 'end'
     def permitted_params
       {
-        # { begin: [], end: [] } or [:begin, :end]
-        filters_key => { config.key => { begin: [], end: [] }, "-#{config.key}" => [] },
-        inclusive_filters_key => { config.key => { begin: [], end: [] } }
+        filters_key => { config.key => [:begin, :end], "-#{config.key}" => [] },
+        inclusive_filters_key => { config.key => [:begin, :end] }
       }
     end
   end

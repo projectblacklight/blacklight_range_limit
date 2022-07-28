@@ -1,5 +1,5 @@
 <%= form_tag search_action_path, method: :get, class: [@classes[:form], "range_#{@facet_field.key} d-flex justify-content-center"].join(' ') do %>
-  <%= render Blacklight::HiddenSearchStateComponent.new(params: @facet_field.search_state.params_for_search.except(:utf8, :page)) %>
+  <%= render Blacklight::HiddenSearchStateComponent.new(params: @facet_field.search_state.params_for_search.except(:utf8, :page).tap { |p| p[:range]&.except!(@facet_field.key) }) %>
 
   <div class="input-group input-group-sm mb-3 flex-nowrap range-limit-input-group">
     <%= render_range_input(:begin, begin_label) %>

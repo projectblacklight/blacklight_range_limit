@@ -55,6 +55,15 @@ RSpec.describe BlacklightRangeLimit::FilterField do
         expect(filter.include?(1234..2345)).to eq false
       end
     end
+
+    describe '#permitted_params' do
+      let(:rails_params) { ActionController::Parameters.new(param_values) }
+      let(:blacklight_params) { Blacklight::Parameters.new(rails_params, search_state) }
+      let(:permitted_params) { blacklight_params.permit_search_params.to_h }
+      pending 'sanitizes single begin/end values as scalars' do
+        expect(permitted_params.dig(:range, 'some_field')).to include 'begin' => '2013', 'end' => '2022'
+      end
+    end
   end
 
   context 'with empty data' do

@@ -42,6 +42,7 @@ describe "Blacklight Range Limit" do
     click_link '2000 to 2008'
     click_button 'Apply', match: :first
     expect(page.current_url).not_to include('page')
+    expect(page.current_url).not_to include('commit')
   end
 
   context 'when I18n translation is available' do

@@ -5,8 +5,8 @@
     <%= render_range_input(:begin, begin_label) %>
     <%= render_range_input(:end, end_label) %>
     <div class="input-group-append visually-hidden">
-      <%= submit_tag t('blacklight.range_limit.submit_limit'), class: @classes[:submit] %>
+      <%= submit_tag t('blacklight.range_limit.submit_limit'), class: @classes[:submit], name: nil %>
     </div>
-    <%= submit_tag t('blacklight.range_limit.submit_limit'), class: @classes[:submit] + " sr-only", "aria-hidden": "true" %>
+    <%= submit_tag t('blacklight.range_limit.submit_limit'), class: @classes[:submit] + " sr-only", "aria-hidden": "true", name: nil %>
   </div>
 <% end %>

@@ -52,6 +52,12 @@ RSpec.describe BlacklightRangeLimit::RangeFormComponent, type: :component do
     expect(rendered).not_to have_field('range[key][begin]', type: 'hidden')
   end
 
+  it 'renders submit controls without a name to suppress from formData' do
+    anon_submit = rendered.find('input', visible: true) { |ele| ele[:type] == 'submit' && !ele[:'aria-hidden'] && !ele[:name] }
+    expect(anon_submit).to be_present
+    expect { rendered.find('input') { |ele| ele[:type] == 'submit' && ele[:name] } }.to raise_error(Capybara::ElementNotFound)
+  end
+
   context 'with range data' do
     let(:selected_range) { (100..300) }
     let(:search_params) do

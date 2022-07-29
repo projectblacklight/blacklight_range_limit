@@ -39,6 +39,17 @@ module BlacklightRangeLimit
 
     private
 
+    ##
+    # the form needs to serialize any search parameters, including other potential range filters,
+    # as hidden fields. The parameters for this component's range filter are serialized as number
+    # inputs, and should not be in the hidden params.
+    # @return [Blacklight::HiddenSearchStateComponent]
+    def hidden_search_state
+      hidden_search_params = @facet_field.search_state.params_for_search.except(:utf8, :page)
+      hidden_search_params[:range]&.except!(@facet_field.key)
+      Blacklight::HiddenSearchStateComponent.new(params: hidden_search_params)
+    end
+
     def range_config
       @facet_field.range_config
     end

@@ -23,8 +23,8 @@ $(".range_limit .profile .range.slider_js").each(function() {
      if (placeholder_input.slider !== undefined) {
       placeholder_input.slider({
         min: min,
-        max: max+1,
-        value: [min, max+1],
+        max: max,
+        value: [min, max],
         tooltip: "hide"
       });
 

@@ -1,3 +1,2 @@
 gem 'rails-controller-testing'
-gem 'thor', '~> 0.20'
 gem 'blacklight', ENV['BLACKLIGHT_VERSION'] if ENV['BLACKLIGHT_VERSION']

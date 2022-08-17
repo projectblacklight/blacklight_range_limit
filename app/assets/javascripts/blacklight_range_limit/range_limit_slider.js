@@ -57,7 +57,7 @@ $(".range_limit .profile .range.slider_js").each(function() {
   begin_el.val(min);
   end_el.val(max);
         
-  begin_el.change( function() {
+  begin_el.on('input', function() {
     var val = BlacklightRangeLimit.parseNum($(this).val());
     if ( isNaN(val)  || val < min) {
       //for weird data, set slider at min           
@@ -68,7 +68,7 @@ $(".range_limit .profile .range.slider_js").each(function() {
     placeholder_input.slider("setValue", values);
   });
         
-  end_el.change( function() {
+  end_el.on('inout', function() {
      var val = BlacklightRangeLimit.parseNum($(this).val());
      if ( isNaN(val) || val > max ) {
        //weird entry, set slider to max
@@ -77,7 +77,27 @@ $(".range_limit .profile .range.slider_js").each(function() {
     var values = placeholder_input.data("slider").getValue();
     values[1] = val;
     placeholder_input.slider("setValue", values);
-  });    
+  });
+
+  begin_el.change(function() {
+    var val1 = BlacklightRangeLimit.parseNum(begin_el.val());
+    var val2 = BlacklightRangeLimit.parseNum(end_el.val());
+
+    if (val2 < val1) {
+      begin_el.val(val2);
+      end_el.val(val1);
+    }
+  });
+
+  end_el.change(function() {
+    var val1 = BlacklightRangeLimit.parseNum(begin_el.val());
+    var val2 = BlacklightRangeLimit.parseNum(end_el.val());
+
+    if (val2 < val1) {
+      begin_el.val(val2);
+      end_el.val(val1);
+    }
+  });
    
 });
 

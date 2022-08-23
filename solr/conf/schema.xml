@@ -175,16 +175,6 @@
     <dynamicField name="*_coordinate" type="tdouble" indexed="true"  stored="false" />
 
 
-    <!-- location (_ll...) -->
-
-    <dynamicField name="*_lli" type="location" stored="false" indexed="true" multiValued="false"/>
-    <dynamicField name="*_llim" type="location" stored="false" indexed="true" multiValued="true"/>
-
-    <dynamicField name="*_lls" type="location" stored="true" indexed="false" multiValued="false"/>
-    <dynamicField name="*_llsm" type="location" stored="true" indexed="false" multiValued="true"/>
-    <dynamicField name="*_llsi" type="location" stored="true" indexed="true" multiValued="false"/>
-    <dynamicField name="*_llsim" type="location" stored="true" indexed="true" multiValued="true"/>
-
     <dynamicField name="*_srpt" type="location_rpt" stored="true" indexed="true" multiValued="true" />
     <dynamicField name="*_bbox" type="bbox" stored="true" indexed="true" />
 
@@ -262,9 +252,6 @@
       users normally should not need to know about them.
      -->
     <fieldType name="point" class="solr.PointType" dimension="2" subFieldSuffix="_d"/>
-
-    <!-- A specialized field for geospatial search. If indexed, this fieldType must not be multivalued. -->
-    <fieldType name="location" class="solr.LatLonType" subFieldSuffix="_coordinate"/>
 
     <!-- An alternative geospatial field type new to Solr 4.  It supports multiValued and polygon shapes.
       For more information about this and other Spatial fields new to Solr 4, see:
@@ -350,7 +337,6 @@
       <analyzer>
         <tokenizer class="solr.StandardTokenizerFactory"/>
         <filter class="solr.StopFilterFactory" ignoreCase="true" words="stopwords.txt"/>
-        <filter class="solr.StandardFilterFactory"/>
         <filter class="solr.LowerCaseFilterFactory"/>
         <filter class="solr.RemoveDuplicatesTokenFilterFactory"/>
       </analyzer>
@@ -359,7 +345,6 @@
     <fieldType  name="textSuggest" class="solr.TextField" positionIncrementGap="100">
        <analyzer>
           <tokenizer class="solr.KeywordTokenizerFactory"/>
-          <filter class="solr.StandardFilterFactory"/>
           <filter class="solr.LowerCaseFilterFactory"/>
           <filter class="solr.RemoveDuplicatesTokenFilterFactory"/>
        </analyzer>

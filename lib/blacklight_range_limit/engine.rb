@@ -16,7 +16,7 @@ module BlacklightRangeLimit
       "BlacklightRangeLimit::InvalidRange" => :not_acceptable
     )
 
-    config.before_configuration do
+    config.after_initialize do
       Blacklight::Configuration::FacetField.prepend BlacklightRangeLimit::FacetFieldConfigOverride
     end
   end

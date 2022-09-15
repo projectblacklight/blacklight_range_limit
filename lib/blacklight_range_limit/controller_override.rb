@@ -22,8 +22,14 @@ module BlacklightRangeLimit
       # field (with start/end params) mentioned in query params
       # range_field, range_start, and range_end
 
-      @response, _ = search_service.search_results do |search_builder|
-        search_builder.except(:add_range_limit_params).append(:fetch_specific_range_limit)
+      if Gem.loaded_specs['blacklight'].version.to_s.start_with?('6.')
+        @response, _ = search_results(params) do |search_builder|
+          search_builder.except(:add_range_limit_params).append(:fetch_specific_range_limit)
+        end
+      else
+        @response, _ = search_service.search_results do |search_builder|
+          search_builder.except(:add_range_limit_params).append(:fetch_specific_range_limit)
+        end
       end
       render('blacklight_range_limit/range_segments', :locals => {:solr_field => params[:range_field]}, :layout => !request.xhr?)
     end

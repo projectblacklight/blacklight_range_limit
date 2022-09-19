@@ -30,5 +30,9 @@ else
   when /^5.[12]/, /^6.0/
     gem 'sass-rails', '~> 5.0'
   end
+
+  if ENV['BLACKLIGHT_VERSION']
+    gem 'blacklight', ENV['BLACKLIGHT_VERSION']
+  end
 end
 # END ENGINE_CART BLOCK

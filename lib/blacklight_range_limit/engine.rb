@@ -17,7 +17,9 @@ module BlacklightRangeLimit
     )
 
     config.after_initialize do
-      Blacklight::Configuration::FacetField.prepend BlacklightRangeLimit::FacetFieldConfigOverride
+      if defined?(::SearchBuilder) # Don't load blacklight config until the blacklight generator has run
+        Blacklight::Configuration::FacetField.prepend BlacklightRangeLimit::FacetFieldConfigOverride
+      end
     end
   end
 end

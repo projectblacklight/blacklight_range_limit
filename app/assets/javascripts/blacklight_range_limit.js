@@ -18,6 +18,8 @@
 //= require 'flot/jquery.flot.selection.js'
 //= require 'bootstrap-slider'
 
+import Blacklight from "blacklight"
+window.Blacklight = Blacklight
 // Ensure that range_limit_shared is loaded first
 //= require 'blacklight_range_limit/range_limit_shared'
 //= require 'blacklight_range_limit/range_limit_plotting'

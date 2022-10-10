@@ -9,11 +9,11 @@ Blacklight.onLoad(function() {
   // Support for Blacklight 7 and 8:
   const modalSelector = Blacklight.modal?.modalSelector || Blacklight.Modal.modalSelector 
 
-  $(modalSelector).on('shown.bs.modal', function() {
-    $(this).find(".range_limit .profile .range.slider_js").each(function() {
-      BlacklightRangeLimit.buildSlider(this);
-    });
-  });
+  // $(modalSelector).on('shown.bs.modal', function() {
+  //   $(this).find(".range_limit .profile .range.slider_js").each(function() {
+  //     BlacklightRangeLimit.buildSlider(this);
+  //   });
+  // });
 
   // catch event for redrawing chart, to redraw slider to match width
   $("body").on("plotDrawn.blacklight.rangeLimit", function(event) {
@@ -33,7 +33,7 @@ Blacklight.onLoad(function() {
 // set as sniffed from HTML. Pass in a DOM element for a div.range
 // Will return NaN as min or max in case of error or other weirdness.
 BlacklightRangeLimit.min_max = function min_max(range_element) {
-  var current_limit =  $(range_element).closest(".limit_content.range_limit").find(".current")
+  const current_limit =  $(range_element).closest(".limit_content.range_limit").find(".current")
   let min, max
   min = max = BlacklightRangeLimit.parseNum(current_limit.find(".single").data('blrlSingle'))
   if ( isNaN(min)) {

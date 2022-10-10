@@ -31,8 +31,8 @@ Blacklight.onLoad(function() {
 // Will return NaN as min or max in case of error or other weirdness.
 BlacklightRangeLimit.min_max = function min_max(range_element) {
   var current_limit =  $(range_element).closest(".limit_content.range_limit").find(".current")
-
-  var min = max = BlacklightRangeLimit.parseNum(current_limit.find(".single").data('blrlSingle'))
+  let min, max
+  min = max = BlacklightRangeLimit.parseNum(current_limit.find(".single").data('blrlSingle'))
   if ( isNaN(min)) {
     min = BlacklightRangeLimit.parseNum(current_limit.find(".from").first().data('blrlBegin'));
     max = BlacklightRangeLimit.parseNum(current_limit.find(".to").first().data('blrlEnd'));

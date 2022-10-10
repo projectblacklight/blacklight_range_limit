@@ -70,13 +70,9 @@
     return {xaxis: { 'from':min, 'to':max}}
   }
 
-  // Check if Flot is loaded, and if browser has support for
-  // canvas object, either natively or via IE excanvas.
+  // Check if Flot is loaded
   BlacklightRangeLimit.domDependenciesMet = function domDependenciesMet() {
-    var flotLoaded = (typeof $.plot != "undefined");
-    var canvasAvailable = ((typeof(document.createElement('canvas').getContext) != "undefined") || (typeof  window.CanvasRenderingContext2D != 'undefined' || typeof G_vmlCanvasManager != 'undefined'));
-
-    return (flotLoaded && canvasAvailable);
+    return typeof $.plot != "undefined"
   }
 
   BlacklightRangeLimit.noConflict = function noConflict() {

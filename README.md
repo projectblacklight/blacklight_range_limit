@@ -102,26 +102,13 @@ config.add_facet_field 'pub_date', label: 'Publication Year',
 
 ## Javascript dependencies
 
-The selectable histograms/barcharts are done with Javascript, using [Flot](http://code.google.com/p/flot/). Flot requires JQuery, as well as support for the HTML5 canvas element. In IE previous to IE9, canvas element support can be added with [excanvas](http://excanvas.sourceforge.net/). For the slider, [bootstrap-slider](http://www.eyecon.ro/bootstrap-slider/) is used (bootstrap-slider is actually third party, not officially bootstrap). Flot and bootstrap-slider are both directly included in blacklight_range_limit in vendor, rather than referenced as dependencies.
+The selectable histograms/barcharts are done with Javascript, using [Flot](http://code.google.com/p/flot/). Flot requires JQuery, as well as support for the HTML5 canvas element. For the slider, [bootstrap-slider](http://www.eyecon.ro/bootstrap-slider/) is used (bootstrap-slider is actually third party, not officially bootstrap). Flot and bootstrap-slider are both directly included in blacklight_range_limit in vendor, rather than referenced as dependencies.
 
 The blacklight_range_limit installer will add `require 'blacklight_range_limit'` to your `application.js` sprockets manifest. This will include flot, bootstrap-slider, and the blacklight_range_limit glue JS.
 
 Both flot and blacklight_range_limit's own JS depend on JQuery; the host app is expected to include JQuery; a default Blacklight-generated app already does. (Jquery 1, 2, or 3 should work)
 
 If you don't want any of this gem's JS, you can simply remove the `require 'blacklight_range_limit'` line from your application.js, and hack something else together yourself.
-
-## IE8, excanvas
-
-IE8 and below do not support the 'canvas' element, needed for flot to render the chart.
-Without canvas, view will cleanly degrade to an ordinary textual listing of range segments
-as facets.
-
-Or, you can use excanvas.js to add canvas support to IE.  `blacklight_range_limit` includes
-the `excanvas.js` file, but you'll have to manually add a reference to it to your Rails layout
-template -- if you were previously using the stock Blacklight layout, you'll have to add a
-local custom layout instead. Then add this to the html `<head>` section:
-
-    <!--[if lte IE 8]><%= javascript_include_tag 'flot/excanvas.min' %><![endif]-->
 
 ## Touch?
 

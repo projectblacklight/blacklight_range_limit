@@ -30,11 +30,4 @@ class TestAppGenerator < Rails::Generators::Base
       "\n    config.add_facet_field 'pub_date_si', label: 'Publication Date Sort', **default_range_config"
     end
   end
-
-  def assets
-    return if !defined?(Sprockets::VERSION) || Sprockets::VERSION < '4'
-
-    append_to_file 'app/assets/config/manifest.js', "\n//= link application.js"
-    empty_directory 'app/assets/images'
-  end
 end

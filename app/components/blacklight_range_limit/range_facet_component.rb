@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module BlacklightRangeLimit
-  class RangeFacetComponent < ::ViewComponent::Base
+  class RangeFacetComponent < Blacklight::Component
     renders_one :more_link, ->(key:, label:) do
       tag.div class: 'more_facets' do
         link_to t('blacklight.range_limit.view_larger', field_name: label),

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module BlacklightRangeLimit
-  class RangeSegmentsComponent < ::ViewComponent::Base
+  class RangeSegmentsComponent < Blacklight::Component
     def initialize(facet_field:, facet_items: nil, item_component: nil, classes: [])
       super
 

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module BlacklightRangeLimit
-  class RangeFormComponent < ::ViewComponent::Base
+  class RangeFormComponent < Blacklight::Component
     delegate :search_action_path, to: :helpers
 
     def initialize(facet_field:, classes: BlacklightRangeLimit.classes)

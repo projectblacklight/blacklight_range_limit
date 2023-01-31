@@ -31,15 +31,16 @@ Blacklight.onLoad(function() {
     }
   });
 
-  // When loaded in a modal
-  $(Blacklight.modal.modalSelector).on('shown.bs.modal', function() {
-    $(this).find(".range_limit .profile .distribution.chart_js ul").each(function() {
-      BlacklightRangeLimit.turnIntoPlot($(this).parent());
-    });
-
-    // Case when there is no currently selected range
-    BlacklightRangeLimit.checkForNeededFacetsToFetch();
-  });
+// This no longer works in blacklight 8, but removing it seems to make the component work
+//  // When loaded in a modal
+//  $(Blacklight.modal.modalSelector).on('shown.bs.modal', function() {
+//    $(this).find(".range_limit .profile .distribution.chart_js ul").each(function() {
+//      BlacklightRangeLimit.turnIntoPlot($(this).parent());
+//    });
+//
+//    // Case when there is no currently selected range
+//    BlacklightRangeLimit.checkForNeededFacetsToFetch();
+//  });
 
   $("body").on("shown.bs.collapse", function(event) {
     var container =  $(event.target).filter(".facet-content").find(".chart_js");

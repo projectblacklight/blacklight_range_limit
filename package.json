@@ -1,0 +1,27 @@
+{
+  "name": "blacklight-range-limit",
+  "version": "8.2.4-beta.1",
+  "description": "Range limit facet Blacklight search results",
+  "main": "app/assets/javascripts/blacklight_range_limit.js",
+  "files": [
+    "app/assets/javascripts/*.js",
+    "vendor/assets/javascripts/*.js",
+    "app/assets/stylesheets/*.css",
+    "vendor/assets/stylesheets/*.css"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/projectblacklight/blacklight_range_limit.git"
+  },
+  "author": "",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/projectblacklight/blacklight_range_limit/issues"
+  },
+  "homepage": "https://github.com/projectblacklight/blacklight_range_limit#readme",
+  "devDependencies": { },
+  "dependencies": {
+    "blacklight-frontend": ">=7.1.0-alpha",
+    "jquery": ">=3.0"
+  }
+}

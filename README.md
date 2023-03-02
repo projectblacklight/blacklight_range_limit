@@ -169,6 +169,10 @@ bundle exec rspec spec/features/blacklight_range_limit_spec.rb
 
 Once you are done iterating on your test you will need to stop the application server with `Ctrl-C`.
 
+# Publishing Javascript
+
+run `npm publish` to push the javascript package to https://npmjs.org/package/blacklight-range-limit
+
 # Possible future To Do
 
 * StatsComponent replacement. We use StatsComponent to get min/max of result set, as well as missing count. StatsComponent is included on every non-drilldown request, so ranges and slider can be displayed. However, StatsComponent really can slow down the solr response with a large result set. So replace StatsComponent with other strategies. No ideal ones, we can use facet.missing to get missing count instead, but RSolr makes it harder than it should be to grab this info. We can use seperate solr queries to get min/max (sort on our field, asc and desc), but this is more complicated, more solr queries, and possibly requires redesign of AJAXy stuff, so even a lone slider can have min/max.

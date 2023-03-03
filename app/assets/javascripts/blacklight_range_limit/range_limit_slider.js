@@ -6,7 +6,10 @@ Blacklight.onLoad(function() {
     BlacklightRangeLimit.buildSlider(this);
   });
 
-  $(Blacklight.modal.modalSelector).on('shown.bs.modal', function() {
+  // Support for Blacklight 7 and 8:
+  const modalSelector = Blacklight.modal?.modalSelector || Blacklight.Modal.modalSelector 
+
+  $(modalSelector).on('shown.bs.modal', function() {
     $(this).find(".range_limit .profile .range.slider_js").each(function() {
       BlacklightRangeLimit.buildSlider(this);
     });

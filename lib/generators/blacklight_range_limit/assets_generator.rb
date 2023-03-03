@@ -16,6 +16,7 @@ module BlacklightRangeLimit
     source_root File.join(BlacklightRangeLimit::Engine.root, 'app', 'assets')
 
     def assets
+      append_to_file 'app/assets/config/manifest.js', "\n//= link blacklight_range_limit/manifest.js"
       application_css = Dir["app/assets/stylesheets/application{.css,.scss,.css.scss}"].first
 
       if application_css

@@ -31,8 +31,11 @@ Blacklight.onLoad(function() {
     }
   });
 
+  // Support for Blacklight 7 and 8:
+  const modalSelector = Blacklight.modal?.modalSelector || Blacklight.Modal.modalSelector 
+
   // When loaded in a modal
-  $(Blacklight.modal.modalSelector).on('shown.bs.modal', function() {
+  $(modalSelector).on('shown.bs.modal', function() {
     $(this).find(".range_limit .profile .distribution.chart_js ul").each(function() {
       BlacklightRangeLimit.turnIntoPlot($(this).parent());
     });

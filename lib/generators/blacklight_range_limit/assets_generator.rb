@@ -33,18 +33,26 @@ module BlacklightRangeLimit
         say_status "warning", "Can not find application.css, did not insert our require", :red
       end
 
-      append_to_file "app/assets/javascripts/application.js" do
-%q{
-
-// For blacklight_range_limit built-in JS, if you don't want it you don't need
-// this:
-//= require 'blacklight_range_limit'
-
-}
+      if defined?(Importmap)
+        run 'bin/importmap pin jquery'
+        append_to_file "app/javascript/application.js" do
+          <<~CONTENT
+            import jQuery from "jquery"
+            window.jQuery = jQuery
+            window.$ = jQuery
+            import BlacklightRangeLimit from "blacklight_range_limit"
+            Blacklight.onLoad(() => BlacklightRangeLimit.initialize())
+          CONTENT
+        end
+      else
+        append_to_file "app/assets/javascripts/application.js" do
+          <<~CONTENT
+            // For blacklight_range_limit built-in JS, if you don't want it you don't need
+            // this:
+            //= require 'blacklight_range_limit'
+          CONTENT
+        end
       end
     end
-
-
-
   end
 end

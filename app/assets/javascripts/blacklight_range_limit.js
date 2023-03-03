@@ -23,3 +23,20 @@
 //= require 'blacklight_range_limit/range_limit_plotting'
 //= require 'blacklight_range_limit/range_limit_slider'
 //= require 'blacklight_range_limit/range_limit_distro_facets'
+
+BlacklightRangeLimit.initialize = function() {
+  // Support for Blacklight 7 and 8:
+  const modalSelector = Blacklight.modal?.modalSelector || Blacklight.Modal.modalSelector 
+
+  RangeLimitDistroFacet.initialize(modalSelector)
+  RangeLimitSlider.initialize(modalSelector)
+}
+
+// Blacklight will only be defined if you aren't using this in a module context
+if (Blacklight)
+  Blacklight.onLoad(() => BlacklightRangeLimit.initialize())
+
+// In a module context you can do:
+//   import BlacklightRangeLimit from 'blacklight_range_limit'
+//   Blacklight.onLoad(() => BlacklightRangeLimit.initialize())
+export default BlacklightRangeLimit

@@ -21,6 +21,7 @@ jobs:
       matrix:
         ruby: [2.7, '3.0']
         rails_version: ['6.1.7.1', '7.0.4.1']
+        blacklight_version: ['']
         additional_engine_cart_rails_options: ['']
         include:
         - ruby: '3.2'
@@ -29,9 +30,15 @@ jobs:
           rails_version: '7.0.4.1'
         - ruby: '3.0'
           rails_version: '7.0.4.1'
+        - ruby: '3.2'
+          rails_version: '7.0.4.1'
+          name: 'Blacklight 8 beta'
+          blacklight_version: '8.0.0.beta6'
+
     env:
       BLACKLIGHT_VERSION: "~> 7.0" # only test on BL 7 for now
       RAILS_VERSION: ${{ matrix.rails_version }}
+      BLACKLIGHT_VERSION: ${{ matrix.blacklight_version }}
       ENGINE_CART_RAILS_OPTIONS: "--skip-git --skip-listen --skip-spring --skip-keeps --skip-action-cable --skip-coffee --skip-test ${{ matrix.engine_cart_rails_options }}"
     steps:
     - uses: actions/checkout@v3

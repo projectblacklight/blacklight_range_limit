@@ -19,7 +19,6 @@ RSpec.describe BlacklightRangeLimit::RangeFormComponent, type: :component do
     instance_double(
       BlacklightRangeLimit::FacetFieldPresenter,
       key: 'key',
-      html_id: 'id',
       active?: false,
       collapsed?: false,
       in_modal?: false,

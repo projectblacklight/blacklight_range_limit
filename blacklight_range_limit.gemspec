@@ -18,6 +18,8 @@ Gem::Specification.new do |s|
   s.license     = 'Apache 2.0'
 
   s.add_dependency 'blacklight', '>= 7.25.2', '< 9'
+  # We now use new `with_` slot API, so need view_copmonent >= 2.54.0, through 3.x
+  s.add_dependency 'view_component', ">= 2.54.0", "< 4"
   s.add_dependency 'deprecation'
 
   s.add_development_dependency 'rspec', '~> 3.0'

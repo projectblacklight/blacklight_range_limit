@@ -33,10 +33,9 @@ jobs:
         - ruby: '3.2'
           rails_version: '7.0.4.1'
           name: 'Blacklight 8 beta'
-          blacklight_version: '8.0.0.beta6'
+          blacklight_version: '~> 8.0'
 
     env:
-      BLACKLIGHT_VERSION: "~> 7.0" # only test on BL 7 for now
       RAILS_VERSION: ${{ matrix.rails_version }}
       BLACKLIGHT_VERSION: ${{ matrix.blacklight_version }}
       ENGINE_CART_RAILS_OPTIONS: "--skip-git --skip-listen --skip-spring --skip-keeps --skip-action-cable --skip-coffee --skip-test ${{ matrix.engine_cart_rails_options }}"

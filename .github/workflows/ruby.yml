@@ -30,6 +30,7 @@ jobs:
         - ruby: '3.0'
           rails_version: '7.0.4.1'
     env:
+      BLACKLIGHT_VERSION: "~> 7.0" # only test on BL 7 for now
       RAILS_VERSION: ${{ matrix.rails_version }}
       ENGINE_CART_RAILS_OPTIONS: "--skip-git --skip-listen --skip-spring --skip-keeps --skip-action-cable --skip-coffee --skip-test ${{ matrix.engine_cart_rails_options }}"
     steps:

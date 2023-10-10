@@ -15,7 +15,6 @@ RSpec.describe BlacklightRangeLimit::RangeFacetComponent, type: :component do
     instance_double(
       BlacklightRangeLimit::FacetFieldPresenter,
       key: 'key',
-      html_id: 'id',
       active?: false,
       collapsed?: false,
       in_modal?: false,
@@ -30,7 +29,8 @@ RSpec.describe BlacklightRangeLimit::RangeFacetComponent, type: :component do
       range_config: {},
       modal_path: nil,
       facet_field: facet_config,
-      **facet_field_params
+      **facet_field_params,
+      **extra_facet_field_params
     )
   end
 
@@ -39,6 +39,7 @@ RSpec.describe BlacklightRangeLimit::RangeFacetComponent, type: :component do
   end
 
   let(:facet_field_params) { {} }
+  let(:extra_facet_field_params) { Blacklight::VERSION > '8' ? {} : { html_id: 'id' } }
 
   before do
     allow(component).to receive(:search_facet_path).and_return('/range/key')

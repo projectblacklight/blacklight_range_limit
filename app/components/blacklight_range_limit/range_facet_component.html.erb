@@ -1,9 +1,9 @@
 <%= render(@layout.new(facet_field: @facet_field)) do |component| %>
-  <% component.label do %>
+  <% component.with_label do %>
     <%= @facet_field.label %>
   <% end %>
 
-  <% component.body do %>
+  <% component.with_body do %>
     <div class="limit_content range_limit <%= @facet_field.key %>-config blrl-plot-config">
       <% if @facet_field.selected_range_facet_item %>
         <%= render BlacklightRangeLimit::RangeSegmentsComponent.new(facet_field: @facet_field, facet_items: [@facet_field.selected_range_facet_item], classes: ['current']) %>
@@ -37,7 +37,7 @@
 
         <%= render BlacklightRangeLimit::RangeFormComponent.new(facet_field: @facet_field, classes: @classes) %>
 
-        <%= more_link(key: @facet_field.key, label: @facet_field.label) unless @facet_field.in_modal? %>
+        <%= with_more_link(key: @facet_field.key, label: @facet_field.label) unless @facet_field.in_modal? %>
 
         <% if @facet_field.missing_facet_item && !request.xhr? %>
           <%= render BlacklightRangeLimit::RangeSegmentsComponent.new(facet_field: @facet_field, facet_items: [@facet_field.missing_facet_item], classes: ['missing', 'subsection']) %>

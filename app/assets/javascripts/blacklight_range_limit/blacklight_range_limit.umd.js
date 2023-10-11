@@ -1,0 +1,188 @@
+(function (global, factory) {
+  typeof exports === 'object' && typeof module !== 'undefined' ? module.exports = factory(require('range_limit_distro_facet')) :
+  typeof define === 'function' && define.amd ? define(['range_limit_distro_facet'], factory) :
+  (global = typeof globalThis !== 'undefined' ? globalThis : global || self, global.BlacklightRangeLimit = factory(global.RangeLimitDistroFacet));
+})(this, (function (RangeLimitDistroFacet) { 'use strict';
+
+  const _interopDefaultLegacy = e => e && typeof e === 'object' && 'default' in e ? e : { default: e };
+
+  const RangeLimitDistroFacet__default = /*#__PURE__*/_interopDefaultLegacy(RangeLimitDistroFacet);
+
+  // for Blacklight.onLoad:
+
+  const RangeLimitSlider = {
+    initialize: function(modalSelector) {
+      $(".range_limit .profile .range.slider_js").each(function() {
+        BlacklightRangeLimit.buildSlider(this);
+      });
+
+      // For Blacklight < 8, when loaded in a modal
+      $(modalSelector).on('shown.bs.modal', function() {
+        $(this).find(".range_limit .profile .range.slider_js").each(function() {
+          BlacklightRangeLimit.buildSlider(this);
+        });
+      });
+
+      // For Blacklight 8, use a mutation observer to detect when the HTML dialog is open
+      BlacklightRangeLimit.initSliderModalObserver();
+
+      // catch event for redrawing chart, to redraw slider to match width
+      $("body").on("plotDrawn.blacklight.rangeLimit", function(event) {
+        var area       = $(event.target).closest(".limit_content.range_limit");
+        var plot       = area.find(".chart_js").data("plot");
+        var slider_el  = area.find(".slider");
+
+        if (plot && slider_el) {
+          slider_el.width(plot.width());
+          slider_el.css("display", "block");
+        }
+      });
+    }
+  };
+
+  // returns two element array min/max as numbers. If there is a limit applied,
+  // it's boundaries are are limits. Otherwise, min/max in current result
+  // set as sniffed from HTML. Pass in a DOM element for a div.range
+  // Will return NaN as min or max in case of error or other weirdness.
+  BlacklightRangeLimit.min_max = function min_max(range_element) {
+    var current_limit =  $(range_element).closest(".limit_content.range_limit").find(".current");
+    let min, max;
+    min = max = BlacklightRangeLimit.parseNum(current_limit.find(".single").data('blrlSingle'));
+    if ( isNaN(min)) {
+      min = BlacklightRangeLimit.parseNum(current_limit.find(".from").first().data('blrlBegin'));
+      max = BlacklightRangeLimit.parseNum(current_limit.find(".to").first().data('blrlEnd'));
+    }
+
+    if (isNaN(min) || isNaN(max)) {
+      //no current limit, take from results min max included in spans
+      min = BlacklightRangeLimit.parseNum($(range_element).find(".min").first().text());
+      max = BlacklightRangeLimit.parseNum($(range_element).find(".max").first().text());
+    }
+    return [min, max]
+  };
+
+
+  // Check to see if a value is an Integer
+  // see: http://stackoverflow.com/questions/3885817/how-to-check-if-a-number-is-float-or-integer
+  BlacklightRangeLimit.isInt = function isInt(n) {
+    return n % 1 === 0;
+  };
+
+  BlacklightRangeLimit.buildSlider = function buildSlider(thisContext) {
+      var range_element = $(thisContext);
+
+      var boundaries = BlacklightRangeLimit.min_max(thisContext);
+      var min = boundaries[0];
+      var max = boundaries[1];
+
+      if (BlacklightRangeLimit.isInt(min) && BlacklightRangeLimit.isInt(max)) {
+        $(thisContext).contents().wrapAll('<div class="sr-only visually-hidden" />');
+
+        var range_element = $(thisContext);
+        var form = $(range_element).closest(".range_limit").find("form.range_limit");
+        var begin_el = form.find("input.range_begin");
+        var end_el = form.find("input.range_end");
+
+        var placeholder_input = $('<input type="hidden" data-slider-placeholder="true" />').appendTo(range_element);
+
+        // make sure slider is loaded
+        if (placeholder_input.slider !== undefined) {
+          placeholder_input.slider({
+            min: min,
+            max: max,
+            value: [min, max],
+            tooltip: "hide"
+          });
+
+          // try to make slider width/orientation match chart's
+          var container = range_element.closest(".range_limit");
+          var plot_el = container.find(".chart_js");
+          var plot = plot_el.data("plot");
+          var slider_el = container.find(".slider");
+
+          if (plot_el) {
+            plot_el.attr('aria-hidden', 'true');
+          }
+
+          if (slider_el) {
+            slider_el.attr('aria-hidden', 'true');
+          }
+
+          if (plot && slider_el) {
+            slider_el.width(plot.width());
+            slider_el.css("display", "block");
+          } else if (slider_el) {
+            slider_el.css("width", "100%");
+          }
+        }
+
+        // Slider change should update text input values.
+        var parent = $(thisContext).parent();
+        var form = $(parent).closest(".limit_content").find("form.range_limit");
+        $(parent).closest(".limit_content").find(".profile .range").on("slide", function(event, ui) {
+          var values = $(event.target).data("slider").getValue();
+          form.find("input.range_begin").val(values[0]);
+          form.find("input.range_end").val(values[1]);
+        });
+      }
+
+      begin_el.val(min);
+      end_el.val(max);
+
+      begin_el.on('input', function() {
+        var val = BlacklightRangeLimit.parseNum(this.value);
+        if (isNaN(val) || val < min) {
+          //for weird data, set slider at min
+          val = min;
+        }
+        var values = placeholder_input.data("slider").getValue();
+        values[0] = val;
+        placeholder_input.slider("setValue", values);
+      });
+
+      end_el.on('input', function() {
+        var val = BlacklightRangeLimit.parseNum(this.value);
+        if (isNaN(val) || val > max) {
+          //weird entry, set slider to max
+          val = max;
+        }
+        var values = placeholder_input.data("slider").getValue();
+        values[1] = val;
+        placeholder_input.slider("setValue", values);
+      });
+
+      begin_el.change(function() {
+        var val1 = BlacklightRangeLimit.parseNum(begin_el.val());
+        var val2 = BlacklightRangeLimit.parseNum(end_el.val());
+
+        if (val2 < val1) {
+          begin_el.val(val2);
+          end_el.val(val1);
+        }
+      });
+
+      end_el.change(function() {
+        var val1 = BlacklightRangeLimit.parseNum(begin_el.val());
+        var val2 = BlacklightRangeLimit.parseNum(end_el.val());
+
+        if (val2 < val1) {
+          begin_el.val(val2);
+          end_el.val(val1);
+        }
+      });
+    };
+
+  BlacklightRangeLimit.initialize = function() {
+    // Support for Blacklight 7 and 8:
+    const modalSelector = Blacklight.modal?.modalSelector || Blacklight.Modal.modalSelector; 
+
+    RangeLimitDistroFacet__default.default.initialize(modalSelector);
+    RangeLimitSlider.initialize(modalSelector);
+  };
+
+  const BlacklightRangeLimit$1 = BlacklightRangeLimit;
+
+  return BlacklightRangeLimit$1;
+
+}));
+//# sourceMappingURL=blacklight_range_limit.umd.js.map

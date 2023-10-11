@@ -6,11 +6,15 @@ const RangeLimitSlider = {
       BlacklightRangeLimit.buildSlider(this);
     });
 
+    // For Blacklight < 8, when loaded in a modal
     $(modalSelector).on('shown.bs.modal', function() {
       $(this).find(".range_limit .profile .range.slider_js").each(function() {
         BlacklightRangeLimit.buildSlider(this);
       });
     });
+
+    // For Blacklight 8, use a mutation observer to detect when the HTML dialog is open
+    BlacklightRangeLimit.initSliderModalObserver();
 
     // catch event for redrawing chart, to redraw slider to match width
     $("body").on("plotDrawn.blacklight.rangeLimit", function(event) {
@@ -157,3 +161,5 @@ BlacklightRangeLimit.buildSlider = function buildSlider(thisContext) {
       }
     });
   }
+
+export default RangeLimitSlider;

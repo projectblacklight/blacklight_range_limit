@@ -73,3 +73,5 @@ const RangeLimitDistroFacet = {
     }, 350));
   }
 }
+
+export default RangeLimitDistroFacet;

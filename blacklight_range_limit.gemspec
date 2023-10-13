@@ -29,5 +29,4 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'solr_wrapper'
   s.add_development_dependency 'engine_cart', '~> 2.1'
   s.add_development_dependency 'selenium-webdriver', '>= 3.13.1'
-  s.add_development_dependency 'webdrivers', '~>5.0'
 end

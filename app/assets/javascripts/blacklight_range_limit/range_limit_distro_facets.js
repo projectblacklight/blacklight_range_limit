@@ -35,14 +35,14 @@ Blacklight.onLoad(function() {
   const modalSelector = Blacklight.modal?.modalSelector || Blacklight.Modal.modalSelector 
 
   // When loaded in a modal
-  $(modalSelector).on('shown.bs.modal', function() {
-    $(this).find(".range_limit .profile .distribution.chart_js ul").each(function() {
-      BlacklightRangeLimit.turnIntoPlot($(this).parent());
-    });
+  // $(modalSelector).on('shown.bs.modal', function() {
+  //   $(this).find(".range_limit .profile .distribution.chart_js ul").each(function() {
+  //     BlacklightRangeLimit.turnIntoPlot($(this).parent());
+  //   });
 
-    // Case when there is no currently selected range
-    BlacklightRangeLimit.checkForNeededFacetsToFetch();
-  });
+  //   // Case when there is no currently selected range
+  //   BlacklightRangeLimit.checkForNeededFacetsToFetch();
+  // });
 
   $("body").on("shown.bs.collapse", function(event) {
     var container =  $(event.target).filter(".facet-content").find(".chart_js");

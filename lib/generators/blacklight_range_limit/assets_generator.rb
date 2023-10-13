@@ -15,7 +15,7 @@ module BlacklightRangeLimit
   class AssetsGenerator < Rails::Generators::Base
     source_root File.join(BlacklightRangeLimit::Engine.root, 'app', 'assets')
 
-    def assets
+    def stylesheet
       application_css = Dir["app/assets/stylesheets/application{.css,.scss,.css.scss}"].first
 
       if application_css
@@ -31,19 +31,46 @@ module BlacklightRangeLimit
       else
         say_status "warning", "Can not find application.css, did not insert our require", :red
       end
+    end
 
-      append_to_file "app/assets/javascripts/application.js" do
-%q{
-
-// For blacklight_range_limit built-in JS, if you don't want it you don't need
-// this:
-//= require 'blacklight_range_limit'
-
-}
+    def javascript
+      if using_importmap?
+        pin_javascript_dependencies
+      else
+        install_javascript_dependencies
       end
     end
 
+    private
 
+    def root
+      @root ||= Pathname(destination_root)
+    end
 
+    def using_importmap?
+      @using_importmap ||= root.join('config/importmap.rb').exist?
+    end
+
+    def install_javascript_dependencies
+      append_to_file "app/assets/javascripts/application.js", <<~RUBY
+        // For blacklight_range_limit built-in JS, if you don't want it you don't need
+        // this:
+        //= require 'blacklight_range_limit'
+      RUBY
+    end
+
+    def pin_javascript_dependencies
+      say 'blacklight_range_limit Importmap asset generation'
+
+      append_to_file 'config/importmap.rb', <<~RUBY
+        pin "jquery", to: "https://cdn.jsdelivr.net/npm/jquery@3.6.0/dist/jquery.js"
+        pin "blacklight_range_limit", to: "blacklight_range_limit.js"
+      RUBY
+
+      append_to_file 'app/javascript/application.js', <<~JS
+        import 'jquery'
+        import "blacklight_range_limit"
+      JS
+    end
   end
 end

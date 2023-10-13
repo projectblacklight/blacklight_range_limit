@@ -169,6 +169,12 @@ bundle exec rspec spec/features/blacklight_range_limit_spec.rb
 
 Once you are done iterating on your test you will need to stop the application server with `Ctrl-C`.
 
+# Build Javascript
+
+```
+npm run prepare
+```
+
 # Publishing Javascript
 
 run `npm publish` to push the javascript package to https://npmjs.org/package/blacklight-range-limit

@@ -19,7 +19,4 @@
 //= require 'bootstrap-slider'
 
 // Ensure that range_limit_shared is loaded first
-//= require 'blacklight_range_limit/range_limit_shared'
-//= require 'blacklight_range_limit/range_limit_plotting'
-//= require 'blacklight_range_limit/range_limit_slider'
-//= require 'blacklight_range_limit/range_limit_distro_facets'
+//= require 'blacklight_range_limit/range_limit.umd'

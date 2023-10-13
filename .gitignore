@@ -26,4 +26,5 @@ Gemfile.lock
 /jetty
 /pkg
 /tmp
+/node_modules
 /.bundle

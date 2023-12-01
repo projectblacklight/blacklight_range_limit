@@ -71,3 +71,43 @@ BlacklightRangeLimit.normalized_selection = function normalized_selection(min, m
 BlacklightRangeLimit.domDependenciesMet = function domDependenciesMet() {
   return typeof $.plot != "undefined"
 }
+
+// Support for Blacklight 7 and 8:
+BlacklightRangeLimit.modalSelector = Blacklight.modal?.modalSelector || Blacklight.Modal.modalSelector
+
+BlacklightRangeLimit.modalObserverConfig = {
+  attributes: true,
+}
+
+BlacklightRangeLimit.initSliderModalObserver = function() {
+  // Use a mutation observer to detect when the modal dialog is open
+  const modalObserver = new MutationObserver(function(mutations) {
+    mutations.forEach(function(mutation) {
+      if (mutation.attributeName !== 'open') {return;}
+      if (mutation.target.hasAttribute('open')) {
+        $(BlacklightRangeLimit.modalSelector).find(".range_limit .profile .range.slider_js").each(function() {
+          BlacklightRangeLimit.buildSlider(this);
+        });
+      }
+    });
+  });
+  modalObserver.observe($(BlacklightRangeLimit.modalSelector)[0], BlacklightRangeLimit.modalObserverConfig);
+}
+
+BlacklightRangeLimit.initPlotModalObserver = function() {
+  // Use a mutation observer to detect when the modal dialog is open
+  const modalObserver = new MutationObserver(function(mutations) {
+    mutations.forEach(function(mutation) {
+      if (mutation.attributeName !== 'open') {return;}
+      if (mutation.target.hasAttribute('open')) {
+        $(BlacklightRangeLimit.modalSelector).find(".range_limit .profile .distribution.chart_js ul").each(function() {
+          BlacklightRangeLimit.turnIntoPlot($(this).parent());
+        });
+
+        // Case when there is no currently selected range
+        BlacklightRangeLimit.checkForNeededFacetsToFetch();
+      }
+    });
+  });
+  modalObserver.observe($(BlacklightRangeLimit.modalSelector)[0], BlacklightRangeLimit.modalObserverConfig);
+}

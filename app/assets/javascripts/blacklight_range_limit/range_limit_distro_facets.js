@@ -31,11 +31,8 @@ Blacklight.onLoad(function() {
     }
   });
 
-  // Support for Blacklight 7 and 8:
-  const modalSelector = Blacklight.modal?.modalSelector || Blacklight.Modal.modalSelector 
-
-  // When loaded in a modal
-  $(modalSelector).on('shown.bs.modal', function() {
+  // For Blacklight version < 8, when loaded in a modal
+  $(BlacklightRangeLimit.modalSelector).on('shown.bs.modal', function() {
     $(this).find(".range_limit .profile .distribution.chart_js ul").each(function() {
       BlacklightRangeLimit.turnIntoPlot($(this).parent());
     });
@@ -43,6 +40,9 @@ Blacklight.onLoad(function() {
     // Case when there is no currently selected range
     BlacklightRangeLimit.checkForNeededFacetsToFetch();
   });
+
+  // Use a mutation observer to detect when the HTML dialog is open
+  BlacklightRangeLimit.initPlotModalObserver();
 
   $("body").on("shown.bs.collapse", function(event) {
     var container =  $(event.target).filter(".facet-content").find(".chart_js");

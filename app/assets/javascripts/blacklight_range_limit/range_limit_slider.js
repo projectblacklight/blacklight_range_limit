@@ -6,14 +6,15 @@ Blacklight.onLoad(function() {
     BlacklightRangeLimit.buildSlider(this);
   });
 
-  // Support for Blacklight 7 and 8:
-  const modalSelector = Blacklight.modal?.modalSelector || Blacklight.Modal.modalSelector 
-
-  $(modalSelector).on('shown.bs.modal', function() {
+  // For Blacklight < 8, when loaded in a modal
+  $(BlacklightRangeLimit.modalSelector).on('shown.bs.modal', function() {
     $(this).find(".range_limit .profile .range.slider_js").each(function() {
       BlacklightRangeLimit.buildSlider(this);
     });
   });
+
+  // For Blacklight 8, use a mutation observer to detect when the HTML dialog is open
+  BlacklightRangeLimit.initSliderModalObserver();
 
   // catch event for redrawing chart, to redraw slider to match width
   $("body").on("plotDrawn.blacklight.rangeLimit", function(event) {

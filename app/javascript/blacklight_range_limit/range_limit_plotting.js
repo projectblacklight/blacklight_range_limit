@@ -5,8 +5,9 @@
 // bootstrap show event, but the animation hasn't barely begun yet -- but
 // we don't want to wait until it's finished, we want to start rendering
 // as soon as we can.
-//
-// We also will
+
+import BlacklightRangeLimit from 'range_limit_shared'
+
 BlacklightRangeLimit.turnIntoPlot = function turnIntoPlot(container, wait_for_visible) {
   // flot can only render in a a div with a defined width.
   // for instance, a hidden div can't generally be rendered in (although if you set

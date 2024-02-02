@@ -4,6 +4,8 @@
  * events.
  */
 
+import BlacklightRangeLimit from 'range_limit_shared'
+
 BlacklightRangeLimit.initializeDistroFacets = function(modalSelector) {
   // Facets already on the page? Turn em into a chart.
   $(".range_limit .profile .distribution.chart_js ul").each(function() {

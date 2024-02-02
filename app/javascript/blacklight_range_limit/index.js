@@ -1,4 +1,4 @@
-import RangeLimitDistroFacet from 'range_limit_distro_facet';
+import RangeLimitDistroFacet from 'range_limit_distro_facets';
 import RangeLimitSlider from 'range_limit_slider';
 
 BlacklightRangeLimit.initialize = function() {

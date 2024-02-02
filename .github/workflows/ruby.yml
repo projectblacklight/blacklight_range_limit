@@ -34,7 +34,7 @@ jobs:
     env:
       BLACKLIGHT_VERSION: "~> 7.0" # only test on BL 7 for now
       RAILS_VERSION: ${{ matrix.rails_version }}
-      ENGINE_CART_RAILS_OPTIONS: "--skip-git --skip-listen --skip-spring --skip-keeps --skip-action-cable --skip-coffee --skip-test ${{ matrix.engine_cart_rails_options }}"
+      ENGINE_CART_RAILS_OPTIONS: "--skip-git --skip-listen --skip-spring --skip-keeps --skip-coffee --skip-test ${{ matrix.engine_cart_rails_options }}"
     steps:
     - uses: actions/checkout@v3
     - name: Set up Ruby

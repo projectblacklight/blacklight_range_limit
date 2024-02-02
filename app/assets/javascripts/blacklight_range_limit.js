@@ -18,15 +18,10 @@
 //= require 'flot/jquery.flot.selection.js'
 //= require 'bootstrap-slider'
 
-// Ensure that range_limit_shared is loaded first
-//= require 'blacklight_range_limit/range_limit_shared'
-//= require 'blacklight_range_limit/range_limit_plotting'
-//= require 'blacklight_range_limit/range_limit_slider'
-//= require 'blacklight_range_limit/range_limit_distro_facets'
+//= require 'blacklight_range_limit/blacklight_range_limit.umd'
 
 Blacklight.onLoad(function() {
   // Support for Blacklight 7 and 8:
   modalSelector = Blacklight.modal?.modalSelector || Blacklight.Modal.modalSelector
-  BlacklightRangeLimit.initializeDistroFacets(modalSelector)
-  BlacklightRangeLimit.initializeSlider(modalSelector)
+  BlacklightRangeLimit.initialize(modalSelector)
 })

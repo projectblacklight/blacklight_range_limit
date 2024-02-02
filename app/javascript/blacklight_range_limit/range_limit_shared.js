@@ -108,3 +108,5 @@ BlacklightRangeLimit.initPlotModalObserver = function(modalSelector) {
   });
   modalObserver.observe(document.querySelector(modalSelector), BlacklightRangeLimit.modalObserverConfig);
 }
+
+export default BlacklightRangeLimit

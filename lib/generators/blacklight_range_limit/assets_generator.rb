@@ -15,7 +15,7 @@ module BlacklightRangeLimit
   class AssetsGenerator < Rails::Generators::Base
     source_root File.join(BlacklightRangeLimit::Engine.root, 'app', 'assets')
 
-    def assets
+    def copy_styles
       application_css = Dir["app/assets/stylesheets/application{.css,.scss,.css.scss}"].first
 
       if application_css
@@ -31,7 +31,42 @@ module BlacklightRangeLimit
       else
         say_status "warning", "Can not find application.css, did not insert our require", :red
       end
+    end
 
+    def assets
+      if using_importmap?
+        pin_javascript_dependencies
+        import_javascript
+      else
+        install_sprockets_dependencies
+      end
+    end
+
+
+    private
+
+    def root
+      @root ||= Pathname(destination_root)
+    end
+
+    def using_importmap?
+      @using_importmap ||= root.join('config/importmap.rb').exist?
+    end
+
+    def pin_javascript_dependencies
+      say 'blacklight-range-limit importmap asset generation'
+
+      append_to_file 'config/importmap.rb', <<~RUBY
+        pin "blacklight-range-limit", to: "blacklight-range-limit/blacklight-range-limit.esm.js"
+      RUBY
+    end
+
+    def import_javascript
+      append_to_file 'app/javascript/application.js', "\nimport \"blacklight-range-limit\""
+    end
+
+    # NOTE: This is expected to fail in Rails 7.1+
+    def install_sprockets_dependencies
       append_to_file "app/assets/javascripts/application.js" do
 %q{
 
@@ -42,8 +77,5 @@ module BlacklightRangeLimit
 }
       end
     end
-
-
-
   end
 end

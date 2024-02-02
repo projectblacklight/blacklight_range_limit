@@ -1,4 +1,4 @@
-// for Blacklight.onLoad:
+import BlacklightRangeLimit from 'range_limit_shared'
 
 /**
  * Closure functions in this file are mainly concerned with initializing, resizing, and updating

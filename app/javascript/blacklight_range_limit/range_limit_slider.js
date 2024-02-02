@@ -1,4 +1,4 @@
-// for Blacklight.onLoad:
+import BlacklightRangeLimit from 'range_limit_shared'
 
 const RangeLimitSlider = {
   initialize: function(modalSelector) {

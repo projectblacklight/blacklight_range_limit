@@ -2,11 +2,12 @@
 
 require 'spec_helper'
 
-describe 'JavaScript', js: true do
+RSpec.describe 'JavaScript', js: true do
   it 'initializes canvas chart' do
     visit search_catalog_path
 
     click_button 'Publication Date Sort'
+    debugger
     expect(page).to have_css '.flot-base'
   end
   it 'has a View larger modal' do

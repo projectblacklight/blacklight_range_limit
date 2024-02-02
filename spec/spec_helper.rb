@@ -7,7 +7,7 @@ require 'rspec/rails'
 require 'capybara/rspec'
 require 'selenium-webdriver'
 
-Capybara.javascript_driver = :headless_chrome
+Capybara.javascript_driver = :selenium#:headless_chrome
 
 Capybara.register_driver :headless_chrome do |app|
   Capybara::Selenium::Driver.load_selenium

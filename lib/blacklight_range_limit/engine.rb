@@ -11,5 +11,9 @@ module BlacklightRangeLimit
     config.before_configuration do
       Blacklight::Configuration::FacetField.prepend BlacklightRangeLimit::FacetFieldConfigOverride
     end
+
+    initializer 'blacklight_range_limit.importmap', before: "importmap" do |app|
+      app.config.importmap.paths << Engine.root.join("config/importmap.rb") if app.config.respond_to?(:importmap)
+    end
   end
 end

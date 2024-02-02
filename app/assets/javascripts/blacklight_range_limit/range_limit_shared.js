@@ -72,35 +72,32 @@ BlacklightRangeLimit.domDependenciesMet = function domDependenciesMet() {
   return typeof $.plot != "undefined"
 }
 
-// Support for Blacklight 7 and 8:
-BlacklightRangeLimit.modalSelector = Blacklight.modal?.modalSelector || Blacklight.Modal.modalSelector
-
 BlacklightRangeLimit.modalObserverConfig = {
   attributes: true,
 }
 
-BlacklightRangeLimit.initSliderModalObserver = function() {
+BlacklightRangeLimit.initSliderModalObserver = function(modalSelector) {
   // Use a mutation observer to detect when the modal dialog is open
   const modalObserver = new MutationObserver(function(mutations) {
     mutations.forEach(function(mutation) {
       if (mutation.attributeName !== 'open') {return;}
       if (mutation.target.hasAttribute('open')) {
-        $(BlacklightRangeLimit.modalSelector).find(".range_limit .profile .range.slider_js").each(function() {
+        $(modalSelector).find(".range_limit .profile .range.slider_js").each(function() {
           BlacklightRangeLimit.buildSlider(this);
         });
       }
     });
   });
-  modalObserver.observe($(BlacklightRangeLimit.modalSelector)[0], BlacklightRangeLimit.modalObserverConfig);
+  modalObserver.observe(document.querySelector(modalSelector), BlacklightRangeLimit.modalObserverConfig);
 }
 
-BlacklightRangeLimit.initPlotModalObserver = function() {
+BlacklightRangeLimit.initPlotModalObserver = function(modalSelector) {
   // Use a mutation observer to detect when the modal dialog is open
   const modalObserver = new MutationObserver(function(mutations) {
     mutations.forEach(function(mutation) {
       if (mutation.attributeName !== 'open') {return;}
       if (mutation.target.hasAttribute('open')) {
-        $(BlacklightRangeLimit.modalSelector).find(".range_limit .profile .distribution.chart_js ul").each(function() {
+        $(modalSelector).find(".range_limit .profile .distribution.chart_js ul").each(function() {
           BlacklightRangeLimit.turnIntoPlot($(this).parent());
         });
 
@@ -109,5 +106,5 @@ BlacklightRangeLimit.initPlotModalObserver = function() {
       }
     });
   });
-  modalObserver.observe($(BlacklightRangeLimit.modalSelector)[0], BlacklightRangeLimit.modalObserverConfig);
+  modalObserver.observe(document.querySelector(modalSelector), BlacklightRangeLimit.modalObserverConfig);
 }

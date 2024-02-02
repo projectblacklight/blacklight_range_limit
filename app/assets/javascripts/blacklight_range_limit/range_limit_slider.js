@@ -1,20 +1,20 @@
 // for Blacklight.onLoad:
 
-Blacklight.onLoad(function() {
+BlacklightRangeLimit.initializeSlider = function(modalSelector) {
 
   $(".range_limit .profile .range.slider_js").each(function() {
     BlacklightRangeLimit.buildSlider(this);
   });
 
   // For Blacklight < 8, when loaded in a modal
-  $(BlacklightRangeLimit.modalSelector).on('shown.bs.modal', function() {
+  $(modalSelector).on('shown.bs.modal', function() {
     $(this).find(".range_limit .profile .range.slider_js").each(function() {
       BlacklightRangeLimit.buildSlider(this);
     });
   });
 
   // For Blacklight 8, use a mutation observer to detect when the HTML dialog is open
-  BlacklightRangeLimit.initSliderModalObserver();
+  BlacklightRangeLimit.initSliderModalObserver(modalSelector);
 
   // catch event for redrawing chart, to redraw slider to match width
   $("body").on("plotDrawn.blacklight.rangeLimit", function(event) {
@@ -27,7 +27,7 @@ Blacklight.onLoad(function() {
       slider_el.css("display", "block")
     }
   });
-});
+}
 
 // returns two element array min/max as numbers. If there is a limit applied,
 // it's boundaries are are limits. Otherwise, min/max in current result

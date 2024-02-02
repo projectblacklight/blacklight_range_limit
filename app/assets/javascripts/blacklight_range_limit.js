@@ -23,3 +23,10 @@
 //= require 'blacklight_range_limit/range_limit_plotting'
 //= require 'blacklight_range_limit/range_limit_slider'
 //= require 'blacklight_range_limit/range_limit_distro_facets'
+
+Blacklight.onLoad(function() {
+  // Support for Blacklight 7 and 8:
+  modalSelector = Blacklight.modal?.modalSelector || Blacklight.Modal.modalSelector
+  BlacklightRangeLimit.initializeDistroFacets(modalSelector)
+  BlacklightRangeLimit.initializeSlider(modalSelector)
+})

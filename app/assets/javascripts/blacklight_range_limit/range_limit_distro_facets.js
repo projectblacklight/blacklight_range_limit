@@ -1,13 +1,10 @@
-// for Blacklight.onLoad:
-
 /**
  * Closure functions in this file are mainly concerned with initializing, resizing, and updating
  * range limit functionality based off of page load, facet opening, page resizing, and otherwise
  * events.
  */
 
-Blacklight.onLoad(function() {
-
+BlacklightRangeLimit.initializeDistroFacets = function(modalSelector) {
   // Facets already on the page? Turn em into a chart.
   $(".range_limit .profile .distribution.chart_js ul").each(function() {
       BlacklightRangeLimit.turnIntoPlot($(this).parent());
@@ -32,7 +29,7 @@ Blacklight.onLoad(function() {
   });
 
   // For Blacklight version < 8, when loaded in a modal
-  $(BlacklightRangeLimit.modalSelector).on('shown.bs.modal', function() {
+  $(modalSelector).on('shown.bs.modal', function() {
     $(this).find(".range_limit .profile .distribution.chart_js ul").each(function() {
       BlacklightRangeLimit.turnIntoPlot($(this).parent());
     });
@@ -42,7 +39,7 @@ Blacklight.onLoad(function() {
   });
 
   // Use a mutation observer to detect when the HTML dialog is open
-  BlacklightRangeLimit.initPlotModalObserver();
+  BlacklightRangeLimit.initPlotModalObserver(modalSelector);
 
   $("body").on("shown.bs.collapse", function(event) {
     var container =  $(event.target).filter(".facet-content").find(".chart_js");
@@ -74,4 +71,4 @@ Blacklight.onLoad(function() {
       BlacklightRangeLimit.redrawPlot($(container));
     });
   }, 350));
-});
+}

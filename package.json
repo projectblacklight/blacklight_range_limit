@@ -4,6 +4,7 @@
   "description": "A range facet UI component plugin for blacklight",
   "main": "app/assets/javascripts/blacklight_range_limit",
   "scripts": {
+    "prepare": "rollup --config rollup.config.js --sourcemap && ESM=true rollup --config rollup.config.js --sourcemap"
   },
   "repository": {
     "type": "git",
@@ -19,6 +20,8 @@
   },
   "homepage": "https://github.com/projectblacklight/blacklight_range_limit#readme",
   "devDependencies": {
+    "rollup": "^2.60.0",
+    "rollup-plugin-includepaths": "^0.2.4"
   },
   "browserslist": [
     "defaults",

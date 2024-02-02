@@ -3,9 +3,7 @@
  */
 'use strict';
 
-const BlacklightRangeLimit = function (options) {
-  this.options = options || {};
-}
+const BlacklightRangeLimit = {}
 
 BlacklightRangeLimit.display_ratio = 1/(1.618 * 2); // half a golden rectangle, why not
 /* A custom event "plotDrawn.blacklight.rangeLimit" will be sent when flot plot
@@ -73,7 +71,7 @@ BlacklightRangeLimit.domDependenciesMet = function domDependenciesMet() {
 }
 
 // Support for Blacklight 7 and 8:
-BlacklightRangeLimit.modalSelector = Blacklight.modal?.modalSelector || Blacklight.Modal.modalSelector
+BlacklightRangeLimit.modalSelector = '#blacklight-modal' // Blacklight.modal?.modalSelector || Blacklight.Modal.modalSelector
 
 BlacklightRangeLimit.modalObserverConfig = {
   attributes: true,
@@ -111,3 +109,5 @@ BlacklightRangeLimit.initPlotModalObserver = function() {
   });
   modalObserver.observe($(BlacklightRangeLimit.modalSelector)[0], BlacklightRangeLimit.modalObserverConfig);
 }
+
+export default BlacklightRangeLimit;

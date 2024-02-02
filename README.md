@@ -171,6 +171,8 @@ Once you are done iterating on your test you will need to stop the application s
 
 # Publishing Javascript
 
+run `npm run prepare` to build the javascript
+
 run `npm publish` to push the javascript package to https://npmjs.org/package/blacklight-range-limit
 
 # Possible future To Do

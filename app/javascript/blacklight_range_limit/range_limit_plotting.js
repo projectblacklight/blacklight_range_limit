@@ -1,3 +1,5 @@
+import BlacklightRangeLimit from 'range_limit_shared'
+
 // second arg, if provided, is a number of ms we're willing to
 // wait for the container to have width before giving up -- we'll
 // set 50ms timers to check back until timeout is expired or the

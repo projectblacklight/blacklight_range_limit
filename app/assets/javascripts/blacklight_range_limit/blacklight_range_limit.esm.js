@@ -525,12 +525,9 @@ BlacklightRangeLimit.buildSlider = function buildSlider(thisContext) {
     });
   };
 
-BlacklightRangeLimit.initialize = function() {
-  // Support for Blacklight 7 and 8:
-  Blacklight.modal?.modalSelector || Blacklight.Modal.modalSelector; 
-
-  // RangeLimitDistroFacet.initialize(modalSelector)
-  // RangeLimitSlider.initialize(modalSelector)
+BlacklightRangeLimit.initialize = function(modalSelector) {
+  BlacklightRangeLimit.initializeDistroFacets(modalSelector);
+  BlacklightRangeLimit.initializeSlider(modalSelector);
 };
 
 export { BlacklightRangeLimit as default };

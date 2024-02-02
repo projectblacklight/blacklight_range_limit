@@ -23,6 +23,5 @@
 Blacklight.onLoad(function() {
   // Support for Blacklight 7 and 8:
   modalSelector = Blacklight.modal?.modalSelector || Blacklight.Modal.modalSelector
-  BlacklightRangeLimit.initializeDistroFacets(modalSelector)
-  BlacklightRangeLimit.initializeSlider(modalSelector)
+  BlacklightRangeLimit.initialize(modalSelector)
 })

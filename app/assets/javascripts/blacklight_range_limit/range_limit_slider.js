@@ -61,8 +61,8 @@ BlacklightRangeLimit.buildSlider = function buildSlider(thisContext) {
     var range_element = $(thisContext);
 
     var boundaries = BlacklightRangeLimit.min_max(thisContext);
-    var min = boundaries[0];
-    var max = boundaries[1];
+    const min = boundaries[0];
+    const max = boundaries[1];
 
     if (BlacklightRangeLimit.isInt(min) && BlacklightRangeLimit.isInt(max)) {
       $(thisContext).contents().wrapAll('<div class="sr-only visually-hidden" />');
@@ -72,39 +72,23 @@ BlacklightRangeLimit.buildSlider = function buildSlider(thisContext) {
       var begin_el = form.find("input.range_begin");
       var end_el = form.find("input.range_end");
 
-      var placeholder_input = $('<input type="hidden" data-slider-placeholder="true" />').appendTo(range_element);
+      range_element[0].innerHTML = `
+        <div class="range_container">
+          <div class="sliders_control">
+            <input id="fromSlider" type="range" value="${min}" min="${min}" max="${max}"/>
+            <input id="toSlider" type="range" value="${max}" min="${min}" max="${max}"/>
+          </div>
+        </div>`
 
-      // make sure slider is loaded
-      if (placeholder_input.slider !== undefined) {
-        placeholder_input.slider({
-          min: min,
-          max: max,
-          value: [min, max],
-          tooltip: "hide"
-        });
+      const container = range_element.closest(".range_limit");
+      const plot_el = container.find(".chart_js");
 
-        // try to make slider width/orientation match chart's
-        var container = range_element.closest(".range_limit");
-        var plot_el = container.find(".chart_js");
-        var plot = plot_el.data("plot");
-        var slider_el = container.find(".slider");
-
-        if (plot_el) {
-          plot_el.attr('aria-hidden', 'true');
-        }
-
-        if (slider_el) {
-          slider_el.attr('aria-hidden', 'true');
-        }
-
-        if (plot && slider_el) {
-          slider_el.width(plot.width());
-          slider_el.css("display", "block")
-        } else if (slider_el) {
-          slider_el.css("width", "100%");
-        }
+      if (plot_el) {
+        plot_el.attr('aria-hidden', 'true');
       }
 
+      // https://codepen.io/predragdavidovic/pen/mdpMoWo
+      
       // Slider change should update text input values.
       var parent = $(thisContext).parent();
       var form = $(parent).closest(".limit_content").find("form.range_limit");

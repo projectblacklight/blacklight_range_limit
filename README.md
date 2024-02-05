@@ -27,7 +27,7 @@ The pre Solr 1.4 now deprecated sint or slong types should work fine too.
 
 # Installation
 
-Current 5.x version of `blacklight_range_limit` work with `blacklight` 5.x -- we now synchronize the _major version number_ between `blacklight` and `blacklight_range_limit`.  `blacklight_range_limit` 2.1 is the last version believed to work with blacklight 4.x or possibly blacklight 3.x.
+Current 8.x version of `blacklight_range_limit` works with `blacklight` 7 or 8.
 
 Add
 
@@ -35,11 +35,40 @@ Add
 
 to your Gemfile. Run "bundle install".
 
-Then run
+## Using sprockets
 
-    rails generate blacklight_range_limit:install
+Run
+```shell
+rails generate blacklight_range_limit:install
+```
 
 This will install some asset references in your application.js and application.css.
+
+## Using node modules
+If you wish to manually install add this to your `app/javascript/application.js` with a builder that relies on node modules, then you can do this (for Blacklight 7):
+
+```javascript
+import "blacklight-frontend/app/assets/javascripts/blacklight/blacklight";
+
+import BlacklightRangeLimit from "blacklight-range-limit/app/assets/javascripts/blacklight_range_limit/blacklight_range_limit.esm";
+import "blacklight-range-limit/vendor/assets/javascripts/bootstrap-slider"
+// jquery.canvaswrapper must come before the rest of Flot.
+import "blacklight-range-limit/vendor/assets/javascripts/flot/jquery.canvaswrapper"
+import "blacklight-range-limit/vendor/assets/javascripts/flot/jquery.flot"
+import "blacklight-range-limit/vendor/assets/javascripts/flot/jquery.colorhelpers"
+import "blacklight-range-limit/vendor/assets/javascripts/flot/jquery.event.drag"
+import "blacklight-range-limit/vendor/assets/javascripts/flot/jquery.flot.browser"
+import "blacklight-range-limit/vendor/assets/javascripts/flot/jquery.flot.drawSeries"
+import "blacklight-range-limit/vendor/assets/javascripts/flot/jquery.flot.hover"
+import "blacklight-range-limit/vendor/assets/javascripts/flot/jquery.flot.saturated"
+import "blacklight-range-limit/vendor/assets/javascripts/flot/jquery.flot.selection"
+import "blacklight-range-limit/vendor/assets/javascripts/flot/jquery.flot.uiConstants"
+
+Blacklight.onLoad(function() {
+  modalSelector = Blacklight.modal?.modalSelector || Blacklight.Modal.modalSelector;
+  BlacklightRangeLimit.initialize(modalSelector);
+});
+```
 
 # Configuration
 

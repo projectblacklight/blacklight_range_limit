@@ -13,6 +13,7 @@ module BlacklightRangeLimit
     end
 
     initializer 'blacklight_range_limit.assets', before: 'assets' do |app|
+      app.config.assets.paths << Engine.root.join("app/assets/javascript")
       app.config.assets.precompile << 'blacklight_range_limit/blacklight_range_limit.esm.js'
     end
 

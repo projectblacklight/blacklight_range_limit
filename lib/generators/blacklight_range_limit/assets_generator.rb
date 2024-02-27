@@ -54,15 +54,22 @@ module BlacklightRangeLimit
     end
 
     def pin_javascript_dependencies
-      say 'blacklight-range-limit importmap asset generation'
-
       append_to_file 'config/importmap.rb', <<~RUBY
-        pin "blacklight-range-limit", to: "blacklight-range-limit/blacklight-range-limit.esm.js"
+        pin "jquery", to: "https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.js"
       RUBY
     end
 
     def import_javascript
-      append_to_file 'app/javascript/application.js', "\nimport \"blacklight-range-limit\""
+      append_to_file 'app/javascript/application.js', <<~JS
+       import "jquery"
+       import "blacklight_range_limit"
+      JS
+
+      append_to_file 'app/assets/config/manifest.js' do
+        <<~CONTENT
+          //= link blacklight_range_limit/manifest.js
+        CONTENT
+      end
     end
 
     # NOTE: This is expected to fail in Rails 7.1+

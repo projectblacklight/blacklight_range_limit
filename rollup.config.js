@@ -9,7 +9,7 @@ const ESM = process.env.ESM === 'true'
 
 const fileDest = `blacklight_range_limit${ESM ? '.esm' : '.umd'}`
 const external = []
-const globals = {}
+const globals = { "blacklight_frontend": "Blacklight" }
 
 let includePathOptions = {
   include: {},

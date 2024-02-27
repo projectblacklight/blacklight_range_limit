@@ -19,9 +19,9 @@
 //= require 'bootstrap-slider'
 
 //= require 'blacklight_range_limit/blacklight_range_limit.umd'
+import Blacklight from 'blacklight'
+import modal from 'blacklight/modal'
 
 Blacklight.onLoad(function() {
-  // Support for Blacklight 7 and 8:
-  modalSelector = Blacklight.modal?.modalSelector || Blacklight.Modal.modalSelector
-  BlacklightRangeLimit.initialize(modalSelector)
+  BlacklightRangeLimit.initialize(modal.modalSelector)
 })

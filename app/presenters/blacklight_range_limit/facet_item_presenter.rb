@@ -15,15 +15,15 @@ module BlacklightRangeLimit
 
       view_context.t(
         range_limit_label_key,
-        begin: format_range_display_value(value.first),
-        begin_value: value.first,
-        end: format_range_display_value(value.last),
-        end_value: value.last
+        begin: format_range_display_value(value.begin),
+        begin_value: value.begin,
+        end: format_range_display_value(value.end),
+        end_value: value.end
       )
     end
 
     def range_limit_label_key
-      if value.first == value.last
+      if value.count == 1
         'blacklight.range_limit.single_html'
       else
         'blacklight.range_limit.range_html'

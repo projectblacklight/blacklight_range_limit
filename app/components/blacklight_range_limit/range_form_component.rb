@@ -27,8 +27,8 @@ module BlacklightRangeLimit
 
       default = if @facet_field.selected_range.is_a?(Range)
                   case type
-                  when 'begin' then @facet_field.selected_range.first
-                  when 'end' then @facet_field.selected_range.last
+                  when 'begin' then @facet_field.selected_range.begin
+                  when 'end' then @facet_field.selected_range.end
                   end
                 end
 

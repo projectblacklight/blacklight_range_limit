@@ -25,9 +25,15 @@ module BlacklightRangeLimit
         next if range_config[:segments] == false
 
         selected_value = search_state.filter(config.key).values.first
-        range = (selected_value if selected_value.is_a? Range) || range_config[:assumed_boundaries]
+        range = if selected_value.is_a? Range
+          selected_value
+        elsif range_config[:assumed_boundaries]
+          Range.new(*range_config[:assumed_boundaries])
+        else
+          Range.new(nil, nil)
+        end
 
-        add_range_segments_to_solr!(solr_params, field_key, range.first, range.last) if range.present?
+        add_range_segments_to_solr!(solr_params, field_key, range.begin, range.end) if range.begin && range.end
       end
 
       solr_params

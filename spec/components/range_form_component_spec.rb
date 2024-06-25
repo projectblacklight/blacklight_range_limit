@@ -66,15 +66,15 @@ RSpec.describe BlacklightRangeLimit::RangeFormComponent, type: :component do
         another_field: 'another_value',
         range: {
           another_range: { begin: 128, end: 1024 },
-          key: { begin: selected_range.first, end: selected_range.last }
+          key: { begin: selected_range.begin, end: selected_range.end }
         }
       }      
     end
 
     it 'renders a form for the selected range' do
       expect(rendered).to have_selector('form[action="http://test.host/catalog"][method="get"]')
-        .and have_field('range[key][begin]', type: 'number', with: selected_range.first)
-        .and have_field('range[key][end]', type: 'number', with: selected_range.last)
+        .and have_field('range[key][begin]', type: 'number', with: selected_range.begin)
+        .and have_field('range[key][end]', type: 'number', with: selected_range.end)
         .and have_field('another_field', type: 'hidden', with: 'another_value', visible: false)
         .and have_field('range[another_range][begin]', type: 'hidden', with: 128, visible: false)
         .and have_field('range[another_range][end]', type: 'hidden', with: 1024, visible: false)

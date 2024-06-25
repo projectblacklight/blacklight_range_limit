@@ -105,7 +105,7 @@ module RangeLimitHelper
   # :from. Assumes integers for sorting purposes.
   def solr_range_queries_to_a(solr_field)
     range_facet_field_presenter(solr_field).range_queries.map do |item|
-      { from: item.value.first, to: item.value.last, count: item.hits }
+      { from: item.value.begin, to: item.value.end, count: item.hits }
     end
   end
   deprecation_deprecate :solr_range_queries_to_a

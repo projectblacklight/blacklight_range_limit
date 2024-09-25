@@ -1,6 +1,7 @@
 # Place any default configuration for solr_wrapper here
 port: 8983
 verbose: true
+version: 9.6.1
 collection:
   dir: solr/conf/
   name: blacklight-core

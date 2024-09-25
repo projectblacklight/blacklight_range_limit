@@ -5,18 +5,43 @@ Bundler::GemHelper.install_tasks
 require 'rspec/core/rake_task'
 require 'engine_cart/rake_task'
 require 'solr_wrapper'
+require 'open3'
 
 task :default => :ci
 
 desc "Run specs"
 RSpec::Core::RakeTask.new
 
-task ci: ['engine_cart:generate'] do
-  SolrWrapper.wrap do |solr|
-    solr.with_collection(name: 'blacklight-core', dir: File.join(File.expand_path(File.dirname(__FILE__)), "solr", "conf")) do
-      Rake::Task["test:seed"].invoke
-      Rake::Task['spec'].invoke
+def system_with_error_handling(*args)
+  Open3.popen3(*args) do |_stdin, stdout, stderr, thread|
+    puts stdout.read
+    raise "Unable to run #{args.inspect}: #{stderr.read}" unless thread.value.success?
+  end
+end
+
+def with_solr
+  if system('docker compose -v')
+    begin
+      puts "Starting Solr"
+      system_with_error_handling "docker compose up -d solr"
+      yield
+    ensure
+      puts "Stopping Solr"
+      system_with_error_handling "docker compose stop solr"
     end
+  else
+    SolrWrapper.wrap do |solr|
+      solr.with_collection do
+        yield
+      end
+    end
+  end
+end
+
+task :ci do
+  with_solr do
+    Rake::Task["test:seed"].invoke
+    Rake::Task['spec'].invoke
   end
 end
 
@@ -40,13 +65,11 @@ namespace :test do
       Rake::Task['engine_cart:generate'].invoke
     end
 
-    SolrWrapper.wrap(port: '8983') do |solr|
-      solr.with_collection(name: 'blacklight-core', dir: File.join(File.expand_path(File.dirname(__FILE__)), "solr", "conf")) do
-        Rake::Task['test:seed'].invoke
+    with_solr do
+      Rake::Task['test:seed'].invoke
 
-        within_test_app do
-          system "bundle exec rails s #{args[:rails_server_args]}"
-        end
+      within_test_app do
+        system "bundle exec rails s #{args[:rails_server_args]}"
       end
     end
   end

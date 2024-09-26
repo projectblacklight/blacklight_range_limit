@@ -23,6 +23,7 @@ Gemfile.lock
 
 /spec/internal
 .internal_test_app
+spec/examples.txt
 /jetty
 /pkg
 /tmp

@@ -19,11 +19,22 @@ Chart.register(
   Filler
 );
 
-export default class BlacklightRangeLimit {
-  static init() {
-    const range_limit = new BlacklightRangeLimit(document.querySelector(".range_limit .profile .distribution"));
 
-    return range_limit;
+export default class BlacklightRangeLimit {
+  static init(args = {}) {
+    // args and defaults
+    const {
+      // a basic vanilla JS onLoad handler as default, but pass in Blacklight.onLoad please
+      onLoadHandler = (() => {}),
+      callback = (range_limit_obj => {}),
+      distributionContainerSelector = ".range_limit .profile .distribution"
+    } = args;
+
+    // For turbolinks on_loads, we need to execute this on every page change
+    onLoadHandler( () => {
+      const range_limit = new BlacklightRangeLimit(document.querySelector(distributionContainerSelector));
+      callback(range_limit);
+    });
   }
 
   hideTextFacets = true;
@@ -46,9 +57,15 @@ export default class BlacklightRangeLimit {
       throw new Error("BlacklightRangeLimit missing argument")
     }
 
-    // Delay setup until someone clicks to open the facet, mainly to avoid making
-    // extra http request to server if it will never be needed!
-    this.whenBecomesVisible(container, target => this.setup());
+    const bounding = container.getBoundingClientRect();
+    if (bounding.width > 0 || bounding.height > 0) {
+      this.setup(); // visible, init now
+    } else {
+      // Delay setup until someone clicks to open the facet, mainly to avoid making
+      // extra http request to server if it will never be needed!
+      this.whenBecomesVisible(container, target => this.setup());
+    }
+
   }
 
   // if the range fetch link is still in DOM, fetch ranges from back-end,

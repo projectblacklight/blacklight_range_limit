@@ -5,8 +5,8 @@
   "type": "module",
 
   "exports": {
-    ".": "./javascript-package/index.js",
-    "./*": "./javascript-package/*"
+    ".": "./app/assets/javascripts/blacklight-range-limit/index.js",
+    "./*": "./app/assets/javascripts/blacklight-range-limit/*"
    },
 
   "repository": {
@@ -14,7 +14,7 @@
     "url": "git+https://github.com/projectblacklight/blacklight_range_limit.git"
   },
   "files": [
-    "javascript-package"
+    "app/assets/javascripts/blacklight-range-limit/"
   ],
   "author": "",
   "license": "Apache-2.0",

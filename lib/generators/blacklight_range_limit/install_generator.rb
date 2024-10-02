@@ -6,7 +6,7 @@ module BlacklightRangeLimit
 
     class_option :'builder-path', type: :string, default: 'app/models/search_builder.rb', aliases: "-b", desc: "Set the path, relative to Rails root, to the Blacklight app's search builder class"
 
-    def copy_public_assets
+    def generate_assets
       generate 'blacklight_range_limit:assets'
     end
 

@@ -26,7 +26,7 @@ describe "Blacklight Range Limit" do
     click_link '2000 to 2008'
 
     within '.blacklight-pub_date_si' do
-      expect(page).to have_content "2000 to 2008✖[remove]12"
+      expect(page).to have_content "2000 to 2008 [remove]12"
     end
 
     within '.constraints-container'  do

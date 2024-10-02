@@ -25,12 +25,11 @@ module BlacklightRangeLimit
     def render_range_input(type, input_label = nil, maxlength_override = nil)
       type = type.to_s
 
-      default = if @facet_field.selected_range.is_a?(Range)
-                  case type
-                  when 'begin' then @facet_field.selected_range.first
-                  when 'end' then @facet_field.selected_range.last
-                  end
-                end
+      default = if type == "begin"
+        @facet_field.selected_range.is_a?(Range) ? @facet_field.selected_range.first : @facet_field.min
+      else
+        @facet_field.selected_range.is_a?(Range) ? @facet_field.selected_range.last : @facet_field.max
+      end
 
       html = number_field_tag("range[#{@facet_field.key}][#{type}]", default, maxlength: maxlength_override || maxlength, class: "form-control text-center range_#{type}")
       html += label_tag("range[#{@facet_field.key}][#{type}]", input_label, class: 'sr-only visually-hidden') if input_label.present?

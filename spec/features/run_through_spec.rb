@@ -15,7 +15,7 @@ describe 'Run through with javascript', js: true do
     click_button 'Publication Date Sort'
 
     within ".facet-limit.blacklight-pub_date_si" do
-      expect(page).to have_css 'canvas'
+      expect(page).to have_css 'canvas', wait: 10
 
       # min/max in actual results are filled in inputs
       expect(find("input#range_pub_date_si_begin").value).to be_present

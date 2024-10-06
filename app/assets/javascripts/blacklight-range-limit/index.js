@@ -163,7 +163,7 @@ export default class BlacklightRangeLimit {
     this.chartCanvasElement.setAttribute("aria-hidden", "true"); // textual facets sr-only are alternative
     this.chartCanvasElement.classList.add("blacklight-range-limit-chart");
     this.container.insertBefore(this.chartCanvasElement, listDiv);
-
+console.log("added canvas: " + this.chartCanvasElement)
     return this.chartCanvasElement;
   }
 

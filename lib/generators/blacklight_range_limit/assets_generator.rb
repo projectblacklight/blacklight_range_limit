@@ -35,11 +35,14 @@ module BlacklightRangeLimit
       end
 
       if root.join(options[:js_file]).exist?
-        append_to_file options[:js_file],
+        js_file_path = root.join(options[:js_file]).to_s
+        append_to_file js_file_path,
           %Q{import BlacklightRangeLimit from "blacklight-range-limit\"},
           after: /import Blacklight from ['"]blacklight['"].*\n/
 
-        append_to_file options[:js_file], "\nBlacklightRangeLimit.init({onLoadHandler: Blacklight.onLoad });"
+puts "\n\nAPPLICATION.js\n\n#{File.read(js_file_path)}\n\n"
+
+        append_to_file js_file_path, "\nBlacklightRangeLimit.init({onLoadHandler: Blacklight.onLoad });"
       else
         say_status(:warn, "No file detected at #{options[:js_file]} so JS setup not added")
       end

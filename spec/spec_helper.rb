@@ -6,6 +6,7 @@ EngineCart.load_application!
 require 'rspec/rails'
 require 'capybara/rspec'
 require 'selenium-webdriver'
+require 'capybara-screenshot/rspec'
 
 Capybara.javascript_driver = :headless_chrome
 
@@ -20,6 +21,10 @@ Capybara.register_driver :headless_chrome do |app|
     opts.add_option('goog:loggingPrefs', browser: 'ALL')
   end
   Capybara::Selenium::Driver.new(app, browser: :chrome, options: browser_options)
+end
+
+Capybara::Screenshot.register_driver(:headless_chrome) do |driver, path|
+  driver.browser.save_screenshot(path)
 end
 
 # Requires supporting ruby files with custom matchers and macros, etc,

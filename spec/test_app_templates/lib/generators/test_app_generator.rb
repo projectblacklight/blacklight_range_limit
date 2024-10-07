@@ -3,19 +3,23 @@ require 'rails/generators'
 class TestAppGenerator < Rails::Generators::Base
   source_root File.expand_path("../../../../spec/test_app_templates", __FILE__)
 
-  # This is only necessary for Rails 3
-  def remove_index
-    remove_file "public/index.html"
+  # While blacklight works with jsbundling-rails (and vite-ruby with layout modification),
+  # it's generators can't set it up at present, we hackily do so.
+  def run_jsbundling_bl7_fixup
+    if File.exist?("package.json") && Rails::VERSION::MAJOR == 7
+      say_status("warning", "BlacklightRangeLimit: Blacklight 7.x package.json-based Test App fixup", {color: :yellow})
+      generate "blacklight_range_limit:jsbundling_bl7_fixup"
+    end
   end
 
   def run_blacklight_generator
-    say_status("warning", "GENERATING BL", :yellow)
+    say_status("warning", "GENERATING Blacklight", :yellow)
 
     generate 'blacklight:install', '--devise'
   end
 
   def run_blacklight_range_limit_generator
-    say_status("warning", "GENERATING BL", :yellow)
+    say_status("warning", "GENERATING BlacklightRangeLimit", :yellow)
 
     generate 'blacklight_range_limit:install'
   end

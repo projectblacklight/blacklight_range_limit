@@ -16,17 +16,30 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-    name: test (ruby ${{ matrix.ruby }} / rails ${{ matrix.rails_version }})
+    name: test (rails ${{ matrix.rails_version }} / ruby ${{ matrix.ruby }} ${{ matrix.additional_name }})
     strategy:
+      fail-fast: false
       matrix:
-        ruby: ["3.3"]
-        rails_version: ["7.2.1"]
-        additional_engine_cart_rails_options: [""]
         include:
-          - ruby: "3.2"
-            rails_version: "7.1.4"
-          - ruby: "3.1"
-            rails_version: "7.0.8.4"
+          # BLACKLIGHT 7, only test with esbuild
+
+          - rails_version: "7.2.1"
+            ruby: "3.3"
+            additional_engine_cart_rails_options: "--javascript=esbuild"
+            additional_name: "/ esbuild, sprockets"
+
+          - rails_version: "7.1.4"
+            ruby: "3.2"
+            additional_engine_cart_rails_options: "--javascript=esbuild"
+            additional_name: "/ esbuild, sprockets"
+
+          - rails_version: "7.0.8.4"
+            ruby: "3.1"
+            additional_engine_cart_rails_options: "--javascript=esbuild"
+            additional_name: "/ esbuild, sprockets"
+
+
+
     env:
       BLACKLIGHT_VERSION: "~> 7.0" # only test on BL 7 for now
       RAILS_VERSION: ${{ matrix.rails_version }}

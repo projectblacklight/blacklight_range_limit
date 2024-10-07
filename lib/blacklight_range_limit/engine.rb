@@ -26,8 +26,10 @@ module BlacklightRangeLimit
 
       #if config.importmaps
         # we do need this, not sure why thought it would be default for rails
-        app.config.importmap.paths << Engine.root.join("config/importmap.rb")
+        if app.config.respond_to?(:importmap)
+          app.config.importmap.paths << Engine.root.join("config/importmap.rb")
         #app.config.importmap.cache_sweepers << Engine.root.join("javascript-package")
+        end
       #end
     end
 

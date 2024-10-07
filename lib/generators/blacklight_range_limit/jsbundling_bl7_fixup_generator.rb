@@ -27,43 +27,43 @@ module BlacklightRangeLimit
       run "yarn add --non-interactive bootstrap@^4.1.0", abort_on_failure: true
       run "yarn add --non-interactive popper.js@^1.16.0", abort_on_failure: true
     end
-  end
 
-  # NOTE this is why you don't want to run this in a real app!!!
-  def remove_default_stimulus_code
-    # Due to a bug or something, import of stimulus will cause a problem with esbuild,
-    # Blacklight layout's default application.js script tag lacking type=module
-    # SEE: https://gist.github.com/pch/fe276b29ba037bdaeaa525932478ca18
+    # NOTE this is why you don't want to run this in a real app!!!
+    def remove_default_stimulus_code
+      # Due to a bug or something, import of stimulus will cause a problem with esbuild,
+      # Blacklight layout's default application.js script tag lacking type=module
+      # SEE: https://gist.github.com/pch/fe276b29ba037bdaeaa525932478ca18
 
-    remove_dir (BlacklightRangeLimit.root + "app/javascript/controllers").to_s
-  end
-
-  def add_blacklight7_esm_imports
-    js_dir = BlacklightRangeLimit.root + "app/javascript"
-    app_js_file = dir + "application.js"
-
-    unless app_js_file.exist?
-      raise "Cannot find file to set up at #{app_js_file}"
+      remove_dir (BlacklightRangeLimit.root + "app/javascript/controllers").to_s
     end
 
-    # Need to setup some things BEFORE actual blacklight imports, to work right
-    create_file (js_dir + "blacklight_dependency_setup.js") do
-      <<~EOS
-        import $ from 'jquery'
-        window.jQuery = window.$ = $
+    def add_blacklight7_esm_imports
+      js_dir = BlacklightRangeLimit.root + "app/javascript"
+      app_js_file = dir + "application.js"
 
-        // Bootstrap 4 also needs Popper, and needs it installed in window.Popper
-        import Popper from 'popper.js';
-        window.Popper = Popper;
-      EOS
-    end
+      unless app_js_file.exist?
+        raise "Cannot find file to set up at #{app_js_file}"
+      end
 
-    append_to_file app_js_file do
-      <<~EOS
-        import "bootstrap";
-        import "./blacklight_dependency_setup.js"
-        import 'blacklight-frontend/app/javascripts/blacklight/blacklight'
-      EOS
+      # Need to setup some things BEFORE actual blacklight imports, to work right
+      create_file (js_dir + "blacklight_dependency_setup.js") do
+        <<~EOS
+          import $ from 'jquery'
+          window.jQuery = window.$ = $
+
+          // Bootstrap 4 also needs Popper, and needs it installed in window.Popper
+          import Popper from 'popper.js';
+          window.Popper = Popper;
+        EOS
+      end
+
+      append_to_file app_js_file do
+        <<~EOS
+          import "bootstrap";
+          import "./blacklight_dependency_setup.js"
+          import 'blacklight-frontend/app/javascripts/blacklight/blacklight'
+        EOS
+      end
     end
   end
 end

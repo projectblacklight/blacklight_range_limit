@@ -3,6 +3,22 @@
 require 'spec_helper'
 
 describe 'Run through with javascript', js: true do
+  # hacky way to inject browser logs into failure message for failed ones
+  after(:each) do |example|
+    if example.exception
+      browser_logs = page.driver.browser.logs.get(:browser).collect { |log| "#{log.level}: #{log.message}" }
+
+      if browser_logs.present?
+        # pretty hacky internal way to get browser logs into long-form failure message
+        new_exception = example.exception.class.new("#{example.exception.message}\n\nBrowser console:\n\n#{browser_logs.join("\n")}\n")
+        new_exception.set_backtrace(example.exception.backtrace)
+
+        example.display_exception = new_exception
+      end
+    end
+  end
+
+
   let(:start_range) { "1900"}
   let(:end_range) { "2100" }
 

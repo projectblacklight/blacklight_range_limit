@@ -18,13 +18,14 @@ module BlacklightRangeLimit
 
     # for vite-ruby you may set to eg 'app/frontend/entrypoints/application.js'
     class_option :js_file, type: :string, default: "app/javascript/application.js"
+    class_option :local_package_link, type: :boolean, default: nil
 
     def add_to_package_json
       # for apps using jsbundling_rails, vite-ruby, etc.
       if root.join("package.json").exist?
         say_status "info", "Adding blacklight-range-limit to package.json", :blue
 
-        if ENV['CI']
+        if link_to_local_npm_package?
           run "yarn add blacklight-range-limit@file:#{BlacklightRangeLimit::Engine.root}", abort_on_failure: true
         else
           # are we actually going to release one-to-one? Maybe just matching major
@@ -38,6 +39,8 @@ module BlacklightRangeLimit
 
     def dependencies_to_importmap_rb
      if root.join("config/importmap.rb").exist?
+        # No need to pin "blacklight-range-limit", importmaps can find it when imported
+        # already, because our engine put it in importmap.paths
         append_to_file("config/importmap.rb") do
           # We'll want to update these version numbers periodically in source here, no other way to do it?
           # And generated apps will have to manually update them too?
@@ -50,7 +53,6 @@ module BlacklightRangeLimit
             pin "@kurkle/color", to: "https://ga.jspm.io/npm:@kurkle/color@0.3.2/dist/color.esm.js"
           EOS
         end
-        say_status(:info, "Pinned dependencies in config/importmap.rb", :blue)
       else
         say_status(:info, "no config/importmap.rb, so did not pin JS dependencies for blacklight-range-limit there", :yellow)
       end
@@ -69,11 +71,20 @@ module BlacklightRangeLimit
           EOS
         end
       else
-        say_status(:warn, "No file detected at #{options[:js_file]} so JS setup not added")
+        say_status(:warn, "No file detected at #{options[:js_file]} so JS setup not added", :yellow)
       end
     end
 
     private
+
+    def link_to_local_npm_package?
+      if !options[:local_package_link].nil?
+        # they chose it explicitly
+        return options[:local_package_link]
+      end
+      # default guess by CI in ENV or app name that we use for test apps
+      ENV['CI'].present? || Rails.application.class.name == "Internal::Application"
+    end
 
     def root
       @root ||= Pathname(destination_root)

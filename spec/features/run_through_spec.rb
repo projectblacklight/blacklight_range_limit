@@ -31,11 +31,7 @@ describe 'Run through with javascript', js: true do
     click_button 'Publication Date Sort'
 
     within ".facet-limit.blacklight-pub_date_si" do
-
-      browser_logs = page.driver.browser.logs.get(:browser).collect { |log| "#{log.time} #{log.level}: #{log.message}" }
-      puts "\n\nBROWSER LOGS\n\n#{browser_logs}\n\n"
-
-      expect(page).to have_css 'canvas', wait: 10
+      expect(page).to have_css('canvas')
 
       # min/max in actual results are filled in inputs
       expect(find("input#range_pub_date_si_begin").value).to be_present

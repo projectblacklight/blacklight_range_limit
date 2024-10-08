@@ -11,24 +11,39 @@ task :default => :ci
 desc "Run specs"
 RSpec::Core::RakeTask.new
 
+# rspec hooks up spec task with spec:prepapre dependency. But we need to make sure
+# it gets called *within test app* so for jsbundling-rails JS is properly built.
+# So we add our custom as a dependency.
+task spec: ["test:spec:prepare"]
+
 task ci: ['engine_cart:generate'] do
   SolrWrapper.wrap do |solr|
     solr.with_collection(name: 'blacklight-core', dir: File.join(File.expand_path(File.dirname(__FILE__)), "solr", "conf")) do
       Rake::Task["test:seed"].invoke
 
       # let's try to add this as an actual build dependency of our own spec instead?
-      within_test_app do
-        # for jsbundling-rails, we need to call this hook within test app to get JS built properly.
-        # With normal app rspec this would be a dependency of 'spec' rake task already
-        system "bin/rails spec:prepare"
-      end
+      # within_test_app do
+      #   # for jsbundling-rails, we need to call this hook within test app to get JS built properly.
+      #   # With normal app rspec this would be a dependency of 'spec' rake task already
+      #   system "bin/rails spec:prepare"
+      # end
 
       Rake::Task['spec'].invoke
     end
   end
 end
 
+
 namespace :test do
+  namespace :spec do
+    desc "call task spec:prepare within test app"
+    task :prepare do
+      within_test_app do
+        system "bin/rake spec:prepare"
+      end
+    end
+  end
+
   desc "Put sample data into solr"
   task seed: ['engine_cart:generate'] do
     within_test_app do

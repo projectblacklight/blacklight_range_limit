@@ -18,36 +18,43 @@ module BlacklightRangeLimit
     end
 
     def add_blacklight_dependencies_to_package_json
-      # there is no blacklight 7.39.0, maybe a mistake...
+      # there is no blacklight 7.39.0, maybe a mistake, makes it hard for us to
+      # add the right one!
       bl_frontend_version = (Blacklight::VERSION == "7.39.0" ? "7.38.0" : Blacklight::VERSION)
 
-      run "yarn add --non-interactive blacklight-frontend@#{bl_frontend_version}", abort_on_failure: true
-
-      # while blacklight7 may work with bootstrap 5, we'll test with 4 for now
-      run "yarn add --non-interactive bootstrap@^4.1.0", abort_on_failure: true
-      run "yarn add --non-interactive popper.js@^1.16.0", abort_on_failure: true
+      # while blacklight7 may work with bootstrap 5, we'll test with 4 for now, and popper 1.x that goes with it
+      run %{yarn add --non-interactive
+              blacklight-frontend@#{bl_frontend_version}
+              bootstrap@^4.1.0
+              popper.js@^1.16.0}.squish, abort_on_failure: true
     end
 
     # NOTE this is why you don't want to run this in a real app!!!
     def remove_default_stimulus_code
-      # Due to a bug or something, import of stimulus will cause a problem with esbuild,
-      # Blacklight layout's default application.js script tag lacking type=module
+      # Due to a bug or something, import of stimulus will cause a problem with
+      # esbuild, in the presence of Blacklight layout's default application.js
+      # script tag lacking type=module
+      #
+      # generated BL app isn't using this stuff, we will just remove the include
+      #
       # SEE: https://gist.github.com/pch/fe276b29ba037bdaeaa525932478ca18
 
-      remove_dir (BlacklightRangeLimit.root + "app/javascript/controllers").to_s
+      gsub_file("app/javascript/application.js", %r{^ *import +["']\./controllers.*$}, '')
     end
 
     def add_blacklight7_esm_imports
-      js_dir = BlacklightRangeLimit.root + "app/javascript"
-      app_js_file = dir + "application.js"
+      js_dir = "app/javascript"
+      app_js_file = js_dir + "/application.js"
 
-      unless app_js_file.exist?
+      unless Pathname(app_js_file).exist?
         raise "Cannot find file to set up at #{app_js_file}"
       end
 
       # Need to setup some things BEFORE actual blacklight imports, to work right
-      create_file (js_dir + "blacklight_dependency_setup.js") do
+      create_file (js_dir + "/blacklight_dependency_setup.js") do
         <<~EOS
+          // Making JQuery from ESM available to Blacklight 7 and Bootstrap 4 that want
+          // it in window globals.
           import $ from 'jquery'
           window.jQuery = window.$ = $
 
@@ -61,7 +68,17 @@ module BlacklightRangeLimit
         <<~EOS
           import "bootstrap";
           import "./blacklight_dependency_setup.js"
-          import 'blacklight-frontend/app/javascripts/blacklight/blacklight'
+
+          //import 'blacklight-frontend/app/assets/javascripts/blacklight/blacklight';
+          // for some reason we need these all like this to work, can we figure out why?
+
+          import 'blacklight-frontend/app/javascript/blacklight/core';
+          import 'blacklight-frontend/app/javascript/blacklight/bookmark_toggle';
+          import 'blacklight-frontend/app/javascript/blacklight/button_focus';
+          import 'blacklight-frontend/app/javascript/blacklight/checkbox_submit';
+          import 'blacklight-frontend/app/javascript/blacklight/facet_load';
+          import 'blacklight-frontend/app/javascript/blacklight/modal';
+          import 'blacklight-frontend/app/javascript/blacklight/search_context';
         EOS
       end
     end

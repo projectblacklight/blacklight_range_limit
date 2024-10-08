@@ -6,7 +6,7 @@ class TestAppGenerator < Rails::Generators::Base
   # While blacklight works with jsbundling-rails (and vite-ruby with layout modification),
   # it's generators can't set it up at present, we hackily do so.
   def run_jsbundling_bl7_fixup
-    if File.exist?("package.json") && Rails::VERSION::MAJOR == 7
+    if File.exist?("package.json") && Blacklight::VERSION.split(".").first == "7"
       say_status("warning", "BlacklightRangeLimit: Blacklight 7.x package.json-based Test App fixup", {color: :yellow})
       generate "blacklight_range_limit:jsbundling_bl7_fixup"
     end

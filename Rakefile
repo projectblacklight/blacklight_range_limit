@@ -15,6 +15,14 @@ task ci: ['engine_cart:generate'] do
   SolrWrapper.wrap do |solr|
     solr.with_collection(name: 'blacklight-core', dir: File.join(File.expand_path(File.dirname(__FILE__)), "solr", "conf")) do
       Rake::Task["test:seed"].invoke
+
+      # let's try to add this as an actual build dependency of our own spec instead?
+      within_test_app do
+        # for jsbundling-rails, we need to call this hook within test app to get JS built properly.
+        # With normal app rspec this would be a dependency of 'spec' rake task already
+        system "bin/rails spec:prepare"
+      end
+
       Rake::Task['spec'].invoke
     end
   end
@@ -27,6 +35,22 @@ namespace :test do
       ENV['RAILS_ENV'] ||= 'test'
       system "rake blacklight:index:seed"
       system "rake blacklight_range_limit:seed"
+    end
+  end
+
+  desc "run just solr, useful for local tests"
+  task :solr, [:rails_sever_args] do |_t, args|
+    unless File.exist? EngineCart.destination
+      Rake::Task['engine_cart:generate'].invoke
+    end
+
+    SolrWrapper.wrap(port: '8983') do |solr|
+      solr.with_collection(name: 'blacklight-core', dir: File.join(File.expand_path(File.dirname(__FILE__)), "solr", "conf")) do
+        Rake::Task['test:seed'].invoke
+        # sleep forever, make us cntrl-c to get out
+        puts "solr is running on port 8983, ctrl-c to exit..."
+        system "while true; do sleep 10000; done"
+      end
     end
   end
 

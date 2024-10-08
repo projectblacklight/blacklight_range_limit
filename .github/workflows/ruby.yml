@@ -21,6 +21,13 @@ jobs:
       fail-fast: false
       matrix:
         include:
+          # BLACKLIGHT 8, can use esbuild(etc) or importmaps. Can use Rails 8 maybe at some point?
+          - rails_version: "7.2.1"
+            blacklight_version: "~> 8.0"
+            ruby: "3.3"
+            additional_name: "/ importmaps-rails, sprockets"
+
+
           # BLACKLIGHT 7, only test with esbuild
 
           - rails_version: "7.2.1"
@@ -41,7 +48,7 @@ jobs:
             additional_engine_cart_rails_options: "--javascript=esbuild"
             additional_name: "/ esbuild, sprockets"
 
-        # BLACKLIGHT 8, can use esbuild(etc) or importmaps. Can use Rails 8 maybe at some point?
+
 
 
 

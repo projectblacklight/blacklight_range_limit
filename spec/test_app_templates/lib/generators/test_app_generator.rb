@@ -12,6 +12,14 @@ class TestAppGenerator < Rails::Generators::Base
     end
   end
 
+  def run_jsbundling_bl8_fixup
+    # while it's named confusingly, the BL8 assets:propshaft generator has what we need
+    # for jsbundling, I think.
+    if File.exist?("package.json") && Blacklight::VERSION.split(".").first == "8"
+      generate "blacklight:assets:propshaft"
+    end
+  end
+
   def run_blacklight_generator
     say_status("warning", "GENERATING Blacklight", :yellow)
 

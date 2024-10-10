@@ -35,6 +35,11 @@ jobs:
             ruby: "3.3"
             additional_engine_cart_rails_options: "--javascript=esbuild"
             additional_name: "/ esbuild, sprockets"
+          - rails_version: "7.2.1"
+            blacklight_version: "~> 7.0"
+            ruby: "3.3"
+            additional_engine_cart_rails_options: "--javascript=esbuild --css=bootstrap  -a propshaft"
+            additional_name: "/ esbuild, propshaft"
 
           - rails_version: "7.1.4"
             blacklight_version: "~> 7.0"

@@ -82,5 +82,18 @@ module BlacklightRangeLimit
         EOS
       end
     end
+
+    def add_blacklight7_sass_esm_import
+      # only if we're using propshaft and not sprockets: We are using cssbundling-rails with
+      # sass, and we need to add a sass import from blacklight npm package -- that BL7 geenrator
+      # didn't know how to do.  (BL8 generator prob does!)
+      if !defined?(Sprockets) && defined?(Propshaft)
+        append_to_file 'app/assets/stylesheets/application.bootstrap.scss' do
+          <<~CONTENT
+            @import "blacklight-frontend/app/assets/stylesheets/blacklight/blacklight";
+          CONTENT
+        end
+      end
+    end
   end
 end

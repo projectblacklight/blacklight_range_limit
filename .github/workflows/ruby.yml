@@ -20,12 +20,37 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
+        # We have SEVERAL axes of difference we support.
+        #
+        #   * Blacklight: 7, 8, or 9
+        #   * Rails: 7 or 8
+        #   * sprockets or propshaft(with cssbundling-rails sass)
+        #   * importmap-rails or esbuild  (each with sprockets or importmaps)
+        #
+        # We should work with almost every combo of these (even though BL itself
+        # doesn't officially support every one), but we don't test with every one,
+        # that'd be too much. Plus BL can't *generate* every one even though it
+        # can be made to work with every one. We test with some good significant
+        # representative samples.
+
         include:
           # BLACKLIGHT 8, can use esbuild(etc) or importmaps. Can use Rails 8 maybe at some point?
+
           - rails_version: "7.2.1"
             blacklight_version: "~> 8.0"
             ruby: "3.3"
             additional_name: "/ importmaps-rails, sprockets"
+          - rails_version: "7.2.1"
+            # need branch until an 8.x release that includes #3357
+            blacklight_version: >
+              {"git": "https://github.com/projectblacklight/blacklight.git", "branch": "release-8.x"}
+            ruby: "3.3"
+            additional_engine_cart_rails_options: "--javascript=esbuild --css=bootstrap  -a propshaft"
+            additional_name: "/ esbuild, propshaft"
+
+            # the BL8 installer can't succesfully install BL8 with sprockets and esbuild,
+            # but if you set it up by hand it really should work here too. Note
+            # we are testing BL7 with esbuild and sprockets.
 
 
           # BLACKLIGHT 7, only test with esbuild

@@ -34,23 +34,31 @@ jobs:
         # representative samples.
 
         include:
-          # BLACKLIGHT 8, can use esbuild(etc) or importmaps. Can use Rails 8 maybe at some point?
+          # BLACKLIGHT 8, can use importmaps. Ideally would test with esbuild(etc) too, should
+          # work. Can test with Rails 8 too maybe at some point?
 
           - rails_version: "7.2.1"
             blacklight_version: "~> 8.0"
             ruby: "3.3"
             additional_name: "/ importmaps-rails, sprockets"
-          - rails_version: "7.2.1"
-            # need branch until an 8.x release that includes #3357
-            blacklight_version: >
-              {"git": "https://github.com/projectblacklight/blacklight.git", "branch": "release-8.x"}
-            ruby: "3.3"
-            additional_engine_cart_rails_options: "--javascript=esbuild --css=bootstrap  -a propshaft"
-            additional_name: "/ esbuild, propshaft"
 
-            # the BL8 installer can't succesfully install BL8 with sprockets and esbuild,
-            # but if you set it up by hand it really should work here too. Note
-            # we are testing BL7 with esbuild and sprockets.
+            # We can't currently test Blacklight 8 in a few situations we'd like to.
+            #
+            # 1. Can't test with Rails 8, because of current flappy test with Rails 8.
+            # https://github.com/projectblacklight/blacklight/pull/3361 -- as well
+            # as challenges mentioned below with using a git checkout of BL in tests.
+            #
+            # 2. Can't test with rails 7, esbuild, propshaft, and Rails 8, because unreleased
+            # fix in BL 8.x branch is required for that. it's not in a release, and we
+            # can't test pointing at JS in github becuase the package.json is not
+            # usable by yarn 1 from github, becuase it relies on a non-checked-in
+            # artifact created by `prepare` script, which yarn 1 does not run. :(
+            #
+            # 3. The BL8 installer itself can't currently succesfully install BL8 with
+            # Rails 7, sprockets, and esbuild -- although BL CAN work in that situation.
+            #
+            # I BELIEVE this code should actually work in those cases, but for
+            # testing challenges.
 
 
           # BLACKLIGHT 7, only test with esbuild

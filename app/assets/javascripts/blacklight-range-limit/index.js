@@ -106,10 +106,10 @@ export default class BlacklightRangeLimit {
   // Extract our bucket ranges from HTML DOM, and store in our instance variables
   extractBucketData(facetListDom = this.container.querySelector(".facet-values")) {
     this.rangeBuckets = Array.from(facetListDom.querySelectorAll("ul.facet-values li")).map( li => {
-      let from    = this.parseNum(li.querySelector("span.from")?.getAttribute("data-blrl-begin") || li.querySelector("span.single")?.getAttribute("data-blrl-single"));
-      let to      = this.parseNum(li.querySelector("span.to")?.getAttribute("data-blrl-end") || li.querySelector("span.single")?.getAttribute("data-blrl-single"));
-      let count   = this.parseNum(li.querySelector("span.facet-count,span.count").innerText);
-      let avg     = (count / (to - from + 1));
+      const from    = this.parseNum(li.querySelector("span.from")?.getAttribute("data-blrl-begin") || li.querySelector("span.single")?.getAttribute("data-blrl-single"));
+      const to      = this.parseNum(li.querySelector("span.to")?.getAttribute("data-blrl-end") || li.querySelector("span.single")?.getAttribute("data-blrl-single"));
+      const count   = this.parseNum(li.querySelector("span.facet-count,span.count").innerText);
+      const avg     = (count / (to - from + 1));
 
       return {
         from: from,
@@ -149,7 +149,7 @@ export default class BlacklightRangeLimit {
       return this.chartCanvasElement;
     }
 
-    let listDiv = this.container.querySelector(".facet-values");
+    const listDiv = this.container.querySelector(".facet-values");
 
     if (this.hideTextFacets) {
       // We keep the textual facet data as accessible screen-reader, add .sr-only to it though
@@ -163,7 +163,7 @@ export default class BlacklightRangeLimit {
     this.chartCanvasElement.setAttribute("aria-hidden", "true"); // textual facets sr-only are alternative
     this.chartCanvasElement.classList.add("blacklight-range-limit-chart");
     this.container.insertBefore(this.chartCanvasElement, listDiv);
-console.log("added canvas: " + this.chartCanvasElement)
+
     return this.chartCanvasElement;
   }
 

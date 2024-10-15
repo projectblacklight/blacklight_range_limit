@@ -54,10 +54,11 @@ jobs:
             # as challenges mentioned below with using a git checkout of BL in tests.
             #
             # 2. Can't test with rails 7, esbuild, propshaft-- because unreleased
-            # fix in BL 8.x branch is required for that. it's not in a release, and we
-            # can't test pointing at JS in github becuase the package.json is not
-            # usable by yarn 1 from github, becuase it relies on a non-checked-in
-            # artifact created by `prepare` script, which yarn 1 does not run. :(
+            # fix in BL 8.x branch is required for that. https://github.com/projectblacklight/blacklight/pull/3357
+            # It's not in a release, and we can't test pointing at JS in github
+            # becuase the package.json is not usable by yarn 1 from github, becuase
+            # it relies on a non-checked-in artifact created by `prepare` script,
+            # which yarn 1 does not run. :(
             #
             # 3. The BL8 installer itself can't currently succesfully install BL8 with
             # Rails 7, sprockets, and esbuild -- although BL CAN work in that situation.

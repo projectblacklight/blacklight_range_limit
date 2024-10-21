@@ -272,10 +272,3 @@ export default class BlacklightRangeLimit {
     resizeWatcher.observe(element);
   }
 }
-
-
-
-
-
-
-//window.rangeLimit = BlacklightRangeLimit.init();

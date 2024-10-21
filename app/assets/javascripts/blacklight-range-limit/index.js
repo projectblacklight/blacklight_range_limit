@@ -27,15 +27,17 @@ export default class BlacklightRangeLimit {
       // a basic vanilla JS onLoad handler as default, but pass in Blacklight.onLoad please
       onLoadHandler = (fn => document.readyState !== 'loading' ? fn() : document.addEventListener('DOMContentLoaded', fn)),
       callback = (range_limit_obj => {}),
-      containerQuerySelector = ".range_limit"
+      containerQuerySelector = ".limit_content.range_limit"
     } = args;
 
     // For turbolinks on_loads, we need to execute this on every page change, and
     // count on being passed Blacklight.onLoad to take care of it. We need to do
     // a new querySelector on every onLoad, because of turbo changes!
     onLoadHandler( () => {
-      const range_limit = new BlacklightRangeLimit(document.querySelector(containerQuerySelector));
-      callback(range_limit);
+      document.querySelectorAll(containerQuerySelector).forEach( container => {
+        const range_limit = new BlacklightRangeLimit(container);
+        callback(range_limit);
+      });
     });
   }
 

@@ -48,6 +48,8 @@ module BlacklightRangeLimit
       range_config: {
         num_segments: 10,
         chart_js: true,
+        chart_segment_border_color: 'rgb(54, 162, 235)',
+        chart_segment_bg_color: 'rgba(54, 162, 235, 0.5)',
         segments: true,
         assumed_boundaries: nil,
         maxlength: nil,

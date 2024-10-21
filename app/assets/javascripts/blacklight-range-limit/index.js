@@ -177,6 +177,9 @@ export default class BlacklightRangeLimit {
     const minX = this.lineDataPoints[0].x;
     const maxX = this.lineDataPoints[this.lineDataPoints.length - 1].x;
 
+    const segmentBorderColor = this.container.getAttribute("data-chart-segment-border-color") || 'rgb(54, 162, 235)';
+    const segmentBgColor = this.container.getAttribute("data-chart-segment-bg-color") || 'rgba(54, 162, 235, 0.5)';
+
     new Chart(chartCanvasElement.getContext("2d"), {
       type: 'line',
       options: {
@@ -245,11 +248,11 @@ export default class BlacklightRangeLimit {
             // hide segments tha just go y 0 to 0 along the bottom
             segment: {
               borderColor: ctx => {
-                return (ctx.p0.parsed.y == 0 && ctx.p1.parsed.y == 0) ? 'transparent' : 'rgb(54, 162, 235)';
+                return (ctx.p0.parsed.y == 0 && ctx.p1.parsed.y == 0) ? 'transparent' : segmentBorderColor;
               },
             },
             // Fill color under line:
-            backgroundColor: 'rgba(54, 162, 235, 0.5)'
+            backgroundColor: segmentBgColor
           }
         ]
       }

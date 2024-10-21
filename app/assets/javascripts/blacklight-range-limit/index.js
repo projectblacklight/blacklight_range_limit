@@ -132,12 +132,12 @@ export default class BlacklightRangeLimit {
       this.xTicks.push(bucket.from);
     });
 
-    // remove first and last tick, they are likely to be uneven unhelpful
-    if (this.xTicks.length > 4) {
+    // Try to even up end point ticks
+    if (this.xTicks.length > 3 && (this.xTicks[1] - this.xTicks[0]) != (this.xTicks[2] - this.xTicks[1])) {
       this.xTicks.shift();
-      this.xTicks.pop();
-    } else {
-      this.xTicks.push(this.xTicks[this.xTicks.length - 1] + 1);
+    }
+    if (this.xTicks[this.xTicks.length - 1] - this.xTicks[this.xTicks.length - 2] == 1) {
+      this.xTicks.push(this.rangeBuckets[this.rangeBuckets.length - 1].to + 1);
     }
 
     return undefined;
@@ -211,7 +211,7 @@ export default class BlacklightRangeLimit {
               max: maxX,
               autoSkip: true, // supposed to skip when can't fit, but does not always work
               maxRotation: 0,
-              maxTicksLimit: 4, // try a number that should fit
+              maxTicksLimit: 5, // try a number that should fit
               callback: (val, index) => {
                 // Don't format for locale, these are years, just display as years.
                 return val;

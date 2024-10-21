@@ -27,7 +27,7 @@ export default class BlacklightRangeLimit {
       // a basic vanilla JS onLoad handler as default, but pass in Blacklight.onLoad please
       onLoadHandler = (fn => document.readyState !== 'loading' ? fn() : document.addEventListener('DOMContentLoaded', fn)),
       callback = (range_limit_obj => {}),
-      container = document.querySelector(".range_limit .profile .distribution")
+      container = document.querySelector(".range_limit")
     } = args;
 
     // For turbolinks on_loads, we need to execute this on every page change, and
@@ -49,14 +49,16 @@ export default class BlacklightRangeLimit {
   // <canvas> DOM element
   chartCanvasElement;
 
-  // container should be div.distribution that includes the fetch ranges link, and will
-  // be replaced by the chart.
+  // container should be a `div.range-limit` that will have within it a `.profile .distribution`
+  // with textual distributions that will be turned into a histogram chart.
   constructor(container) {
     this.container = container;
 
     if (!this.container) {
       throw new Error("BlacklightRangeLimit missing argument")
     }
+
+    this.distributionElement = container.querySelector(".profile .distribution")
 
     const bounding = container.getBoundingClientRect();
     if (bounding.width > 0 || bounding.height > 0) {
@@ -77,12 +79,12 @@ export default class BlacklightRangeLimit {
   // created, it will skip creating them.
   setup() {
     // we replace this link in DOM after loaded, so if it's there, we need to load
-    const loadLink = this.container.querySelector("a.load_distribution");
+    const loadLink = this.distributionElement.querySelector("a.load_distribution");
 
     // What we'll do to put the chart on page whether or not we need to load --
     // when query has range limits, we don't need to load, it's already there.
     let handleOnPageData = () => {
-      if (this.container.classList.contains("chart_js")) {
+      if (this.distributionElement.classList.contains("chart_js")) {
         this.extractBucketData();
         this.chartCanvasElement = this.setupDomForChart();
         this.drawChart(this.chartCanvasElement);
@@ -94,7 +96,7 @@ export default class BlacklightRangeLimit {
         then( response => response.ok ? response.text() : Promise.reject(response)).
         then( responseBody => new DOMParser().parseFromString(responseBody, "text/html")).
         then( responseDom => responseDom.querySelector(".facet-values")).
-        then( element =>  this.container.innerHTML = element.outerHTML  ).
+        then( element =>  this.distributionElement.innerHTML = element.outerHTML  ).
         then( _ => { handleOnPageData()  }).
         catch( error => {
           console.error(error);
@@ -105,7 +107,7 @@ export default class BlacklightRangeLimit {
   }
 
   // Extract our bucket ranges from HTML DOM, and store in our instance variables
-  extractBucketData(facetListDom = this.container.querySelector(".facet-values")) {
+  extractBucketData(facetListDom = this.distributionElement.querySelector(".facet-values")) {
     this.rangeBuckets = Array.from(facetListDom.querySelectorAll("ul.facet-values li")).map( li => {
       const from    = this.parseNum(li.querySelector("span.from")?.getAttribute("data-blrl-begin") || li.querySelector("span.single")?.getAttribute("data-blrl-single"));
       const to      = this.parseNum(li.querySelector("span.to")?.getAttribute("data-blrl-end") || li.querySelector("span.single")?.getAttribute("data-blrl-single"));
@@ -150,7 +152,7 @@ export default class BlacklightRangeLimit {
       return this.chartCanvasElement;
     }
 
-    const listDiv = this.container.querySelector(".facet-values");
+    const listDiv = this.distributionElement.querySelector(".facet-values");
 
     if (this.hideTextFacets) {
       // We keep the textual facet data as accessible screen-reader, add .sr-only to it though
@@ -161,7 +163,7 @@ export default class BlacklightRangeLimit {
     this.chartCanvasElement = this.container.ownerDocument.createElement("canvas");
     this.chartCanvasElement.setAttribute("aria-hidden", "true"); // textual facets sr-only are alternative
     this.chartCanvasElement.classList.add("blacklight-range-limit-chart");
-    this.container.insertBefore(this.chartCanvasElement, listDiv);
+    this.distributionElement.insertBefore(this.chartCanvasElement, listDiv);
 
     return this.chartCanvasElement;
   }

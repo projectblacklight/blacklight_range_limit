@@ -48,7 +48,6 @@ module BlacklightRangeLimit
       range_config: {
         num_segments: 10,
         chart_js: true,
-        slider_js: true,
         segments: true,
         assumed_boundaries: nil,
         maxlength: nil,

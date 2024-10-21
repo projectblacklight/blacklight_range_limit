@@ -154,8 +154,6 @@ export default class BlacklightRangeLimit {
     if (this.hideTextFacets) {
       // We keep the textual facet data as accessible screen-reader, add .sr-only to it though
       listDiv.classList.add("sr-only");
-      // and hide the legend as to total range sr-only too
-      this.container.closest(".profile").querySelector("p.range").classList.add("sr-only");
     }
 
     // We create a <chart>, insert it into DOM before listDiv

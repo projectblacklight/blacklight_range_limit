@@ -18,14 +18,43 @@ module BlacklightRangeLimit
 
     # for vite-ruby you may set to eg 'app/frontend/entrypoints/application.js'
     class_option :js_file, type: :string, default: "app/javascript/application.js"
-    class_option :local_package_link, type: :boolean, default: nil
+    class_option :yarn_local_package, type: :boolean, default: nil
+    class_option :asset_delivery_mode, type: :string, default: nil
+
+    attr_reader :option_js_file, :option_yarn_local_package, :option_asset_delivery_mode
+
+    def set_default_options
+      @option_js_file = options[:js_file]
+
+      @option_asset_delivery_mode = options[:asset_delivery_mode]
+      if option_asset_delivery_mode.nil?
+        # prefererntially default to importmap
+        if defined?(Importmap) && root.join("config/importmap.rb").exist?
+          @option_asset_delivery_mode = "importmap-rails"
+        elsif root.join("package.json").exist?
+          @option_asset_delivery_mode = "yarn-package"
+        else
+          raise ArgumentError.new("Could not identify asset_delivery_mode, try supplying --asset-delivery-mode=[importmap-rails|yarn-package]")
+        end
+      end
+
+      unless option_asset_delivery_mode.in?(["importmap-rails", "yarn-package"])
+        raise ArgumentError.new("Illegal --asset-delivery-mode '#{option_asset_delivery_mode}', must be importmap-rails or yarn-package")
+      end
+
+      @option_yarn_local_package = options[:yarn_local_package]
+      if option_yarn_local_package.nil?
+        # default guess by CI in ENV or app name that we use for test apps
+        @option_yarn_local_package = ENV['CI'].present? || Rails.application.class.name == "Internal::Application"
+      end
+    end
 
     def add_to_package_json
       # for apps using jsbundling_rails, vite-ruby, etc.
-      if root.join("package.json").exist?
+      if option_asset_delivery_mode == "yarn-package"
         say_status "info", "Adding blacklight-range-limit to package.json", :blue
 
-        if link_to_local_npm_package?
+        if option_yarn_local_package
           run "yarn add blacklight-range-limit@file:#{BlacklightRangeLimit::Engine.root}", abort_on_failure: true
         else
           # are we actually going to release one-to-one? Maybe just matching major
@@ -38,7 +67,7 @@ module BlacklightRangeLimit
     end
 
     def dependencies_to_importmap_rb
-     if root.join("config/importmap.rb").exist?
+     if option_asset_delivery_mode == "importmap-rails"
         # No need to pin "blacklight-range-limit", importmaps can find it when imported
         # already, because our engine put it in importmap.paths
         append_to_file("config/importmap.rb") do
@@ -60,8 +89,8 @@ module BlacklightRangeLimit
 
 
     def import_and_start_in_application_js
-      if root.join(options[:js_file]).exist?
-        js_file_path = root.join(options[:js_file]).to_s
+      if root.join(option_js_file).exist?
+        js_file_path = root.join(option_js_file).to_s
 
         append_to_file js_file_path do
           <<~EOS
@@ -71,20 +100,11 @@ module BlacklightRangeLimit
           EOS
         end
       else
-        say_status(:warn, "No file detected at #{options[:js_file]} so JS setup not added", :yellow)
+        say_status(:warn, "No file detected at #{option_js_file} so JS setup not added", :yellow)
       end
     end
 
     private
-
-    def link_to_local_npm_package?
-      if !options[:local_package_link].nil?
-        # they chose it explicitly
-        return options[:local_package_link]
-      end
-      # default guess by CI in ENV or app name that we use for test apps
-      ENV['CI'].present? || Rails.application.class.name == "Internal::Application"
-    end
 
     def root
       @root ||= Pathname(destination_root)

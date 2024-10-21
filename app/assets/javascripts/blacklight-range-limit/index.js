@@ -25,7 +25,7 @@ export default class BlacklightRangeLimit {
     // args and defaults
     const {
       // a basic vanilla JS onLoad handler as default, but pass in Blacklight.onLoad please
-      onLoadHandler = (() => {}),
+      onLoadHandler = (fn => document.readyState !== 'loading' ? fn() : document.addEventListener('DOMContentLoaded', fn)),
       callback = (range_limit_obj => {}),
       distributionContainerSelector = ".range_limit .profile .distribution"
     } = args;

@@ -2,8 +2,6 @@ require 'blacklight'
 require 'blacklight_range_limit'
 require 'rails'
 
-require 'debug'
-
 module BlacklightRangeLimit
   # delegate for easier configability
   def self.config

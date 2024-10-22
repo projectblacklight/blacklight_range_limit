@@ -57,6 +57,14 @@ For import map pins, note:
 * The standard "locally vendored" importmap-rails setup is not working with chart.js at the time of this writing, so you need to pin to CDN as above.
 * versions in importmap pins will have to be updated manually if you want to upgrade.
 
+### Unreleased version?
+
+If you'd like to use an unrelased version from git, just add that to your Gemfile in the usual way.
+
+importmap-rails use should then Just Work.
+
+package.json-based use will additionally need to point to the matching unreleaesd version in git in package.json, eg `yarn add blacklight-range-limit@git+https://github.com/projectblacklight/blacklight_range_limit.git#branch_name_or_commit_sha`. Still simple.
+
 
 # Facet Configuration
 
@@ -116,6 +124,21 @@ config.add_facet_field 'pub_date', label: 'Publication Year',
 We use [chart.js](https://www.chartjs.org/) to draw the chart. It has one dependency of it's own. These need to be either pinned with importmap-rails, or used via the chart.js npm package and an npm-package-based bundler.
 
 There is **no CSS** needed.
+
+## Upgrading from blacklight-range-limit 8.x to 9.x
+
+All back-end configuration should be backwards compatible.
+
+You will need to change how you load JS. (There is no longer any blacklight_range_limit CSS to load).
+
+You will need to be using either importmap-rails or a package.json-based javascript bunder (jsbundling-rails or vite) to deliver JS to your app. Legacy sprockets-only is not supported.
+
+Then, remove ALL existing (sprockets) references to blacklight_range_limit in your JS or CSS pipelines.
+
+And run `rails g blacklight_range_limit:assets` -- or manually set up the JS for unusual setups (such as vite-rails), see above at <a href="#installation">Installation</a>.
+
+For an unreleased version from git -- the installer is not presently capable of installing
+that, but simply add the unreleased version of the gem to your Gemfile.
 
 
 # Tests

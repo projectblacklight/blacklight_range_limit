@@ -50,8 +50,27 @@ RSpec.describe BlacklightRangeLimit::RangeFacetComponent, type: :component do
       .and have_selector('div.collapse')
   end
 
+  # This is JS api
   it 'renders a placeholder profile area' do
     expect(rendered).to have_selector('div.profile', text: '')
+  end
+
+  context 'with min/max' do
+    let(:facet_field_params) do
+      {
+        range_queries: [],
+        min: 100,
+        max: 300
+      }
+    end
+
+    # This is JS api
+    it "renders a link to fetch distribution info" do
+      # need request_url for routing of links generated
+      with_request_url '/catalog' do
+        expect(rendered).to have_selector("a.load_distribution[href]")
+      end
+    end
   end
 
   context 'with range data' do

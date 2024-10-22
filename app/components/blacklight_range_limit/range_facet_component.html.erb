@@ -36,8 +36,6 @@
 
         <%= render BlacklightRangeLimit::RangeFormComponent.new(facet_field: @facet_field, classes: @classes) %>
 
-        <%= with_more_link(key: @facet_field.key, label: @facet_field.label) unless @facet_field.in_modal? %>
-
         <% if @facet_field.missing_facet_item && !request.xhr? %>
           <%= render BlacklightRangeLimit::RangeSegmentsComponent.new(facet_field: @facet_field, facet_items: [@facet_field.missing_facet_item], classes: ['missing', 'subsection']) %>
         <% end %>

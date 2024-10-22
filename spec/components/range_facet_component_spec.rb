@@ -79,18 +79,6 @@ RSpec.describe BlacklightRangeLimit::RangeFacetComponent, type: :component do
       .and have_field('range[key][end]')
   end
 
-  it 'renders a link to the modal' do
-    expect(rendered).to have_link 'View larger', href: '/range/key'
-  end
-
-  context 'within a modal' do
-    let(:facet_field_params) { { in_modal?: true } }
-
-    it 'does not link to the modal' do
-      expect(rendered).not_to have_link 'View larger'
-    end
-  end
-
   it 'does not render the missing link if there are no matching documents' do
     expect(rendered).not_to have_link '[Missing]'
   end

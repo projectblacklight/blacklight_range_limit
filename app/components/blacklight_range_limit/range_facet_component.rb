@@ -2,14 +2,6 @@
 
 module BlacklightRangeLimit
   class RangeFacetComponent < Blacklight::Component
-    renders_one :more_link, ->(key:, label:) do
-      tag.div class: 'more_facets' do
-        link_to t('blacklight.range_limit.view_larger', field_name: label),
-          search_facet_path(id: key),
-          data: { blacklight_modal: 'trigger' }
-      end
-    end
-
     delegate :search_action_path, :search_facet_path, to: :helpers
 
     def initialize(facet_field:, layout: nil, classes: BlacklightRangeLimit.classes)

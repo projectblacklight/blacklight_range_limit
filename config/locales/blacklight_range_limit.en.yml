@@ -11,3 +11,4 @@ en:
       results_range_html: 'Current results range from <span class="min">%{min}</span> to <span class="max">%{max}</span>'
       single_html: '<span class="single" data-blrl-single="%{begin_value}">%{begin}</span>'
       range_html: '<span class="from" data-blrl-begin="%{begin_value}">%{begin}</span> to <span class="to" data-blrl-end="%{end_value}">%{end}</span>'
+      loading_html: "Loading..."

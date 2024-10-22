@@ -95,6 +95,8 @@ export default class BlacklightRangeLimit {
     }
 
     if (loadLink) {
+      loadLink.innerHTML = loadLink.getAttribute("data-loading-message-html") || "Loading...";
+
       fetch(loadLink["href"]).
         then( response => response.ok ? response.text() : Promise.reject(response)).
         then( responseBody => new DOMParser().parseFromString(responseBody, "text/html")).

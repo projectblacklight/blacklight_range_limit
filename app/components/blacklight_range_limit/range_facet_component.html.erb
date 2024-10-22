@@ -27,7 +27,7 @@
                 <% if @facet_field.range_queries.any? %>
                   <%= render BlacklightRangeLimit::RangeSegmentsComponent.new(facet_field: @facet_field) %>
                 <% else %>
-                  <%= link_to(t('blacklight.range_limit.view_distribution'), range_limit_url(range_start: min, range_end: max), class: "load_distribution") %>
+                  <%= link_to(t('blacklight.range_limit.view_distribution'), range_limit_url(range_start: min, range_end: max), class: "load_distribution", "data-loading-message-html": t('blacklight.range_limit.loading_html')) %>
                 <% end %>
               </div>
             <% end %>

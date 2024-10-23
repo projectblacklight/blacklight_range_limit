@@ -15,7 +15,7 @@
       <!-- no results profile if missing is selected -->
       <% unless @facet_field.missing_selected? %>
         <!-- this has to be on page if you want calculated facets to show up, JS sniffs it. -->
-        <div class="profile">
+        <div class="profile mb-3">
           <% if (min = @facet_field.min) &&
                 (max = @facet_field.max) %>
 
@@ -37,7 +37,7 @@
         <%= render BlacklightRangeLimit::RangeFormComponent.new(facet_field: @facet_field, classes: @classes) %>
 
         <% if @facet_field.missing_facet_item && !request.xhr? && range_config[:segments] != false %>
-          <%= render BlacklightRangeLimit::RangeSegmentsComponent.new(facet_field: @facet_field, facet_items: [@facet_field.missing_facet_item], classes: ['missing', 'subsection']) %>
+          <%= render BlacklightRangeLimit::RangeSegmentsComponent.new(facet_field: @facet_field, facet_items: [@facet_field.missing_facet_item], classes: ['missing', 'subsection', 'mt-3']) %>
         <% end %>
       <% end %>
     </div>

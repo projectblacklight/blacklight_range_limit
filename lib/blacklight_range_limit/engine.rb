@@ -52,6 +52,7 @@ module BlacklightRangeLimit
     initializer "blacklight_range_limit.importmap", before: "importmap" do |app|
       if BlacklightRangeLimit.config.using_importmaps
         app.config.importmap.paths << Engine.root.join("config/importmap.rb")
+        app.config.importmap.cache_sweepers << Engine.root.join("app/assets/javascripts/blacklight-range-limit")
       end
     end
 

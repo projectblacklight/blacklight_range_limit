@@ -161,7 +161,8 @@ export default class BlacklightRangeLimit {
 
     if (this.hideTextFacets) {
       // We keep the textual facet data as accessible screen-reader, add .sr-only to it though
-      listDiv.classList.add("sr-only");
+      listDiv.classList.add("sr-only")
+      listDiv.classList.add("visually-hidden");
     }
 
     // We create a <chart>, insert it into DOM before listDiv

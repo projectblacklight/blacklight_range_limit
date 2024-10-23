@@ -41,7 +41,7 @@ export default class BlacklightRangeLimit {
     });
   }
 
-  hideTextFacets = true;
+  chartReplacesText = true;
 
   rangeBuckets = []; // array of objects with bucket range info
 
@@ -70,6 +70,10 @@ export default class BlacklightRangeLimit {
       // Delay setup until someone clicks to open the facet, mainly to avoid making
       // extra http request to server if it will never be needed!
       this.whenBecomesVisible(container, target => this.setup());
+    }
+
+    if (this.container.getAttribute("data-chart-replaces-text") == "false") {
+      this.chartReplacesText = false;
     }
 
   }
@@ -159,7 +163,7 @@ export default class BlacklightRangeLimit {
 
     const listDiv = this.distributionElement.querySelector(".facet-values");
 
-    if (this.hideTextFacets) {
+    if (this.chartReplacesText) {
       // We keep the textual facet data as accessible screen-reader, add .sr-only to it though
       listDiv.classList.add("sr-only")
       listDiv.classList.add("visually-hidden");

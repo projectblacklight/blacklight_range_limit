@@ -97,11 +97,12 @@ config.add_facet_field 'pub_date', label: 'Publication Year',
             range_config: {
                num_segments: 6,
                assumed_boundaries: [1100, Time.now.year + 2],
-               segments: false,
-               maxlength: 4,
-               chart_js: false,
+               segments: true,
+               chart_js: true,
+               chart_replaces_text: true,
                chart_segment_border_color: "rgba(0,0,0, 0.5)"
                chart_segment_bg_color: "#ccddcc"
+               maxlength: 4
             }A
         )
 ```
@@ -112,12 +113,14 @@ config.add_facet_field 'pub_date', label: 'Publication Year',
   * Default null. For a result set that has not yet been limited, instead of taking boundaries from results and making a second AJAX request to fetch segments, just assume these given boundaries. If you'd like to avoid this second AJAX Solr call, you can set :assumed_boundaries to a two-element array of integers instead, and the assumed boundaries will always be used. Note this is live ruby code, you can put calculations in there like Time.now.year + 2.
 * **:segments** :
   * Default true. If set to false, then distribution segment facets will not be loaded at all,    you'll just get input boxes.
-* **:maxlength** :
-  * Default 4. Changes the value of the `maxlength` attribute of the text boxes, which determines how many digits can be entered.
 * **chart_js**:
   * Default true. If false, the Javascript chart is not loaded, you will still get textual facets for buckets.
+* **chart_replaces_text**: Default true. If false, when the chart is loaded purely textual facets will still remain on-screen too.
 * **chart_segment_border_color** / **chart_segment_bg_color** :
   * Set colors for the edge and fill of the segment bars in the histogram.
+* **:maxlength** :
+  * Default 4. Changes the value of the `maxlength` attribute of the text boxes, which determines how many digits can be entered.
+
 
 ## Javascript dependencies
 

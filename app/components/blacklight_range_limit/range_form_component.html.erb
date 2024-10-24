@@ -4,14 +4,13 @@
   <div class="range-limit-input-group">
     <div class="d-flex justify-content-between align-items-end">
       <div class="d-flex flex-column">
-        <%= label_tag("range[#{@facet_field.key}][begin]", t("blacklight.range_limit.range_begin_short"), class: 'text-muted small') %>
-
-        <%= render_range_input(:begin) %>
+        <%= label_tag(begin_input_name, t("blacklight.range_limit.range_begin_short"), class: 'text-muted small') %>
+        <%= number_field_tag(begin_input_name, begin_value_default, class: "form-control form-control-sm text-center range_begin mr-1 me-1") %>
       </div>
 
       <div class="d-flex flex-column">
-        <%= label_tag("range[#{@facet_field.key}][end]", t("blacklight.range_limit.range_end_short"), class: 'text-muted small') %>
-        <%= render_range_input(:end) %>
+        <%= label_tag(end_input_name, t("blacklight.range_limit.range_end_short"), class: 'text-muted small') %>
+        <%= number_field_tag(end_input_name, end_value_default, class: "form-control form-control-sm text-center range_begin ml-1 ms-1") %>
       </div>
     </div>
     <div class="d-flex justify-content-end mt-2">

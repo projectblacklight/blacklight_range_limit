@@ -9,21 +9,20 @@ module BlacklightRangeLimit
       @classes = classes
     end
 
-    # type is 'begin' or 'end'
-    def render_range_input(type)
-      type = type.to_s
+    def begin_value_default
+      @facet_field.selected_range.is_a?(Range) ? @facet_field.selected_range.first : @facet_field.min
+    end
 
-      if type == "begin"
-        default = @facet_field.selected_range.is_a?(Range) ? @facet_field.selected_range.first : @facet_field.min
-        extra_class = "mr-1 me-1" # bootstrap 4 and 5
-      else
-        default = @facet_field.selected_range.is_a?(Range) ? @facet_field.selected_range.last : @facet_field.max
-        extra_class = "ml-1 ms-1"
-      end
+    def end_value_default
+      @facet_field.selected_range.is_a?(Range) ? @facet_field.selected_range.last : @facet_field.max
+    end
 
-      html = number_field_tag("range[#{@facet_field.key}][#{type}]", default, class: "form-control form-control-sm text-center range_#{type} #{extra_class}")
+    def begin_input_name
+      "range[#{@facet_field.key}][begin]"
+    end
 
-      html
+    def end_input_name
+      "range[#{@facet_field.key}][end]"
     end
 
     private

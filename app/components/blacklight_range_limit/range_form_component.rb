@@ -9,14 +9,6 @@ module BlacklightRangeLimit
       @classes = classes
     end
 
-    def begin_label
-      range_config[:input_label_range_begin] || t("blacklight.range_limit.range_begin", field_label: @facet_field.label)
-    end
-
-    def end_label
-      range_config[:input_label_range_end] || t("blacklight.range_limit.range_end", field_label: @facet_field.label)
-    end
-
     # type is 'begin' or 'end'
     def render_range_input(type)
       type = type.to_s

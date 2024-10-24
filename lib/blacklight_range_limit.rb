@@ -52,9 +52,7 @@ module BlacklightRangeLimit
         chart_segment_bg_color: 'rgba(54, 162, 235, 0.5)',
         segments: true,
         chart_replaces_text: true,
-        assumed_boundaries: nil,
-        input_label_range_begin: nil,
-        input_label_range_end: nil
+        assumed_boundaries: nil
       },
       filter_class: BlacklightRangeLimit::FilterField,
       presenter: BlacklightRangeLimit::FacetFieldPresenter,

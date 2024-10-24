@@ -2,7 +2,9 @@ en:
   blacklight:
     range_limit:
       range_begin: "%{field_label} range begin"
+      range_begin_short: "Begin"
       range_end: "%{field_label} range end"
+      range_end_short: "End"
       submit_limit: 'Apply'
       remove_limit: 'remove'
       missing: 'Unknown'

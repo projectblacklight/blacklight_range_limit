@@ -6,8 +6,8 @@ describe "Blacklight Range Limit" do
     visit search_catalog_path
     expect(page).to have_selector 'input.range_begin'
     expect(page).to have_selector 'input.range_end'
-    expect(page).to have_selector 'label.sr-only[for="range_pub_date_si_begin"]', :text => 'Publication Date Sort range begin'
-    expect(page).to have_selector 'label.sr-only[for="range_pub_date_si_end"]', :text => 'Publication Date Sort range end'
+    expect(page).to have_selector 'label[for="range_pub_date_si_begin"]', :text => I18n.t("blacklight.range_limit.range_begin_short")
+    expect(page).to have_selector 'label[for="range_pub_date_si_end"]', :text => I18n.t("blacklight.range_limit.range_end_short")
     expect(page).to have_button 'Apply'
   end
 
@@ -81,8 +81,9 @@ describe "Blacklight Range Limit with configured input labels" do
 
   it "should show the range limit facet with configured labels" do
     visit '/catalog'
-    expect(page).to have_selector 'label.sr-only[for="range_pub_date_si_begin"]', :text => 'from publication date'
-    expect(page).to have_selector 'label.sr-only[for="range_pub_date_si_end"]', :text => 'to publication date'
+    expect(page).to have_selector 'label[for="range_pub_date_si_begin"]', :text => I18n.t("blacklight.range_limit.range_begin_short")
+    expect(page).to have_selector 'label[for="range_pub_date_si_end"]', :text => I18n.t("blacklight.range_limit.range_end_short")
+
     expect(page).to have_selector 'input#range_pub_date_si_begin'
     expect(page).to have_selector 'input#range_pub_date_si_end'
   end

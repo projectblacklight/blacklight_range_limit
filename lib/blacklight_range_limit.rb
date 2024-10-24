@@ -20,7 +20,7 @@ module BlacklightRangeLimit
 
   self.classes = {
     form: 'range_limit_form subsection form-inline',
-    submit: 'submit btn btn-secondary'
+    submit: 'submit btn btn-sm btn-secondary'
   }
 
   # Add element to array only if it's not already there

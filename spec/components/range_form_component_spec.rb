@@ -62,13 +62,13 @@ RSpec.describe BlacklightRangeLimit::RangeFormComponent, type: :component do
   context 'with range data' do
     let(:selected_range) { (100..300) }
     let(:search_params) do
-      { 
+      {
         another_field: 'another_value',
         range: {
           another_range: { begin: 128, end: 1024 },
           key: { begin: selected_range.first, end: selected_range.last }
         }
-      }      
+      }
     end
 
     it 'renders a form for the selected range' do

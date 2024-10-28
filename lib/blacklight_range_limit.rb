@@ -1,9 +1,5 @@
 # BlacklightRangeLimit
-require 'deprecation'
-
 module BlacklightRangeLimit
-  extend Deprecation
-
   require 'blacklight_range_limit/facet_field_config_override'
   require 'blacklight_range_limit/range_limit_builder'
   require 'blacklight_range_limit/controller_override'

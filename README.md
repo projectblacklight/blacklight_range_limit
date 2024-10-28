@@ -100,8 +100,9 @@ config.add_facet_field 'pub_date', label: 'Publication Year',
                segments: true,
                chart_js: true,
                chart_replaces_text: true,
-               chart_segment_border_color: "rgba(0,0,0, 0.5)"
-               chart_segment_bg_color: "#ccddcc"
+               chart_segment_border_color: "rgba(0,0,0, 0.5)",
+               chart_segment_bg_color: "#ccddcc",
+               chart_aspect_ratio: "2",
                maxlength: 4
             }A
         )
@@ -118,6 +119,7 @@ config.add_facet_field 'pub_date', label: 'Publication Year',
 * **chart_replaces_text**: Default true. If false, when the chart is loaded purely textual facets will still remain on-screen too.
 * **chart_segment_border_color** / **chart_segment_bg_color** :
   * Set colors for the edge and fill of the segment bars in the histogram.
+* chart_aspect_ratio: for chart.js, will fill available width then this determines size of chart. defaults to 2
 * **:maxlength** :
   * Default 4. Changes the value of the `maxlength` attribute of the text boxes, which determines how many digits can be entered.
 

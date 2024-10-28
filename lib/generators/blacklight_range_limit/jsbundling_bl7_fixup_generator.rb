@@ -18,13 +18,12 @@ module BlacklightRangeLimit
     end
 
     def add_blacklight_dependencies_to_package_json
-      # there is no blacklight 7.39.0, maybe a mistake, makes it hard for us to
-      # add the right one!
-      bl_frontend_version = (Blacklight::VERSION == "7.39.0" ? "7.38.0" : Blacklight::VERSION)
+      # there is no blacklight 7.39.0 or 7.40.0 makes it hard for us to know what version to
+      # generate here, I guess we'll try generating an open range like "^7.0.0"?
 
       # while blacklight7 may work with bootstrap 5, we'll test with 4 for now, and popper 1.x that goes with it
       run %{yarn add --non-interactive
-              blacklight-frontend@#{bl_frontend_version}
+              blacklight-frontend@^#{Blacklight::VERSION.split(".").first}.0.0
               bootstrap@^4.1.0
               popper.js@^1.16.0}.squish, abort_on_failure: true
     end

@@ -59,7 +59,7 @@ module BlacklightRangeLimit
 
       @presenter = (@facet.presenter || BlacklightRangeLimit::FacetFieldPresenter).new(@facet, display_facet, view_context)
 
-      render 'blacklight_range_limit/range_segments', locals: { facet_field: @presenter }, layout: !request.xhr?
+      render BlacklightRangeLimit::RangeSegmentsComponent.new(facet_field: @presenter), layout: !request.xhr?
     end
 
     def range_limit_panel

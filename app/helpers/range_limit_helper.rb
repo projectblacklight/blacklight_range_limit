@@ -13,7 +13,7 @@ module RangeLimitHelper
 
   # type is 'begin' or 'end'
   def render_range_input(solr_field, type, input_label = nil, maxlength=4)
-    range_form_component(solr_field).render_range_input(type, input_label, maxlength)
+    range_form_component(solr_field).render_range_input(type, input_label)
   end
   deprecation_deprecate :render_range_input
 

@@ -54,7 +54,6 @@ module BlacklightRangeLimit
         segments: true,
         chart_replaces_text: true,
         assumed_boundaries: nil,
-        maxlength: nil,
         input_label_range_begin: nil,
         input_label_range_end: nil
       },

@@ -34,12 +34,7 @@ module BlacklightRangeLimit
     # A method that is meant to be overridden downstream to format how a range
     # label might be displayed to a user. By default it just returns the value.
     def format_range_display_value(value)
-      if view_context.method(:format_range_display_value).owner == RangeLimitHelper
-        value
-      else
-        Deprecation.warn(BlacklightRangeLimit, 'Helper method #format_range_display_value has been overridden; implement a custom FacetItemPresenter instead')
-        view_context.format_range_display_value(value, key)
-      end
+      value
     end
   end
 end

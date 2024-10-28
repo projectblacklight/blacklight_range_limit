@@ -4,7 +4,6 @@
 require 'blacklight_range_limit/segment_calculation'
 module BlacklightRangeLimit
   module ControllerOverride
-    extend Deprecation
     extend ActiveSupport::Concern
 
     RANGE_LIMIT_FIELDS = [:range_end, :range_field, :range_start].freeze
@@ -42,11 +41,6 @@ module BlacklightRangeLimit
       @presenter = (@facet.presenter || BlacklightRangeLimit::FacetFieldPresenter).new(@facet, display_facet, view_context)
 
       render BlacklightRangeLimit::RangeSegmentsComponent.new(facet_field: @presenter), layout: !request.xhr?
-    end
-
-    def range_limit_panel
-      Deprecation.warn(BlacklightRangeLimit::ControllerOverride, 'range_limit_panel is deprecated; use the normal facet modal route instead')
-      facet
     end
 
     class_methods do

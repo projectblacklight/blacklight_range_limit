@@ -34,14 +34,24 @@ jobs:
         # representative samples.
 
         include:
-          # BLACKLIGHT 8, can use importmaps. Ideally would test with esbuild(etc) too, should
-          # work. Can test with Rails 8 too maybe at some point?
+          # BLACKLIGHT EDGE, can test with Rails 8 beta, importmap and esbuild
+          #
 
           - rails_version: "8.0.0.beta1"
             blacklight_version: '{ "git": "https://github.com/projectblacklight/blacklight.git" }'
             ruby: "3.3"
             additional_name: "/ importmap-rails"
             additional_engine_cart_rails_options: "--css=bootstrap"
+          - rails_version: "8.0.0.beta1"
+            blacklight_version: '{ "git": "https://github.com/projectblacklight/blacklight.git" }'
+            ruby: "3.3"
+            additional_name: "/ esbuild"
+            additional_engine_cart_rails_options: "--css=bootstrap --javascript=esbuild"
+
+
+
+          # BLACKLIGHT 8, can use importmaps. Ideally would test with esbuild(etc) too, should
+          # work.
 
           - rails_version: "7.2.1"
             blacklight_version: "~> 8.0"
@@ -66,6 +76,7 @@ jobs:
             # * Can't test with unreleaed Blacklight main and esbuild because the blacklight-frontend
             #   npm package doens't work from git checkout.  So currently can't test with Rails8
             #   and esbuild.
+
 
 
           # BLACKLIGHT 7, only test with esbuild, not sure if it supports importmaps, it won't generate it

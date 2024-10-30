@@ -20,14 +20,6 @@ task ci: ['engine_cart:generate'] do
   SolrWrapper.wrap do |solr|
     solr.with_collection(name: 'blacklight-core', dir: File.join(File.expand_path(File.dirname(__FILE__)), "solr", "conf")) do
       Rake::Task["test:seed"].invoke
-
-      # let's try to add this as an actual build dependency of our own spec instead?
-      # within_test_app do
-      #   # for jsbundling-rails, we need to call this hook within test app to get JS built properly.
-      #   # With normal app rspec this would be a dependency of 'spec' rake task already
-      #   system "bin/rails spec:prepare"
-      # end
-
       Rake::Task['spec'].invoke
     end
   end

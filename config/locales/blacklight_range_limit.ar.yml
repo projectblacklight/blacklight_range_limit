@@ -1,13 +1,15 @@
+---
 ar:
   blacklight:
     range_limit:
+      loading_html: تحميل
+      missing: غير معروف
       range_begin: "%{field_label} بداية المدة"
       range_end: "%{field_label} نهاية المدة"
-      submit_limit: 'تطبيق'
-      remove_limit: 'حذف'
-      missing: 'غير معروف'
-      view_distribution: 'عرض التوزيع'
-      view_larger: 'عرض بحجم أكبر »'
-      results_range_html: 'تمتد النتائج الحالية من <span class="min">%{min}</span> إلى<span class="max">%{max}</span>'
-      single_html: '<span class="single" data-blrl-single="%{begin_value}">%{begin}</span>'
-      range_html: '<span class="from" data-blrl-begin="%{begin_value}">%{begin}</span> الى <span class="to" data-blrl-end="%{end_value}">%{end}</span>'
+      range_html: <span class="from" data-blrl-begin="%{begin_value}">%{begin}</span> الى <span class="to" data-blrl-end="%{end_value}">%{end}</span>
+      remove_limit: حذف
+      results_range_html: تمتد النتائج الحالية من <span class="min">%{min}</span> إلى<span class="max">%{max}</span>
+      single_html: <span class="single" data-blrl-single="%{begin_value}">%{begin}</span>
+      submit_limit: تطبيق
+      view_distribution: عرض التوزيع
+      view_larger: عرض بحجم أكبر »

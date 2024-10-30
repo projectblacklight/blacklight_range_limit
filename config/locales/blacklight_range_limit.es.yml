@@ -1,0 +1,15 @@
+---
+es:
+  blacklight:
+    range_limit:
+      loading_html: Cargando...
+      missing: Desconocido
+      range_begin: Rango %{field_label} inicio
+      range_end: Fin del rango %{field_label}
+      range_html: <span class="from" data-blrl-begin="%{begin_value}">%{begin}</span> a <span class="to" data-blrl-end="%{end_value}">%{end}</span>
+      remove_limit: eliminar
+      results_range_html: Los resultados actuales varían de <span class="min">%{min}</span> a <span class="max">%{max}</span>
+      single_html: <span class="single" data-blrl-single="%{begin_value}">%{begin}</span>
+      submit_limit: Aplicar
+      view_distribution: Ver distribución
+      view_larger: Ver más grande »

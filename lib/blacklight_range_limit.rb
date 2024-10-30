@@ -50,7 +50,6 @@ module BlacklightRangeLimit
         chart_js: true,
         chart_segment_border_color: 'rgb(54, 162, 235)',
         chart_segment_bg_color: 'rgba(54, 162, 235, 0.5)',
-        chart_aspect_ratio: 2,
         segments: true,
         chart_replaces_text: true,
         assumed_boundaries: nil,

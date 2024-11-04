@@ -26,7 +26,9 @@ describe "Blacklight Range Limit" do
     click_link '2000 to 2008'
 
     within '.blacklight-pub_date_si' do
-      expect(page).to have_content "2000 to 2008✖[remove]12"
+      # depending on version of chrome driver, the 'x' may or may not show up
+      # here before [remove]
+      expect(page).to have_content /2000 to 2008.\[remove\]12/
     end
 
     within '.constraints-container'  do
@@ -72,18 +74,17 @@ describe "Blacklight Range Limit with configured input labels" do
       config.add_facet_field 'pub_date_si', **CatalogController.default_range_config, range_config: {
         input_label_range_begin: 'from publication date',
         input_label_range_end: 'to publication date',
-        maxlength: 6
       }
       config.default_solr_params[:'facet.field'] = config.facet_fields.keys
     end
   end
 
-  it "should show the range limit facet with configured labels and maxlength" do
+  it "should show the range limit facet with configured labels" do
     visit '/catalog'
     expect(page).to have_selector 'label.sr-only[for="range_pub_date_si_begin"]', :text => 'from publication date'
     expect(page).to have_selector 'label.sr-only[for="range_pub_date_si_end"]', :text => 'to publication date'
-    expect(page).to have_selector 'input#range_pub_date_si_begin[maxlength="6"]'
-    expect(page).to have_selector 'input#range_pub_date_si_end[maxlength="6"]'
+    expect(page).to have_selector 'input#range_pub_date_si_begin'
+    expect(page).to have_selector 'input#range_pub_date_si_end'
   end
 
 end

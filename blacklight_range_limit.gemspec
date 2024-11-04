@@ -24,6 +24,7 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'rspec', '~> 3.0'
   s.add_development_dependency 'rspec-rails'
   s.add_development_dependency 'capybara', '~> 3'
+  s.add_development_dependency 'capybara-screenshot', "~> 1.0"
   s.add_development_dependency 'sqlite3'
   s.add_development_dependency 'launchy'
   s.add_development_dependency 'solr_wrapper'

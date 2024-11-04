@@ -16,23 +16,104 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-    name: test (ruby ${{ matrix.ruby }} / rails ${{ matrix.rails_version }})
+    name: test (${{ matrix.blacklight_version && format('bl {0} / ', matrix.blacklight_version) }}rails ${{ matrix.rails_version }} / rb ${{ matrix.ruby }} ${{ matrix.additional_name }})
     strategy:
+      fail-fast: false
       matrix:
-        ruby: ["3.3"]
-        rails_version: ["7.2.1"]
-        additional_engine_cart_rails_options: [""]
+        # We have SEVERAL axes of difference we support.
+        #
+        #   * Blacklight: 7, 8, or 9
+        #   * Rails: 7 or 8
+        #   * sprockets or propshaft(with cssbundling-rails sass)
+        #   * importmap-rails or esbuild  (each with sprockets or importmaps)
+        #
+        # We should work with almost every combo of these (even though BL itself
+        # doesn't officially support every one), but we don't test with every one,
+        # that'd be too much. Plus BL can't *generate* every one even though it
+        # can be made to work with every one. We test with some good significant
+        # representative samples.
+
         include:
-          - ruby: "3.2"
-            rails_version: "7.1.4"
-          - ruby: "3.1"
-            rails_version: "7.0.8.4"
+          # BLACKLIGHT EDGE, can test with Rails 8 beta, importmap and esbuild
+          #
+
+          - rails_version: "8.0.0.rc2"
+            blacklight_version: '{ "git": "https://github.com/projectblacklight/blacklight.git" }'
+            ruby: "3.3"
+            additional_name: "/ importmap-rails"
+            additional_engine_cart_rails_options: "--css=bootstrap"
+          - rails_version: "8.0.0.rc2"
+            blacklight_version: '{ "git": "https://github.com/projectblacklight/blacklight.git" }'
+            ruby: "3.3"
+            additional_name: "/ esbuild"
+            additional_engine_cart_rails_options: "--css=bootstrap --javascript=esbuild"
+
+
+
+          # BLACKLIGHT 8, can use importmaps. Ideally would test with esbuild(etc) too, should
+          # work.
+
+          - rails_version: "7.2.1"
+            blacklight_version: "~> 8.0"
+            ruby: "3.3"
+            additional_name: "/ importmap-rails, sprockets"
+          - rails_version: "7.2.1"
+            blacklight_version: "~> 8.0"
+            ruby: "3.3"
+            additional_name: "/ importmap-rails, propshaft"
+            additional_engine_cart_rails_options: "-a propshaft --css=bootstrap"
+          - rails_version: "7.2.1"
+            blacklight_version: "~> 8.0"
+            ruby: 3.3
+            additional_engine_cart_rails_options: "-a propshaft --javascript=esbuild --css=bootstrap"
+            additional_name: "/ esbuild, propshaft"
+
+            # We can't currently test Blacklight 8 in a few situations we'd like to.
+            #
+            # * Blacklight 8 can't easily generate an app with Rails 7 and sprockets and esbuild
+            #   (the default layout won't be right), although I think it should work fine.
+            #
+            # * Can't test with unreleaed Blacklight main and esbuild because the blacklight-frontend
+            #   npm package doens't work from git checkout.  So currently can't test with Rails8
+            #   and esbuild.
+
+
+
+          # BLACKLIGHT 7, only test with esbuild, not sure if it supports importmaps, it won't generate it
+
+          - rails_version: "7.2.1"
+            blacklight_version: "~> 7.0"
+            ruby: "3.3"
+            additional_engine_cart_rails_options: "--javascript=esbuild"
+            additional_name: "/ esbuild, sprockets"
+          - rails_version: "7.2.1"
+            blacklight_version: "~> 7.0"
+            ruby: "3.3"
+            additional_engine_cart_rails_options: "--javascript=esbuild --css=bootstrap  -a propshaft"
+            additional_name: "/ esbuild, propshaft"
+
+          - rails_version: "7.1.4"
+            blacklight_version: "~> 7.0"
+            ruby: "3.2"
+            additional_engine_cart_rails_options: "--javascript=esbuild"
+            additional_name: "/ esbuild, sprockets"
+
+          - rails_version: "7.0.8.4"
+            blacklight_version: "~> 7.0"
+            ruby: "3.1"
+            additional_engine_cart_rails_options: "--javascript=esbuild"
+            additional_name: "/ esbuild, sprockets"
+
+
+
+
+
     env:
-      BLACKLIGHT_VERSION: "~> 7.0" # only test on BL 7 for now
+      BLACKLIGHT_VERSION: ${{ matrix.blacklight_version || '~> 8.0' }}
       RAILS_VERSION: ${{ matrix.rails_version }}
-      ENGINE_CART_RAILS_OPTIONS: "--skip-git --skip-listen --skip-spring --skip-keeps --skip-coffee --skip-test ${{ matrix.engine_cart_rails_options }}"
+      ENGINE_CART_RAILS_OPTIONS: "--skip-git --skip-listen --skip-spring --skip-keeps --skip-coffee --skip-test ${{ matrix.additional_engine_cart_rails_options }}"
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:

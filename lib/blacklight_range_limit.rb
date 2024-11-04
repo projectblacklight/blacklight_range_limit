@@ -19,7 +19,7 @@ module BlacklightRangeLimit
   mattr_accessor :classes
 
   self.classes = {
-    form: 'range_limit subsection form-inline',
+    form: 'range_limit_form subsection form-inline',
     submit: 'submit btn btn-secondary'
   }
 
@@ -48,10 +48,11 @@ module BlacklightRangeLimit
       range_config: {
         num_segments: 10,
         chart_js: true,
-        slider_js: true,
+        chart_segment_border_color: 'rgb(54, 162, 235)',
+        chart_segment_bg_color: 'rgba(54, 162, 235, 0.5)',
         segments: true,
+        chart_replaces_text: true,
         assumed_boundaries: nil,
-        maxlength: nil,
         input_label_range_begin: nil,
         input_label_range_end: nil
       },

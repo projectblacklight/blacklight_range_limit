@@ -50,8 +50,27 @@ RSpec.describe BlacklightRangeLimit::RangeFacetComponent, type: :component do
       .and have_selector('div.collapse')
   end
 
+  # This is JS api
   it 'renders a placeholder profile area' do
     expect(rendered).to have_selector('div.profile', text: '')
+  end
+
+  context 'with min/max' do
+    let(:facet_field_params) do
+      {
+        range_queries: [],
+        min: 100,
+        max: 300
+      }
+    end
+
+    # This is JS api
+    it "renders a link to fetch distribution info" do
+      # need request_url for routing of links generated
+      with_request_url '/catalog' do
+        expect(rendered).to have_selector("a.load_distribution[href]")
+      end
+    end
   end
 
   context 'with range data' do
@@ -77,18 +96,6 @@ RSpec.describe BlacklightRangeLimit::RangeFacetComponent, type: :component do
     expect(rendered).to have_selector('form[action="http://test.host/catalog"][method="get"]')
       .and have_field('range[key][begin]')
       .and have_field('range[key][end]')
-  end
-
-  it 'renders a link to the modal' do
-    expect(rendered).to have_link 'View larger', href: '/range/key'
-  end
-
-  context 'within a modal' do
-    let(:facet_field_params) { { in_modal?: true } }
-
-    it 'does not link to the modal' do
-      expect(rendered).not_to have_link 'View larger'
-    end
   end
 
   it 'does not render the missing link if there are no matching documents' do

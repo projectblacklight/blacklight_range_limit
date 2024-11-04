@@ -4,16 +4,19 @@
   <% end %>
 
   <% component.with_body do %>
-    <div class="limit_content range_limit <%= @facet_field.key %>-config blrl-plot-config">
+    <div class="limit_content range_limit <%= @facet_field.key %>-config blrl-plot-config"
+        data-chart-segment-border-color="<%= range_config[:chart_segment_border_color] %>"
+        data-chart-segment-bg-color="<%= range_config[:chart_segment_bg_color] %>"
+        data-chart-replaces-text="<%= range_config[:chart_replaces_text] %>"
+    >
       <% if @facet_field.selected_range_facet_item %>
-        <%= render BlacklightRangeLimit::RangeSegmentsComponent.new(facet_field: @facet_field, facet_items: [@facet_field.selected_range_facet_item], classes: ['current']) %>
+        <%= render BlacklightRangeLimit::RangeSegmentsComponent.new(facet_field: @facet_field, facet_items: [@facet_field.selected_range_facet_item], classes: ['current', 'mb-3']) %>
       <% end %>
 
       <!-- no results profile if missing is selected -->
       <% unless @facet_field.missing_selected? %>
-        <!-- you can hide this if you want, but it has to be on page if you want
-             JS slider and calculated facets to show up, JS sniffs it. -->
-        <div class="profile">
+        <!-- this has to be on page if you want calculated facets to show up, JS sniffs it. -->
+        <div class="profile mb-3">
           <% if (min = @facet_field.min) &&
                 (max = @facet_field.max) %>
 
@@ -25,22 +28,17 @@
                 <% if @facet_field.range_queries.any? %>
                   <%= render BlacklightRangeLimit::RangeSegmentsComponent.new(facet_field: @facet_field) %>
                 <% else %>
-                  <%= link_to(t('blacklight.range_limit.view_distribution'), range_limit_url(range_start: min, range_end: max), class: "load_distribution") %>
+                  <%= link_to(t('blacklight.range_limit.view_distribution'), range_limit_url(range_start: min, range_end: max), class: "load_distribution", "data-loading-message-html": t('blacklight.range_limit.loading_html')) %>
                 <% end %>
               </div>
             <% end %>
-            <p class="range subsection <%= "slider_js" unless range_config[:slider_js] == false %>">
-              <%= t('blacklight.range_limit.results_range_html', min: min, max: max) %>
-            </p>
           <% end %>
         </div>
 
         <%= render BlacklightRangeLimit::RangeFormComponent.new(facet_field: @facet_field, classes: @classes) %>
 
-        <%= with_more_link(key: @facet_field.key, label: @facet_field.label) unless @facet_field.in_modal? %>
-
-        <% if @facet_field.missing_facet_item && !request.xhr? %>
-          <%= render BlacklightRangeLimit::RangeSegmentsComponent.new(facet_field: @facet_field, facet_items: [@facet_field.missing_facet_item], classes: ['missing', 'subsection']) %>
+        <% if @facet_field.missing_facet_item && !request.xhr? && range_config[:segments] != false %>
+          <%= render BlacklightRangeLimit::RangeSegmentsComponent.new(facet_field: @facet_field, facet_items: [@facet_field.missing_facet_item], classes: ['missing', 'subsection', 'mt-3']) %>
         <% end %>
       <% end %>
     </div>

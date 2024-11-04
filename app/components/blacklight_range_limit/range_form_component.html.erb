@@ -1,7 +1,7 @@
 <%= form_tag search_action_path, method: :get, class: [@classes[:form], "range_#{@facet_field.key} d-flex justify-content-center"].join(' ') do %>
   <%= render hidden_search_state %>
 
-  <div class="input-group input-group-sm mb-3 flex-nowrap range-limit-input-group">
+  <div class="input-group input-group-sm flex-nowrap range-limit-input-group">
     <%= render_range_input(:begin, begin_label) %>
     <%= render_range_input(:end, end_label) %>
     <div class="input-group-append visually-hidden">

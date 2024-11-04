@@ -1,19 +1,20 @@
 {
   "name": "blacklight-range-limit",
-  "version": "8.5.0",
+  "version": "9.0.1",
   "description": "A range facet UI component plugin for blacklight",
-  "main": "app/assets/javascripts/blacklight_range_limit",
   "type": "module",
-  "scripts": {
-    "prepare": "rollup --config rollup.config.js --sourcemap && ESM=true rollup --config rollup.config.js --sourcemap"
-  },
+
+  "exports": {
+    ".": "./app/assets/javascripts/blacklight-range-limit/index.js",
+    "./*": "./app/assets/javascripts/blacklight-range-limit/*"
+   },
+
   "repository": {
     "type": "git",
     "url": "git+https://github.com/projectblacklight/blacklight_range_limit.git"
   },
   "files": [
-    "app/assets",
-    "vendor/assets"
+    "app/assets/javascripts/blacklight-range-limit/"
   ],
   "author": "",
   "license": "Apache-2.0",
@@ -21,12 +22,7 @@
     "url": "https://github.com/projectblacklight/blacklight_range_limit/issues"
   },
   "homepage": "https://github.com/projectblacklight/blacklight_range_limit#readme",
-  "browserslist": [
-    "defaults",
-    "not IE 11"
-  ],
-  "devDependencies": {
-    "rollup": "^3.29.5",
-    "rollup-plugin-includepaths": "^0.2.4"
+  "dependencies": {
+    "chart.js": "^ 4.4.1"
   }
 }

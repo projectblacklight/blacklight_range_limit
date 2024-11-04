@@ -8,69 +8,65 @@ BlacklightRangeLimit:  integer range limiting and profiling for Blacklight appli
 
 The BlacklightRangeLimit plugin provides a 'facet' or limit for integer fields, that lets the user enter range limits with a text box or a slider, and also provides area charts giving a sense of the distribution of values (with drill down).
 
-The primary use case of this plugin is for 'year' data, but it should work for any integer field. It may not work right for negative numbers, however.
+The primary use case of this plugin is for 'year' data, but it should work for any integer field.
 
 Decimal numbers and Dates are NOT supported; they theoretically could be in the future, although it gets tricky.
 
 
 # Requirements
 
-A Solr integer field. Depending on your data, it may or may not be advantageous to use a tint (trie with non-zero precision) type field.
+* A Solr integer field. It might be advantageous to use an IntPointField.
 
-## Note on solr field types
+* Javascript requires you to be using either rails-importmaps or a package.json-based builder like jsbundling-rails or vite-ruby.  Legacy "sprockets-only" is not supported, however propshaft or sprockets can be used as your base asset pipeline.
 
-If all your integers are the same number of digits, you can use just about any solr type, including string/type, and all will be well. But if your integers vary in digits, strings won't sort correctly, making your numbers behave oddly in partitions and limits. This is also true if you use a pre-1.4 "integer"/pint/solr.IntField  field -- these are not "sortable".
+* Blaklight 7.0+.  Rails 7.0+
 
-You need to use a "sortable" numeric-type field. In Solr 1.4, the standard "int"/solr.TrieIntField should work fine and is probably prefered. For some distributions of data, it may be more efficient to use "tint" (solr.TrieIntField with non-zero precision).
-
-The pre Solr 1.4 now deprecated sint or slong types should work fine too.
 
 # Installation
-
-Current 8.x version of `blacklight_range_limit` works with `blacklight` 7 or 8.
 
 Add
 
     gem "blacklight_range_limit"
 
-to your Gemfile. Run "bundle install".
+to your Gemfile. Run `bundle install`.
 
-## Using sprockets
+Run `rails generate blacklight_range_limit:install`
 
-Run
-```shell
-rails generate blacklight_range_limit:install
+### Manual Javascript setup is not hard
+
+The installer could have trouble figuring out how to add Javascript to your particular setup. In the end, all you need is `blacklight-range-limit` either importmap-pinned (with it's chart.js dependency), or added to your package.json, and then, in a file that has access to the `Blacklight` import:
+
+    import BlacklightRangeLimit from "blacklight-range-limit";
+    BlacklightRangeLimit.init({ onLoadHandler: Blacklight.onLoad });
+
+A package.json might include:
+
+```
+"blacklight-range-limit": "^9.0.0",
+```
+(direct to git references also supported in package.json)
+
+importmap.rb pins might look like:
+
+```
+pin "chart.js", to: "https://ga.jspm.io/npm:chart.js@4.2.0/dist/chart.js"
+pin "@kurkle/color", to: "https://ga.jspm.io/npm:@kurkle/color@0.3.2/dist/color.esm.js"
 ```
 
-This will install some asset references in your application.js and application.css.
+For import map pins, note:
+* The standard "locally vendored" importmap-rails setup is not working with chart.js at the time of this writing, so you need to pin to CDN as above.
+* versions in importmap pins will have to be updated manually if you want to upgrade.
 
-## Using node modules
-If you wish to manually install add this to your `app/javascript/application.js` with a builder that relies on node modules, then you can do this (for Blacklight 7):
+### Unreleased version?
 
-```javascript
-import "blacklight-frontend/app/assets/javascripts/blacklight/blacklight";
+If you'd like to use an unrelased version from git, just add that to your Gemfile in the usual way.
 
-import BlacklightRangeLimit from "blacklight-range-limit/app/assets/javascripts/blacklight_range_limit/blacklight_range_limit.esm";
-import "blacklight-range-limit/vendor/assets/javascripts/bootstrap-slider"
-// jquery.canvaswrapper must come before the rest of Flot.
-import "blacklight-range-limit/vendor/assets/javascripts/flot/jquery.canvaswrapper"
-import "blacklight-range-limit/vendor/assets/javascripts/flot/jquery.flot"
-import "blacklight-range-limit/vendor/assets/javascripts/flot/jquery.colorhelpers"
-import "blacklight-range-limit/vendor/assets/javascripts/flot/jquery.event.drag"
-import "blacklight-range-limit/vendor/assets/javascripts/flot/jquery.flot.browser"
-import "blacklight-range-limit/vendor/assets/javascripts/flot/jquery.flot.drawSeries"
-import "blacklight-range-limit/vendor/assets/javascripts/flot/jquery.flot.hover"
-import "blacklight-range-limit/vendor/assets/javascripts/flot/jquery.flot.saturated"
-import "blacklight-range-limit/vendor/assets/javascripts/flot/jquery.flot.selection"
-import "blacklight-range-limit/vendor/assets/javascripts/flot/jquery.flot.uiConstants"
+importmap-rails use should then Just Work.
 
-Blacklight.onLoad(function() {
-  modalSelector = Blacklight.modal?.modalSelector || Blacklight.Modal.modalSelector;
-  BlacklightRangeLimit.initialize(modalSelector);
-});
-```
+package.json-based use will additionally need to point to the matching unreleaesd version in git in package.json, eg `yarn add blacklight-range-limit@git+https://github.com/projectblacklight/blacklight_range_limit.git#branch_name_or_commit_sha`. Still simple.
 
-# Configuration
+
+# Facet Configuration
 
 You have at least one solr field you want to display as a range limit, that's why you've installed this plugin. In your CatalogController, the facet configuration should look like:
 
@@ -80,26 +76,11 @@ config.add_facet_field 'pub_date', label: 'Publication Year', **default_range_co
 
 You should now get range limit display. More complicated configuration is available if desired, see Range Facet Configuration below.
 
-
-You can also configure the look and feel of the Flot chart using the jQuery .data() method. On the `.blrl-plot-config` or `.facet-limit` container you want to configure, add a Flot options associative array (documented at http://people.iola.dk/olau/flot/API.txt) as the `plot-config` key. The `plot-config` key to set the `plot-config` key on the appropriate `.blrl-plot-config` or `.facet-limit` container. In order to customize the plot colors, for example, you could use this code:
-
-```javascript
-$('.blacklight-year_i').data('plot-config', {
-    selection: { color: '#C0FF83' },
-    colors: ['#ffffff'],
-    series: { lines: { fillColor: 'rgba(255,255,255, 0.5)' }},
-    grid: { color: '#aaaaaa', tickColor: '#aaaaaa', borderWidth: 0 }
-});
-```
-You can add this configuration in app/assets/javascript/application.js, or anywhere else loaded before the blacklight range limit javascript.
-
 ## A note on AJAX use
 
 In order to calculate distribution segment ranges, we need to first know the min and max boundaries. But we don't really know that until we've fetched the result set (we use the Solr Stats component to get min and max with a result set).
 
-So, ordinarily, after we've gotten the result set, only then can we calculate the segment ranges, and then we need to do another Solr request to actually fetch the segment range counts.
-
-The plugin uses an AJAX request on the result page to do this. This means that for every application results display that includes any values at all in your range field, your application will get a second AJAX http request, and make a second solr request.
+So, ordinarily, after we've gotten the result set, an additional round trip to back-end and solr will happen, with min max identified, to fetch segments.
 
 If you'd like to avoid this, you can turn off segment display altogether with the :segment option below; or you can set :assumed_boundaries below to use fixed boundaries for not-yet-limited segments instead of taking boundaries from the result set.
 
@@ -108,16 +89,21 @@ Note that a drill-down will never require the second request, because boundaries
 
 ## Range Facet Configuration
 
-Instead of simply passing "true", you can pass a hash with additional configuration. Here's an example with all the available keys, you don't need to use them all, just the ones you want to set to non-default values.
+There are some additional configuration options that can be passed in facet config in the `range_config` key. You can pass some or all of them like this:
 
 ```ruby
 config.add_facet_field 'pub_date', label: 'Publication Year',
-                       range: {
-                         num_segments: 6,
-                         assumed_boundaries: [1100, Time.now.year + 2],
-                         segments: false,
-                         maxlength: 4
-                       }
+        **default_range_config.deep_merge(
+            range_config: {
+               num_segments: 6,
+               assumed_boundaries: [1100, Time.now.year + 2],
+               segments: true,
+               chart_js: true,
+               chart_replaces_text: true,
+               chart_segment_border_color: "rgba(0,0,0, 0.5)",
+               chart_segment_bg_color: "#ccddcc",
+            }
+        )
 ```
 
 * **:num_segments** :
@@ -125,63 +111,42 @@ config.add_facet_field 'pub_date', label: 'Publication Year',
 * **:assumed_boundaries** :
   * Default null. For a result set that has not yet been limited, instead of taking boundaries from results and making a second AJAX request to fetch segments, just assume these given boundaries. If you'd like to avoid this second AJAX Solr call, you can set :assumed_boundaries to a two-element array of integers instead, and the assumed boundaries will always be used. Note this is live ruby code, you can put calculations in there like Time.now.year + 2.
 * **:segments** :
-  * Default true. If set to false, then distribution segment facets will not be loaded at all.
-* **:maxlength** :
-  * Default 4. Changes the value of the `maxlength` attribute of the text boxes, which determines how many digits can be entered.
+  * Default true. If set to false, then distribution segment facets will not be loaded at all,    you'll just get input boxes.
+* **chart_js**:
+  * Default true. If false, the Javascript chart is not loaded, you will still get textual facets for buckets.
+* **chart_replaces_text**: Default true. If false, when the chart is loaded purely textual facets will still remain on-screen too.
+* **chart_segment_border_color** / **chart_segment_bg_color** :
+  * Set colors for the edge and fill of the segment bars in the histogram.
+
 
 ## Javascript dependencies
 
-The selectable histograms/barcharts are done with Javascript, using [Flot](http://code.google.com/p/flot/). Flot requires JQuery, as well as support for the HTML5 canvas element. For the slider, [bootstrap-slider](http://www.eyecon.ro/bootstrap-slider/) is used (bootstrap-slider is actually third party, not officially bootstrap). Flot and bootstrap-slider are both directly included in blacklight_range_limit in vendor, rather than referenced as dependencies.
+We use [chart.js](https://www.chartjs.org/) to draw the chart. It has one dependency of it's own. These need to be either pinned with importmap-rails, or used via the chart.js npm package and an npm-package-based bundler.
 
-The blacklight_range_limit installer will add `require 'blacklight_range_limit'` to your `application.js` sprockets manifest. This will include flot, bootstrap-slider, and the blacklight_range_limit glue JS.
+There is **no CSS** needed.
 
-Both flot and blacklight_range_limit's own JS depend on JQuery; the host app is expected to include JQuery; a default Blacklight-generated app already does. (Jquery 1, 2, or 3 should work)
+## Upgrading from blacklight-range-limit 8.x to 9.x
 
-If you don't want any of this gem's JS, you can simply remove the `require 'blacklight_range_limit'` line from your application.js, and hack something else together yourself.
+All back-end configuration should be backwards compatible.
 
-## Touch?
+You will need to change how you load JS. (There is no longer any blacklight_range_limit CSS to load).
 
-For touch screens, one wants the UI to work well. The slider used is
-[bootstrap_slider](http://www.eyecon.ro/bootstrap-slider/), which says if you add
-Modernizr to your page, touch events will be supported. We haven't tested it
-ourselves yet.
+You will need to be using either importmap-rails or a package.json-based javascript bunder (jsbundling-rails or vite) to deliver JS to your app. Legacy sprockets-only is not supported.
 
-Also not sure how well the flot select UI works on a touch screen. The slider
-is probably the best touch UI anyway, if it can be made to work well.
+Then, remove ALL existing (sprockets) references to blacklight_range_limit in your JS or CSS pipelines.
 
-## JavaScript Customization
+And run `rails g blacklight_range_limit:assets` -- or manually set up the JS for unusual setups (such as vite-rails), see above at <a href="#installation">Installation</a>.
 
-There are two main types of JavaScript implemented for BlacklightRangeLimit:
- - Initialization and refresh of Range Limit plugin based off of events
- - Range Limit plugin functionality called from event listeners
+For an unreleased version from git -- the installer is not presently capable of installing
+that, but simply add the unreleased version of the gem to your Gemfile.
 
- The second class of range limit functionality is customizable in your local application by overriding the specified function.
-
- A simple example of this is overriding the display ratio used to create the histogram
-
- ```javascript
- BlacklightRangeLimit.display_ratio = 1
-```
-
-This will now create a square histogram.
-
-Not only these variables and functions be customized, you can call them based off of custom events in your application.
-
-```javascript
-$('.custom-class').on('doSomething', function() {
-  BlacklightRangeLimit.checkForNeededFacetsToFetch();
-  $(".range_limit .profile .range.slider_js").each(function() {
-    BlacklightRangeLimit.buildSlider(this);
-  });
-});
-```
 
 # Tests
 
 Test coverage is not great, but there are some tests, using rspec.  Run `bundle exec rake ci` or just `bundle exec rake` to seed and
-start a demo jetty server, build a clean test app, and run tests.
+start a demo solr server, build a clean test app, and run tests.
 
-Just `bundle exec rake spec` to just run tests against an existing test app and jetty server.
+Just `bundle exec rake spec` to just run tests against an existing test app and solr server.
 
 ## Local Testing
 If you want to iterate on a test locally and do not want to rebuild the
@@ -202,9 +167,3 @@ Once you are done iterating on your test you will need to stop the application s
 
 run `npm publish` to push the javascript package to https://npmjs.org/package/blacklight-range-limit
 
-# Possible future To Do
-
-* StatsComponent replacement. We use StatsComponent to get min/max of result set, as well as missing count. StatsComponent is included on every non-drilldown request, so ranges and slider can be displayed. However, StatsComponent really can slow down the solr response with a large result set. So replace StatsComponent with other strategies. No ideal ones, we can use facet.missing to get missing count instead, but RSolr makes it harder than it should be to grab this info. We can use seperate solr queries to get min/max (sort on our field, asc and desc), but this is more complicated, more solr queries, and possibly requires redesign of AJAXy stuff, so even a lone slider can have min/max.
-* tests
-* In cases where an AJAX request is needed to fetch more results, don't trigger the AJAX until the range facet has actually been opened/shown. Currently it's done on page load.
-* If :assumed_boundaries ends up popular, we could provide a method to fetch min and max values from entire corpus on app startup or in a rake task, and automatically use these as :assumed_boundaries.

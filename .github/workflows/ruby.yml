@@ -37,12 +37,12 @@ jobs:
           # BLACKLIGHT EDGE, can test with Rails 8 beta, importmap and esbuild
           #
 
-          - rails_version: "8.0.0.beta1"
+          - rails_version: "8.0.0.rc2"
             blacklight_version: '{ "git": "https://github.com/projectblacklight/blacklight.git" }'
             ruby: "3.3"
             additional_name: "/ importmap-rails"
             additional_engine_cart_rails_options: "--css=bootstrap"
-          - rails_version: "8.0.0.beta1"
+          - rails_version: "8.0.0.rc2"
             blacklight_version: '{ "git": "https://github.com/projectblacklight/blacklight.git" }'
             ruby: "3.3"
             additional_name: "/ esbuild"

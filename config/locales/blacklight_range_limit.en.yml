@@ -5,7 +5,7 @@ en:
       range_begin_short: "Begin"
       range_end: "%{field_label} range end"
       range_end_short: "End"
-      submit_limit: 'Apply'
+      submit_limit: 'Apply limit'
       remove_limit: 'remove'
       missing: 'Unknown'
       view_distribution: 'View distribution'

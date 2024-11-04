@@ -1,7 +1,14 @@
 # Place any default configuration for solr_wrapper here
+#
+# We try to use a cacheable and cached location for solr at tmp/solr_dist
+# in Github Actions CI, to avoid excessive downloads from
+# apache (which also get sometimes blocked/rate-limited)
+
 port: 8983
 verbose: true
 version: 9.6.1
+  <% ENV['CI'] && FileUtils.mkdir_p('ci_dl_solr_dist') %>
+download_dir: <%= 'ci_dl_solr_dist' if ENV['CI'] %>
 collection:
   dir: solr/conf/
   name: blacklight-core

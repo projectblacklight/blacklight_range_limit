@@ -19,7 +19,7 @@ module BlacklightRangeLimit
   mattr_accessor :classes
 
   self.classes = {
-    form: 'range_limit_form subsection form-inline',
+    form: 'range_limit_form subsection',
     submit: 'submit btn btn-sm btn-secondary'
   }
 

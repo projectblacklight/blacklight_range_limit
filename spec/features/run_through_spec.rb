@@ -46,10 +46,7 @@ describe 'Run through with javascript', js: true do
       find("input#range_pub_date_si_begin").set(start_range)
       find("input#range_pub_date_si_end").set(end_range)
 
-      # there are two apply buttons cause of handling bootstrap 4/5, with one
-      # hidden off-screen. it's extremely hard to figure out which one is
-      # actually clickable/visible and capybara will let us click on it, annoying.
-      all(:button, "Apply", obscured: false).first.click
+      click_button "Apply limit"
     end
 
     # new page with limit

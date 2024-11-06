@@ -9,27 +9,20 @@ module BlacklightRangeLimit
       @classes = classes
     end
 
-    def begin_label
-      range_config[:input_label_range_begin] || t("blacklight.range_limit.range_begin", field_label: @facet_field.label)
+    def begin_value_default
+      @facet_field.selected_range.is_a?(Range) ? @facet_field.selected_range.first : @facet_field.min
     end
 
-    def end_label
-      range_config[:input_label_range_end] || t("blacklight.range_limit.range_end", field_label: @facet_field.label)
+    def end_value_default
+      @facet_field.selected_range.is_a?(Range) ? @facet_field.selected_range.last : @facet_field.max
     end
 
-    # type is 'begin' or 'end'
-    def render_range_input(type, input_label = nil)
-      type = type.to_s
+    def begin_input_name
+      "range[#{@facet_field.key}][begin]"
+    end
 
-      default = if type == "begin"
-        @facet_field.selected_range.is_a?(Range) ? @facet_field.selected_range.first : @facet_field.min
-      else
-        @facet_field.selected_range.is_a?(Range) ? @facet_field.selected_range.last : @facet_field.max
-      end
-
-      html = number_field_tag("range[#{@facet_field.key}][#{type}]", default, class: "form-control text-center range_#{type}")
-      html += label_tag("range[#{@facet_field.key}][#{type}]", input_label, class: 'sr-only visually-hidden') if input_label.present?
-      html
+    def end_input_name
+      "range[#{@facet_field.key}][end]"
     end
 
     private

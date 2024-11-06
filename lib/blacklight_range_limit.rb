@@ -19,8 +19,8 @@ module BlacklightRangeLimit
   mattr_accessor :classes
 
   self.classes = {
-    form: 'range_limit_form subsection form-inline',
-    submit: 'submit btn btn-secondary'
+    form: 'range_limit_form subsection',
+    submit: 'submit btn btn-sm btn-secondary'
   }
 
   # Add element to array only if it's not already there
@@ -52,9 +52,7 @@ module BlacklightRangeLimit
         chart_segment_bg_color: 'rgba(54, 162, 235, 0.5)',
         segments: true,
         chart_replaces_text: true,
-        assumed_boundaries: nil,
-        input_label_range_begin: nil,
-        input_label_range_end: nil
+        assumed_boundaries: nil
       },
       filter_class: BlacklightRangeLimit::FilterField,
       presenter: BlacklightRangeLimit::FacetFieldPresenter,

@@ -5,7 +5,9 @@ ar:
       loading_html: تحميل
       missing: غير معروف
       range_begin: "%{field_label} بداية المدة"
+      range_begin_short: يبدأ
       range_end: "%{field_label} نهاية المدة"
+      range_end_short: نهاية
       range_html: <span class="from" data-blrl-begin="%{begin_value}">%{begin}</span> الى <span class="to" data-blrl-end="%{end_value}">%{end}</span>
       remove_limit: حذف
       results_range_html: تمتد النتائج الحالية من <span class="min">%{min}</span> إلى<span class="max">%{max}</span>

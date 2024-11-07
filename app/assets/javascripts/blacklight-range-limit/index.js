@@ -49,8 +49,8 @@ export default class BlacklightRangeLimit {
 
   lineDataPoints = [] // array of objects in Chart.js line chart data format, { x: xVal, y: yVal }
 
-  // <canvas> DOM element
-  chartCanvasElement;
+  container;  // div.range-limit wrapping entire facet display box
+  chartCanvasElement; // <canvas> DOM element
 
   // container should be a `div.range-limit` that will have within it a `.profile .distribution`
   // with textual distributions that will be turned into a histogram chart.
@@ -162,6 +162,7 @@ export default class BlacklightRangeLimit {
     }
 
     const listDiv = this.distributionElement.querySelector(".facet-values");
+    const wrapperDiv = this.container.querySelector("*[data-chart-wrapper=true]");
 
     if (this.chartReplacesText) {
       // We keep the textual facet data as accessible screen-reader, add .sr-only to it though
@@ -169,11 +170,15 @@ export default class BlacklightRangeLimit {
       listDiv.classList.add("visually-hidden");
     }
 
-    // We create a <chart>, insert it into DOM before listDiv
+    // We create a <chart>, insert it into DOM in wrapper
     this.chartCanvasElement = this.container.ownerDocument.createElement("canvas");
     this.chartCanvasElement.setAttribute("aria-hidden", "true"); // textual facets sr-only are alternative
     this.chartCanvasElement.classList.add("blacklight-range-limit-chart");
-    this.distributionElement.insertBefore(this.chartCanvasElement, listDiv);
+    // We set inline-block for compatibility with container-fluid layouts, e.g. when
+    // Blacklight's config.full_width_layout = true
+    // See: https://github.com/projectblacklight/blacklight_range_limit/pull/269
+    this.chartCanvasElement.style.display = 'inline-block';
+    wrapperDiv.prepend(this.chartCanvasElement);
 
     return this.chartCanvasElement;
   }
@@ -185,6 +190,11 @@ export default class BlacklightRangeLimit {
   drawChart(chartCanvasElement) {
     const minX = this.lineDataPoints[0].x;
     const maxX = this.lineDataPoints[this.lineDataPoints.length - 1].x;
+
+    // Get aspect ratio from CSS on wrapper element, has to match.
+    // Getting responsive chart.js to work was a pain! https://github.com/chartjs/Chart.js/issues/11005
+    const wrapper = chartCanvasElement.closest("*[data-chart-wrapper=true]");
+    const aspectRatio = window.getComputedStyle(wrapper)?.getPropertyValue("aspect-ratio") || 2;
 
     const segmentBorderColor = this.container.getAttribute("data-chart-segment-border-color") || 'rgb(54, 162, 235)';
     const segmentBgColor = this.container.getAttribute("data-chart-segment-bg-color") || 'rgba(54, 162, 235, 0.5)';
@@ -200,7 +210,8 @@ export default class BlacklightRangeLimit {
             animationDuration: 0 // duration of animations when hovering an item
         },
         responsiveAnimationDuration: 0,
-
+        aspectRatio: aspectRatio,
+        resizeDelay: 15, // to debounce a bit
         plugins: {
           legend: false,
           tooltip: { enabled: false} // tooltips don't currently show anything useful for our

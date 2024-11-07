@@ -119,7 +119,21 @@ jobs:
         with:
           ruby-version: ${{ matrix.ruby }}
           bundler: "latest"
+
       - name: Install dependencies
         run: bundle install
+
+      # Try to cache solr dist download, which may not save us much time,
+      # but hopes to save us from being throttled/blocked on some runs by
+      # apache foundation servers unhappy that we're downloading the dist zip
+      # so much.
+      - name: Cache solr install
+        uses: actions/cache@v3
+        with:
+          # these paths specified in .solr_wrapper.yml:
+          path: |
+            ci_dl_solr_dist
+          key: ${{ runner.os }}-solr-${{ hashFiles('.solr_wrapper.yml') }}
+
       - name: Run tests
         run: bundle exec rake ci

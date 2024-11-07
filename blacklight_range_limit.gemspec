@@ -19,7 +19,6 @@ Gem::Specification.new do |s|
 
   s.add_dependency 'blacklight', '>= 7.25.2', '< 9'
   s.add_dependency 'view_component', ">= 2.54", "< 4"
-  s.add_dependency 'deprecation'
 
   s.add_development_dependency 'rspec', '~> 3.0'
   s.add_development_dependency 'rspec-rails'

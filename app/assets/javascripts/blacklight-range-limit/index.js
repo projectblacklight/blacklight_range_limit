@@ -174,6 +174,10 @@ export default class BlacklightRangeLimit {
     this.chartCanvasElement = this.container.ownerDocument.createElement("canvas");
     this.chartCanvasElement.setAttribute("aria-hidden", "true"); // textual facets sr-only are alternative
     this.chartCanvasElement.classList.add("blacklight-range-limit-chart");
+    // We set inline-block for compatibility with container-fluid layouts, e.g. when
+    // Blacklight's config.full_width_layout = true
+    // See: https://github.com/projectblacklight/blacklight_range_limit/pull/269
+    this.chartCanvasElement.style.display = 'inline-block';
     wrapperDiv.prepend(this.chartCanvasElement);
 
     return this.chartCanvasElement;

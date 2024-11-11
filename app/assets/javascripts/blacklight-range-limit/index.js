@@ -41,7 +41,8 @@ export default class BlacklightRangeLimit {
     });
   }
 
-  chartReplacesText = true;
+  textualFacets = true;
+  textualFacetsCollapsible = true;
 
   rangeBuckets = []; // array of objects with bucket range info
 
@@ -72,10 +73,12 @@ export default class BlacklightRangeLimit {
       this.whenBecomesVisible(container, target => this.setup());
     }
 
-    if (this.container.getAttribute("data-chart-replaces-text") == "false") {
-      this.chartReplacesText = false;
+    if (this.container.getAttribute("data-textual-facets") == "false") {
+      this.textualFacets = false;
     }
-
+    if (this.container.getAttribute("data-textual-facets-collapsible") == "false") {
+      this.textualFacetsCollapsible = false;
+    }
   }
 
   // if the range fetch link is still in DOM, fetch ranges from back-end,
@@ -90,7 +93,7 @@ export default class BlacklightRangeLimit {
 
     // What we'll do to put the chart on page whether or not we need to load --
     // when query has range limits, we don't need to load, it's already there.
-    let handleOnPageData = () => {
+    let conditonallySetupChart = () => {
       if (this.distributionElement.classList.contains("chart_js")) {
         this.extractBucketData();
         this.chartCanvasElement = this.setupDomForChart();
@@ -105,8 +108,9 @@ export default class BlacklightRangeLimit {
         then( response => response.ok ? response.text() : Promise.reject(response)).
         then( responseBody => new DOMParser().parseFromString(responseBody, "text/html")).
         then( responseDom => responseDom.querySelector(".facet-values")).
+        then( element => this.decorateFacetValuesListElement(element)).
         then( element =>  this.distributionElement.innerHTML = element.outerHTML  ).
-        then( _ => { handleOnPageData()  }).
+        then( _ => { conditonallySetupChart()  }).
         catch( error => {
           console.error(error);
         });
@@ -120,7 +124,7 @@ export default class BlacklightRangeLimit {
     this.rangeBuckets = Array.from(facetListDom.querySelectorAll("ul.facet-values li")).map( li => {
       const from    = this.parseNum(li.querySelector("span.from")?.getAttribute("data-blrl-begin") || li.querySelector("span.single")?.getAttribute("data-blrl-single"));
       const to      = this.parseNum(li.querySelector("span.to")?.getAttribute("data-blrl-end") || li.querySelector("span.single")?.getAttribute("data-blrl-single"));
-      const count   = this.parseNum(li.querySelector("span.facet-count,span.count").innerText);
+      const count   = this.parseNum(li.querySelector("span.facet-count,span.count").textContent);
       const avg     = (count / (to - from + 1));
 
       return {
@@ -155,6 +159,21 @@ export default class BlacklightRangeLimit {
     return undefined;
   }
 
+  // Take HTML element with facet list values, and hide and/or
+  // wrap in a collape/disclosure element.
+  decorateFacetValuesListElement(listElement) {
+    if (! this.textualFacets) {
+      listElement.style["display"] = "none"
+    } else if (this.textualFacetsCollapsible) {
+      const detailsEl = this.container.ownerDocument.createElement("details");
+      detailsEl.innerHTML = "<summary>Range Interval List</summary>";
+      detailsEl.appendChild( listElement );
+      listElement = detailsEl;
+    }
+
+    return listElement;
+  }
+
   setupDomForChart() {
     if(this.chartCanvasElement) {
       // already there, we're good.
@@ -164,11 +183,13 @@ export default class BlacklightRangeLimit {
     const listDiv = this.distributionElement.querySelector(".facet-values");
     const wrapperDiv = this.container.querySelector("*[data-chart-wrapper=true]");
 
-    if (this.chartReplacesText) {
-      // We keep the textual facet data as accessible screen-reader, add .sr-only to it though
-      listDiv.classList.add("sr-only")
-      listDiv.classList.add("visually-hidden");
-    }
+
+
+    // if (this.chartReplacesText) {
+    //   // We keep the textual facet data as accessible screen-reader, add .sr-only to it though
+    //   listDiv.classList.add("sr-only")
+    //   listDiv.classList.add("visually-hidden");
+    // }
 
     // We create a <chart>, insert it into DOM in wrapper
     this.chartCanvasElement = this.container.ownerDocument.createElement("canvas");

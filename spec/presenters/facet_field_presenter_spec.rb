@@ -141,4 +141,76 @@ RSpec.describe BlacklightRangeLimit::FacetFieldPresenter, type: :presenter do
       end
     end
   end
+
+  describe '#selected_range_facet_item' do
+    before do
+      allow(presenter).to receive(:selected_range).and_return(1990..1999)
+    end
+
+    context 'when the response is not a grouped response' do
+      let(:response) do
+        Blacklight::Solr::Response.new(
+          {
+            response: { numFound: 501 }
+          },
+          nil
+        )
+      end
+
+      it 'returns the facet item with the correct value and hits' do
+        expected_facet_item = Blacklight::Solr::Response::Facets::FacetItem.new(value: 1990..1999, hits: 501)
+        expect(presenter.selected_range_facet_item).to eq expected_facet_item
+      end
+    end
+
+    context 'when the response is a grouped response with one group' do
+      let(:response) do
+        Blacklight::Solr::Response.new(
+          {
+            grouped: {
+              _root_: {
+                matches: 123
+              }
+            }
+          },
+          nil
+        )
+      end
+
+      it 'returns the facet item with the hits from the group' do
+        expected_facet_item = Blacklight::Solr::Response::Facets::FacetItem.new(value: 1990..1999, hits: 123)
+        expect(presenter.selected_range_facet_item).to eq expected_facet_item
+      end
+    end
+
+    context 'when the response is a grouped response with multiple groups' do
+      let(:response) do
+        Blacklight::Solr::Response.new(
+          {
+            grouped: {
+              field_one_ssi: {
+                matches: 123
+              },
+              field_two_ssi: {
+                matches: 456
+              }
+            }
+          },
+          nil
+        )
+      end
+
+      let(:blacklight_config) do
+        Blacklight::Configuration.new.tap do |config|
+          config.facet_fields['field_key'] = facet_field
+          config.index.group = 'field_two_ssi'
+        end
+      end
+
+      it 'returns the facet item with the hits from the configured group' do
+        expected_facet_item = Blacklight::Solr::Response::Facets::FacetItem.new(value: 1990..1999, hits: 456)
+        expect(presenter.selected_range_facet_item).to eq expected_facet_item
+      end
+    end
+  end
 end

@@ -38,7 +38,7 @@ module BlacklightRangeLimit
     def selected_range_facet_item
       return unless selected_range
 
-      Blacklight::Solr::Response::Facets::FacetItem.new(value: selected_range, hits: response.total)
+      Blacklight::Solr::Response::Facets::FacetItem.new(value: selected_range, hits: selected_range_hits)
     end
 
     def missing_facet_item
@@ -77,9 +77,20 @@ module BlacklightRangeLimit
       return nil unless stats.key? type
       # StatsComponent returns weird min/max when there are in
       # fact no values
-      return nil if response.total == stats['missing']
+      return nil if selected_range_hits == stats['missing']
 
       stats[type].to_s.gsub(/\.0+/, '')
+    end
+
+    def selected_range_hits
+      return response.total unless response.grouped?
+
+      # The total doc count when results are *grouped* is located at a
+      # different key path than in a normal ungrouped response.
+      # If a config.index.group field is set via blacklight_config, use that.
+      # Otherwise, use the first (and likely only) group key in the response.
+      group_key = blacklight_config.view_config(action_name: :index).group || response.grouped.first.key
+      response.dig('grouped', group_key, 'matches')
     end
   end
 end

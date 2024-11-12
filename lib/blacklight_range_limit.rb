@@ -30,7 +30,6 @@ module BlacklightRangeLimit
         chart_segment_border_color: 'rgb(54, 162, 235)',
         chart_segment_bg_color: 'rgba(54, 162, 235, 0.5)',
         chart_aspect_ratio: 2,
-        segments: true,
         assumed_boundaries: nil
       },
       filter_class: BlacklightRangeLimit::FilterField,

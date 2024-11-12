@@ -25,25 +25,22 @@
 
         <%= render BlacklightRangeLimit::RangeFormComponent.new(facet_field: @facet_field, classes: @classes) %>
 
-        <% if (min = @facet_field.min) &&
+        <% if uses_distribution? &&
+              (min = @facet_field.min) &&
               (max = @facet_field.max) %>
-
-          <% if range_config[:segments] != false %>
-            <div class="distribution <%= 'chart_js' unless range_config[:chart_js] == false %>">
-              <!-- if  we already fetched segments from solr, display them
-                   here. Otherwise, display a link to fetch them, which JS
-                   will AJAX fetch.  -->
-              <% if @facet_field.range_queries.any? %>
-                <%= render BlacklightRangeLimit::RangeSegmentsComponent.new(facet_field: @facet_field) %>
-              <% else %>
-                <%= link_to(t('blacklight.range_limit.view_distribution'), range_limit_url(range_start: min, range_end: max), class: "load_distribution", "data-loading-message-html": t('blacklight.range_limit.loading_html')) %>
-              <% end %>
-            </div>
-          <% end %>
+          <div class="distribution <%= 'chart_js' unless range_config[:chart_js] == false %>">
+            <!-- if  we already fetched segments from solr, display them
+                 here. Otherwise, display a link to fetch them, which JS
+                 will AJAX fetch.  -->
+            <% if @facet_field.range_queries.any? %>
+              <%= render BlacklightRangeLimit::RangeSegmentsComponent.new(facet_field: @facet_field) %>
+            <% else %>
+              <%= link_to(t('blacklight.range_limit.view_distribution'), range_limit_url(range_start: min, range_end: max), class: "load_distribution", "data-loading-message-html": t('blacklight.range_limit.loading_html')) %>
+            <% end %>
+          </div>
         <% end %>
 
-
-        <% if @facet_field.missing_facet_item && !request.xhr? && range_config[:segments] != false %>
+        <% if @facet_field.missing_facet_item && !request.xhr? && uses_distribution? %>
           <%= render BlacklightRangeLimit::RangeSegmentsComponent.new(facet_field: @facet_field, facet_items: [@facet_field.missing_facet_item], classes: ['missing', 'mt-3']) %>
         <% end %>
       <% end %>

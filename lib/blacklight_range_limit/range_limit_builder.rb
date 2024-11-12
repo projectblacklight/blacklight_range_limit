@@ -22,7 +22,7 @@ module BlacklightRangeLimit
         solr_params["stats.field"] << config.field
 
         range_config = config.range_config
-        next if range_config[:segments] == false
+        next unless range_config[:chart_js] || range_config[:textual_facets]
 
         selected_value = search_state.filter(config.key).values.first
         range = (selected_value if selected_value.is_a? Range) || range_config[:assumed_boundaries]

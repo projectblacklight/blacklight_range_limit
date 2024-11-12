@@ -26,7 +26,7 @@ RSpec.describe BlacklightRangeLimit::RangeFacetComponent, type: :component do
       min: nil,
       max: nil,
       search_state: Blacklight::SearchState.new({}, nil),
-      range_config: {},
+      range_config: BlacklightRangeLimit.default_range_config[:range_config],
       modal_path: nil,
       facet_field: facet_config,
       **facet_field_params,

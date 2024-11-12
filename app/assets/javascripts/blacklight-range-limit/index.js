@@ -41,7 +41,9 @@ export default class BlacklightRangeLimit {
     });
   }
 
-  chartReplacesText = true;
+  textualFacets = true;
+  textualFacetsCollapsible = true;
+  rangeListHeadingLocalized = undefined;
 
   rangeBuckets = []; // array of objects with bucket range info
 
@@ -52,7 +54,7 @@ export default class BlacklightRangeLimit {
   container;  // div.range-limit wrapping entire facet display box
   chartCanvasElement; // <canvas> DOM element
 
-  // container should be a `div.range-limit` that will have within it a `.profile .distribution`
+  // container should be a `div.range-limit` that will have within it a `.distribution`
   // with textual distributions that will be turned into a histogram chart.
   constructor(container) {
     this.container = container;
@@ -61,7 +63,7 @@ export default class BlacklightRangeLimit {
       throw new Error("BlacklightRangeLimit missing argument")
     }
 
-    this.distributionElement = container.querySelector(".profile .distribution")
+    this.distributionElement = container.querySelector(".distribution")
 
     // If there is no distribution element on page, it means we don't have data,
     // nothing to do.
@@ -78,10 +80,13 @@ export default class BlacklightRangeLimit {
       this.whenBecomesVisible(container, target => this.setup());
     }
 
-    if (this.container.getAttribute("data-chart-replaces-text") == "false") {
-      this.chartReplacesText = false;
+    if (this.container.getAttribute("data-textual-facets") == "false") {
+      this.textualFacets = false;
     }
-
+    if (this.container.getAttribute("data-textual-facets-collapsible") == "false") {
+      this.textualFacetsCollapsible = false;
+    }
+    this.rangeListHeadingLocalized = this.container.getAttribute("data-range-list-heading-localized") || "Range List";
   }
 
   // if the range fetch link is still in DOM, fetch ranges from back-end,
@@ -96,7 +101,7 @@ export default class BlacklightRangeLimit {
 
     // What we'll do to put the chart on page whether or not we need to load --
     // when query has range limits, we don't need to load, it's already there.
-    let handleOnPageData = () => {
+    let conditonallySetupChart = () => {
       if (this.distributionElement.classList.contains("chart_js")) {
         this.extractBucketData();
         this.chartCanvasElement = this.setupDomForChart();
@@ -111,13 +116,14 @@ export default class BlacklightRangeLimit {
         then( response => response.ok ? response.text() : Promise.reject(response)).
         then( responseBody => new DOMParser().parseFromString(responseBody, "text/html")).
         then( responseDom => responseDom.querySelector(".facet-values")).
-        then( element =>  this.distributionElement.innerHTML = element.outerHTML  ).
-        then( _ => { handleOnPageData()  }).
+        then( element => this.placeFacetValuesListElement(element)).
+        then( _ => { conditonallySetupChart()  }).
         catch( error => {
           console.error(error);
         });
     } else {
-      handleOnPageData();
+      this.placeFacetValuesListElement(this.distributionElement.querySelector(".facet-values"));
+      conditonallySetupChart();
     }
   }
 
@@ -161,6 +167,32 @@ export default class BlacklightRangeLimit {
     return undefined;
   }
 
+  // Take HTML element with facet list values
+  //
+  // Possibly hide or wrap it with open/close disclosure, depending on
+  // configuration.
+  //
+  // Place it onto page.
+  placeFacetValuesListElement(listElement) {
+    if (!listElement) {
+      return;
+    }
+
+    listElement.classList.add("mt-3");
+
+    if (! this.textualFacets) {
+      listElement.style["display"] = "none"
+    } else if (this.textualFacetsCollapsible) {
+      const detailsEl = this.container.ownerDocument.createElement("details");
+      detailsEl.innerHTML = "<summary>" + this.rangeListHeadingLocalized + "</summary>";
+      detailsEl.classList.add("mt-4", "text-muted");
+      detailsEl.appendChild( listElement );
+      listElement = detailsEl;
+    }
+
+    this.distributionElement.innerHTML  = listElement.outerHTML;
+  }
+
   setupDomForChart() {
     if(this.chartCanvasElement) {
       // already there, we're good.
@@ -170,11 +202,13 @@ export default class BlacklightRangeLimit {
     const listDiv = this.distributionElement.querySelector(".facet-values");
     const wrapperDiv = this.container.querySelector("*[data-chart-wrapper=true]");
 
-    if (this.chartReplacesText) {
-      // We keep the textual facet data as accessible screen-reader, add .sr-only to it though
-      listDiv.classList.add("sr-only")
-      listDiv.classList.add("visually-hidden");
-    }
+
+
+    // if (this.chartReplacesText) {
+    //   // We keep the textual facet data as accessible screen-reader, add .sr-only to it though
+    //   listDiv.classList.add("sr-only")
+    //   listDiv.classList.add("visually-hidden");
+    // }
 
     // We create a <chart>, insert it into DOM in wrapper
     this.chartCanvasElement = this.container.ownerDocument.createElement("canvas");

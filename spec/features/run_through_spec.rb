@@ -38,7 +38,7 @@ describe 'Run through with javascript', js: true do
       expect(find("input#range_pub_date_si_end").value).to be_present
 
       # expect "missing" facet
-      within 'ul.subsection.missing' do
+      within 'ul.missing' do
         expect(page).to have_link '[Missing]'
       end
 

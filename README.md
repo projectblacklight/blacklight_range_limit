@@ -82,7 +82,7 @@ In order to calculate distribution segment ranges, we need to first know the min
 
 So, ordinarily, after we've gotten the result set, an additional round trip to back-end and solr will happen, with min max identified, to fetch segments.
 
-If you'd like to avoid this, you can turn off segment display altogether with the :segment option below; or you can set :assumed_boundaries below to use fixed boundaries for not-yet-limited segments instead of taking boundaries from the result set.
+If you'd like to avoid this, you can set :assumed_boundaries below to use fixed boundaries for not-yet-limited segments instead of taking boundaries from the result set. Or you can disable the segment behavior by setting `chart_js` and `textual_facets` both to false.
 
 Note that a drill-down will never require the second request, because boundaries on a drill-down are always taken from the specified limits.
 
@@ -99,7 +99,8 @@ config.add_facet_field 'pub_date', label: 'Publication Year',
                assumed_boundaries: [1100, Time.now.year + 2],
                segments: true,
                chart_js: true,
-               chart_replaces_text: true,
+               textual_facets: true,
+               textual_facets_collapsible: true,
                chart_segment_border_color: "rgba(0,0,0, 0.5)",
                chart_segment_bg_color: "#ccddcc",
                chart_aspect_ratio: "2"
@@ -111,11 +112,13 @@ config.add_facet_field 'pub_date', label: 'Publication Year',
   * Default 10. Approximately how many segments to divide the range into for segment facets, which become segments on the chart. Actual segments are calculated to be 'nice' values, so may not exactly match your setting.
 * **:assumed_boundaries** :
   * Default null. For a result set that has not yet been limited, instead of taking boundaries from results and making a second AJAX request to fetch segments, just assume these given boundaries. If you'd like to avoid this second AJAX Solr call, you can set :assumed_boundaries to a two-element array of integers instead, and the assumed boundaries will always be used. Note this is live ruby code, you can put calculations in there like Time.now.year + 2.
-* **:segments** :
-  * Default true. If set to false, then distribution segment facets will not be loaded at all,    you'll just get input boxes.
 * **chart_js**:
-  * Default true. If false, the Javascript chart is not loaded, you will still get textual facets for buckets.
-* **chart_replaces_text**: Default true. If false, when the chart is loaded purely textual facets will still remain on-screen too.
+  * Default true. If false, the Javascript chart is not loaded, you can still get textual facets for bucket with `textual_facets` config.
+* **textual_facets**: Default true. Should we show textual facet list too? Universal design
+  for accessibility, may have accessibilty concerns to turn off.
+* **textual_facets_collapsible**: Put the textual facets in a collapse/expand
+  disclosure. If you set chart_js to false, may make sense to set this to false too, to have
+  textual facets only instead of chart?
 * **chart_segment_border_color** / **chart_segment_bg_color** :
   * Set colors for the edge and fill of the segment bars in the histogram.
 * chart_aspect_ratio: for chart.js, will fill available width then this determines size of chart. defaults to 2

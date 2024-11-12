@@ -17,5 +17,9 @@ module BlacklightRangeLimit
     def range_limit_url(options = {})
       helpers.main_app.url_for(@facet_field.search_state.to_h.merge(range_field: @facet_field.key, action: 'range_limit').merge(options))
     end
+
+    def uses_distribution?
+      range_config[:chart_js] || range_config[:textual_facets]
+    end
   end
 end

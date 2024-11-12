@@ -65,6 +65,12 @@ export default class BlacklightRangeLimit {
 
     this.distributionElement = container.querySelector(".distribution")
 
+    // If there is no distribution element on page, it means we don't have data,
+    // nothing to do.
+    if (! this.distributionElement) {
+      return;
+    }
+
     const bounding = container.getBoundingClientRect();
     if (bounding.width > 0 || bounding.height > 0) {
       this.setup(); // visible, init now
@@ -212,6 +218,7 @@ export default class BlacklightRangeLimit {
     // Blacklight's config.full_width_layout = true
     // See: https://github.com/projectblacklight/blacklight_range_limit/pull/269
     this.chartCanvasElement.style.display = 'inline-block';
+    wrapperDiv.style.display  = "block"; // un-hide it
     wrapperDiv.prepend(this.chartCanvasElement);
 
     return this.chartCanvasElement;

@@ -176,7 +176,7 @@ export default class BlacklightRangeLimit {
       listElement.style["display"] = "none"
     } else if (this.textualFacetsCollapsible) {
       const detailsEl = this.container.ownerDocument.createElement("details");
-      detailsEl.innerHTML = "<summary>Range Interval List</summary>";
+      detailsEl.innerHTML = "<summary>Range List</summary>";
       detailsEl.classList.add("mt-4", "text-muted");
       detailsEl.appendChild( listElement );
       listElement = detailsEl;

@@ -62,7 +62,7 @@ export default class BlacklightRangeLimit {
       throw new Error("BlacklightRangeLimit missing argument")
     }
 
-    this.distributionElement = container.querySelector(".profile .distribution")
+    this.distributionElement = container.querySelector(".distribution")
 
     const bounding = container.getBoundingClientRect();
     if (bounding.width > 0 || bounding.height > 0) {

@@ -9,6 +9,7 @@ es:
       range_end: Fin del rango %{field_label}
       range_end_short: Fin
       range_html: <span class="from" data-blrl-begin="%{begin_value}">%{begin}</span> a <span class="to" data-blrl-end="%{end_value}">%{end}</span>
+      range_list_heading: Lista de rangos
       remove_limit: eliminar
       results_range_html: Los resultados actuales varían de <span class="min">%{min}</span> a <span class="max">%{max}</span>
       single_html: <span class="single" data-blrl-single="%{begin_value}">%{begin}</span>

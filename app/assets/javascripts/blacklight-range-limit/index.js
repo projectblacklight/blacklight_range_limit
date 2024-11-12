@@ -43,6 +43,7 @@ export default class BlacklightRangeLimit {
 
   textualFacets = true;
   textualFacetsCollapsible = true;
+  rangeListHeadingLocalized = undefined;
 
   rangeBuckets = []; // array of objects with bucket range info
 
@@ -79,6 +80,7 @@ export default class BlacklightRangeLimit {
     if (this.container.getAttribute("data-textual-facets-collapsible") == "false") {
       this.textualFacetsCollapsible = false;
     }
+    this.rangeListHeadingLocalized = this.container.getAttribute("data-range-list-heading-localized") || "Range List";
   }
 
   // if the range fetch link is still in DOM, fetch ranges from back-end,
@@ -176,7 +178,7 @@ export default class BlacklightRangeLimit {
       listElement.style["display"] = "none"
     } else if (this.textualFacetsCollapsible) {
       const detailsEl = this.container.ownerDocument.createElement("details");
-      detailsEl.innerHTML = "<summary>Range List</summary>";
+      detailsEl.innerHTML = "<summary>" + this.rangeListHeadingLocalized + "</summary>";
       detailsEl.classList.add("mt-4", "text-muted");
       detailsEl.appendChild( listElement );
       listElement = detailsEl;

@@ -9,6 +9,7 @@
         data-chart-segment-bg-color="<%= range_config[:chart_segment_bg_color] %>"
         data-textual-facets="<%= !! range_config[:textual_facets] %>"
         data-textual-facets-collapsible="<%= !! range_config[:textual_facets_collapsible] %>"
+        data-range-list-heading-localized="<%= t('blacklight.range_limit.range_list_heading') %>"
     >
       <% if @facet_field.selected_range_facet_item %>
         <%= render BlacklightRangeLimit::RangeSegmentsComponent.new(facet_field: @facet_field, facet_items: [@facet_field.selected_range_facet_item], classes: ['current', 'mb-3']) %>

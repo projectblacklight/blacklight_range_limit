@@ -9,6 +9,7 @@ it:
       range_end: "%{field_label} a"
       range_end_short: Fine
       range_html: <span class="from" data-blrl-begin="%{begin_value}">%{begin}</span> a <span class="to" data-blrl-end="%{end_value}">%{end}</span>
+      range_list_heading: Elenco intervalli
       remove_limit: cancella
       results_range_html: Risultati attuali vanno da <span class="min">%{min}</span> a <span class="max">%{max}</span>
       single_html: <span class="single" data-blrl-single="%{begin_value}">%{begin}</span>

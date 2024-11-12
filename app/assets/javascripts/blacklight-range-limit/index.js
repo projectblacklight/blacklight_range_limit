@@ -120,7 +120,7 @@ export default class BlacklightRangeLimit {
     this.rangeBuckets = Array.from(facetListDom.querySelectorAll("ul.facet-values li")).map( li => {
       const from    = this.parseNum(li.querySelector("span.from")?.getAttribute("data-blrl-begin") || li.querySelector("span.single")?.getAttribute("data-blrl-single"));
       const to      = this.parseNum(li.querySelector("span.to")?.getAttribute("data-blrl-end") || li.querySelector("span.single")?.getAttribute("data-blrl-single"));
-      const count   = this.parseNum(li.querySelector("span.facet-count,span.count").innerText);
+      const count   = this.parseNum(li.querySelector("span.facet-count,span.count").textContent);
       const avg     = (count / (to - from + 1));
 
       return {
@@ -178,6 +178,7 @@ export default class BlacklightRangeLimit {
     // Blacklight's config.full_width_layout = true
     // See: https://github.com/projectblacklight/blacklight_range_limit/pull/269
     this.chartCanvasElement.style.display = 'inline-block';
+    wrapperDiv.style.display  = "block"; // un-hide it
     wrapperDiv.prepend(this.chartCanvasElement);
 
     return this.chartCanvasElement;

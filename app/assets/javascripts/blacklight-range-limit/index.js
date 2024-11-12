@@ -53,7 +53,7 @@ export default class BlacklightRangeLimit {
   container;  // div.range-limit wrapping entire facet display box
   chartCanvasElement; // <canvas> DOM element
 
-  // container should be a `div.range-limit` that will have within it a `.profile .distribution`
+  // container should be a `div.range-limit` that will have within it a `.distribution`
   // with textual distributions that will be turned into a histogram chart.
   constructor(container) {
     this.container = container;

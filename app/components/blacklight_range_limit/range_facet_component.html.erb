@@ -19,7 +19,7 @@
         <div class="profile mb-3">
           <%# if was very hard to get chart.js to be succesfully resonsive, required this wrapper!
           https://github.com/chartjs/Chart.js/issues/11005 %>
-          <div class="chart-wrapper" data-chart-wrapper="true" style="position: relative; width: 100%; aspect-ratio: <%= range_config[:chart_aspect_ratio] %>;">
+          <div class="chart-wrapper" data-chart-wrapper="true" style="display: none; position: relative; width: 100%; aspect-ratio: <%= range_config[:chart_aspect_ratio] %>;">
           </div>
 
           <% if (min = @facet_field.min) &&

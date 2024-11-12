@@ -108,13 +108,13 @@ export default class BlacklightRangeLimit {
         then( response => response.ok ? response.text() : Promise.reject(response)).
         then( responseBody => new DOMParser().parseFromString(responseBody, "text/html")).
         then( responseDom => responseDom.querySelector(".facet-values")).
-        then( element => this.decorateFacetValuesListElement(element)).
-        then( element =>  this.distributionElement.innerHTML = element.outerHTML  ).
+        then( element => this.placeFacetValuesListElement(element)).
         then( _ => { conditonallySetupChart()  }).
         catch( error => {
           console.error(error);
         });
     } else {
+      this.placeFacetValuesListElement(this.distributionElement.querySelector(".facet-values"));
       conditonallySetupChart();
     }
   }
@@ -159,9 +159,17 @@ export default class BlacklightRangeLimit {
     return undefined;
   }
 
-  // Take HTML element with facet list values, and hide and/or
-  // wrap in a collape/disclosure element.
-  decorateFacetValuesListElement(listElement) {
+  // Take HTML element with facet list values
+  //
+  // Possibly hide or wrap it with open/close disclosure, depending on
+  // configuration.
+  //
+  // Place it onto page.
+  placeFacetValuesListElement(listElement) {
+    if (!listElement) {
+      return;
+    }
+
     if (! this.textualFacets) {
       listElement.style["display"] = "none"
     } else if (this.textualFacetsCollapsible) {
@@ -171,7 +179,7 @@ export default class BlacklightRangeLimit {
       listElement = detailsEl;
     }
 
-    return listElement;
+    this.distributionElement.innerHTML  = listElement.outerHTML;
   }
 
   setupDomForChart() {

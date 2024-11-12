@@ -115,7 +115,7 @@ export default class BlacklightRangeLimit {
           console.error(error);
         });
     } else {
-      handleOnPageData();
+      conditonallySetupChart();
     }
   }
 

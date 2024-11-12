@@ -177,7 +177,7 @@ export default class BlacklightRangeLimit {
     } else if (this.textualFacetsCollapsible) {
       const detailsEl = this.container.ownerDocument.createElement("details");
       detailsEl.innerHTML = "<summary>Range Interval List</summary>";
-      detailsEl.classList.add("mt-3", "text-muted");
+      detailsEl.classList.add("mt-4", "text-muted");
       detailsEl.appendChild( listElement );
       listElement = detailsEl;
     }

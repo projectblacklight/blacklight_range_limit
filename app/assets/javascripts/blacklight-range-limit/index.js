@@ -170,11 +170,14 @@ export default class BlacklightRangeLimit {
       return;
     }
 
+    listElement.classList.add("mt-3");
+
     if (! this.textualFacets) {
       listElement.style["display"] = "none"
     } else if (this.textualFacetsCollapsible) {
       const detailsEl = this.container.ownerDocument.createElement("details");
       detailsEl.innerHTML = "<summary>Range Interval List</summary>";
+      detailsEl.classList.add("mt-3");
       detailsEl.appendChild( listElement );
       listElement = detailsEl;
     }

@@ -29,7 +29,7 @@
               (max = @facet_field.max) %>
 
           <% if range_config[:segments] != false %>
-            <div class="distribution subsection <%= 'chart_js' unless range_config[:chart_js] == false %>">
+            <div class="distribution <%= 'chart_js' unless range_config[:chart_js] == false %>">
               <!-- if  we already fetched segments from solr, display them
                    here. Otherwise, display a link to fetch them, which JS
                    will AJAX fetch.  -->
@@ -44,7 +44,7 @@
 
 
         <% if @facet_field.missing_facet_item && !request.xhr? && range_config[:segments] != false %>
-          <%= render BlacklightRangeLimit::RangeSegmentsComponent.new(facet_field: @facet_field, facet_items: [@facet_field.missing_facet_item], classes: ['missing', 'subsection', 'mt-3']) %>
+          <%= render BlacklightRangeLimit::RangeSegmentsComponent.new(facet_field: @facet_field, facet_items: [@facet_field.missing_facet_item], classes: ['missing', 'mt-3']) %>
         <% end %>
       <% end %>
     </div>

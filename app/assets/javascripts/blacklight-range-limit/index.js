@@ -43,6 +43,7 @@ export default class BlacklightRangeLimit {
 
   textualFacets = true;
   textualFacetsCollapsible = true;
+  rangeListHeadingLocalized = undefined;
 
   rangeBuckets = []; // array of objects with bucket range info
 
@@ -64,6 +65,12 @@ export default class BlacklightRangeLimit {
 
     this.distributionElement = container.querySelector(".distribution")
 
+    // If there is no distribution element on page, it means we don't have data,
+    // nothing to do.
+    if (! this.distributionElement) {
+      return;
+    }
+
     const bounding = container.getBoundingClientRect();
     if (bounding.width > 0 || bounding.height > 0) {
       this.setup(); // visible, init now
@@ -79,6 +86,7 @@ export default class BlacklightRangeLimit {
     if (this.container.getAttribute("data-textual-facets-collapsible") == "false") {
       this.textualFacetsCollapsible = false;
     }
+    this.rangeListHeadingLocalized = this.container.getAttribute("data-range-list-heading-localized") || "Range List";
   }
 
   // if the range fetch link is still in DOM, fetch ranges from back-end,
@@ -176,7 +184,7 @@ export default class BlacklightRangeLimit {
       listElement.style["display"] = "none"
     } else if (this.textualFacetsCollapsible) {
       const detailsEl = this.container.ownerDocument.createElement("details");
-      detailsEl.innerHTML = "<summary>Range List</summary>";
+      detailsEl.innerHTML = "<summary>" + this.rangeListHeadingLocalized + "</summary>";
       detailsEl.classList.add("mt-4", "text-muted");
       detailsEl.appendChild( listElement );
       listElement = detailsEl;
@@ -210,6 +218,7 @@ export default class BlacklightRangeLimit {
     // Blacklight's config.full_width_layout = true
     // See: https://github.com/projectblacklight/blacklight_range_limit/pull/269
     this.chartCanvasElement.style.display = 'inline-block';
+    wrapperDiv.style.display  = "block"; // un-hide it
     wrapperDiv.prepend(this.chartCanvasElement);
 
     return this.chartCanvasElement;

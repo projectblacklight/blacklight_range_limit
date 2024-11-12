@@ -9,6 +9,7 @@
         data-chart-segment-bg-color="<%= range_config[:chart_segment_bg_color] %>"
         data-textual-facets="<%= !! range_config[:textual_facets] %>"
         data-textual-facets-collapsible="<%= !! range_config[:textual_facets_collapsible] %>"
+        data-range-list-heading-localized="<%= t('blacklight.range_limit.range_list_heading') %>"
     >
       <% if @facet_field.selected_range_facet_item %>
         <%= render BlacklightRangeLimit::RangeSegmentsComponent.new(facet_field: @facet_field, facet_items: [@facet_field.selected_range_facet_item], classes: ['current', 'mb-3']) %>
@@ -17,10 +18,9 @@
       <!-- no results profile if missing is selected -->
       <% unless @facet_field.missing_selected? %>
         <%# this has to be on page if you want calculated facets to show up, JS sniffs it.
-
           it was very hard to get chart.js to be succesfully resonsive, required this wrapper!
           https://github.com/chartjs/Chart.js/issues/11005 -%>
-        <div class="chart-wrapper mb-3" data-chart-wrapper="true" style="position: relative; width: 100%; aspect-ratio: <%= range_config[:chart_aspect_ratio] %>;">
+        <div class="chart-wrapper mb-3" data-chart-wrapper="true" style="display: none; position: relative; width: 100%; aspect-ratio: <%= range_config[:chart_aspect_ratio] %>;">
         </div>
 
         <%= render BlacklightRangeLimit::RangeFormComponent.new(facet_field: @facet_field, classes: @classes) %>

@@ -71,7 +71,7 @@ package.json-based use will additionally need to point to the matching unreleaes
 You have at least one solr field you want to display as a range limit, that's why you've installed this plugin. In your CatalogController, the facet configuration should look like:
 
 ```ruby
-config.add_facet_field 'pub_date', label: 'Publication Year', **default_range_config
+config.add_facet_field 'pub_date', label: 'Publication Year', range: true
 ```
 
 You should now get range limit display. More complicated configuration is available if desired, see Range Facet Configuration below.
@@ -92,20 +92,18 @@ Note that a drill-down will never require the second request, because boundaries
 There are some additional configuration options that can be passed in facet config in the `range_config` key. You can pass some or all of them like this:
 
 ```ruby
-config.add_facet_field 'pub_date', label: 'Publication Year',
-        **default_range_config.deep_merge(
-            range_config: {
-               num_segments: 6,
-               assumed_boundaries: [1100, Time.now.year + 2],
-               segments: true,
-               chart_js: true,
-               textual_facets: true,
-               textual_facets_collapsible: true,
-               chart_segment_border_color: "rgba(0,0,0, 0.5)",
-               chart_segment_bg_color: "#ccddcc",
-               chart_aspect_ratio: "2"
-            }
-        )
+config.add_facet_field 'pub_date', label: 'Publication Year', range_config: {
+       num_segments: 6,
+       assumed_boundaries: [1100, Time.now.year + 2],
+       segments: true,
+       chart_js: true,
+       textual_facets: true,
+       textual_facets_collapsible: true,
+       chart_segment_border_color: "rgba(0,0,0, 0.5)",
+       chart_segment_bg_color: "#ccddcc",
+       chart_aspect_ratio: "2"
+    }
+)
 ```
 
 * **:num_segments** :

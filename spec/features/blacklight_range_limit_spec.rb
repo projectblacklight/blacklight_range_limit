@@ -71,7 +71,7 @@ describe "Blacklight Range Limit with configured input labels" do
   before do
     CatalogController.blacklight_config = Blacklight::Configuration.new
     CatalogController.configure_blacklight do |config|
-      config.add_facet_field 'pub_date_si', **CatalogController.default_range_config
+      config.add_facet_field 'pub_date_si', range: true
       config.default_solr_params[:'facet.field'] = config.facet_fields.keys
     end
   end

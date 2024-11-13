@@ -61,5 +61,29 @@ module BlacklightRangeLimit
       return solr_params
     end
 
+    # hacky polyfill for new Blacklight behavior we need, if we don't have it yet
+    #
+    # https://github.com/projectblacklight/blacklight/pull/3213
+    # https://github.com/projectblacklight/blacklight/pull/3443
+    bl_version = Gem.loaded_specs["blacklight"]&.version
+    if bl_version && (bl_version <= Gem::Version.new("8.6.1"))
+      def facet_value_to_fq_string(facet_field, value, use_local_params: true)
+        facet_config = blacklight_config.facet_fields[facet_field]
+
+        # if it's an one-end range, and condition from original that would use query instead isn't met
+        if value.is_a?(Range) && (value.count == Float::INFINITY) && !facet_config&.query
+          solr_field = facet_config.field if facet_config && !facet_config.query
+          solr_field ||= facet_field
+
+          local_params = []
+          local_params << "tag=#{facet_config.tag}" if use_local_params && facet_config && facet_config.tag
+
+          "#{solr_field}:[#{value.begin || "*"} TO #{value.end || "*"}]"
+        else
+          super
+        end
+      end
+    end
+
   end
 end

@@ -61,6 +61,50 @@ describe 'Run through with javascript', js: true do
     end
   end
 
+  context "open-ended range" do
+    it "can search" do
+      visit search_catalog_path
+
+      click_button 'Publication Date Sort'
+
+      within ".facet-limit.blacklight-pub_date_si" do
+        find("input#range_pub_date_si_begin").set("")
+        find("input#range_pub_date_si_end").set(end_range)
+        click_button "Apply limit"
+      end
+
+      expect(page).to have_css(".applied-filter", text: /Publication Date Sort +to #{end_range}/)
+      expect(page).not_to have_text("No entries found")
+      expect(page).to have_css(".document")
+
+      within ".facet-limit.blacklight-pub_date_si" do
+        # expect expandable limits
+        find("summary", text: "Range List").click
+        expect(page).to have_css("details ul.facet-values li")
+      end
+    end
+  end
+
+  context "submitted with empty boundaries" do
+    it "does not apply filter" do
+      visit search_catalog_path
+
+      click_button 'Publication Date Sort'
+
+      within ".facet-limit.blacklight-pub_date_si" do
+        find("input#range_pub_date_si_begin").set("")
+        find("input#range_pub_date_si_end").set("")
+        click_button "Apply limit"
+      end
+      expect(page).not_to have_css(".applied-filter")
+
+      click_button 'Publication Date Sort'
+      within ".facet-limit.blacklight-pub_date_si" do
+        expect(page).not_to have_css(".selected")
+      end
+    end
+  end
+
   context 'when assumed boundaries configured' do
     before do
       CatalogController.blacklight_config.facet_fields['pub_date_si'].range_config = {

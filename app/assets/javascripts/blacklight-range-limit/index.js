@@ -102,7 +102,8 @@ export default class BlacklightRangeLimit {
     // What we'll do to put the chart on page whether or not we need to load --
     // when query has range limits, we don't need to load, it's already there.
     let conditonallySetupChart = () => {
-      if (this.distributionElement.classList.contains("chart_js")) {
+      // No need to draw chart for only one or none buckets, not useful
+      if (this.distributionElement.classList.contains("chart_js") && this.rangeBuckets.length > 1) {
         this.chartCanvasElement = this.setupDomForChart();
         this.drawChart(this.chartCanvasElement);
       }
@@ -122,8 +123,9 @@ export default class BlacklightRangeLimit {
           console.error(error);
         });
     } else {
-      this.placeFacetValuesListElement(this.distributionElement.querySelector(".facet-values"));
-      this.extractBucketData();
+      const listElement = this.distributionElement.querySelector(".facet-values");
+      this.extractBucketData(listElement);
+      this.placeFacetValuesListElement(listElement);
       conditonallySetupChart();
     }
   }
@@ -181,7 +183,8 @@ export default class BlacklightRangeLimit {
 
     listElement.classList.add("mt-3");
 
-    if (! this.textualFacets) {
+    // No need to show if only 1 or none categories, not useful
+    if (!this.textualFacets || this.rangeBuckets.length <= 1) {
       listElement.style["display"] = "none"
     } else if (this.textualFacetsCollapsible) {
       const detailsEl = this.container.ownerDocument.createElement("details");

@@ -103,7 +103,6 @@ export default class BlacklightRangeLimit {
     // when query has range limits, we don't need to load, it's already there.
     let conditonallySetupChart = () => {
       if (this.distributionElement.classList.contains("chart_js")) {
-        this.extractBucketData();
         this.chartCanvasElement = this.setupDomForChart();
         this.drawChart(this.chartCanvasElement);
       }
@@ -116,6 +115,7 @@ export default class BlacklightRangeLimit {
         then( response => response.ok ? response.text() : Promise.reject(response)).
         then( responseBody => new DOMParser().parseFromString(responseBody, "text/html")).
         then( responseDom => responseDom.querySelector(".facet-values")).
+        then( element => this.extractBucketData(element)).
         then( element => this.placeFacetValuesListElement(element)).
         then( _ => { conditonallySetupChart()  }).
         catch( error => {
@@ -123,6 +123,7 @@ export default class BlacklightRangeLimit {
         });
     } else {
       this.placeFacetValuesListElement(this.distributionElement.querySelector(".facet-values"));
+      this.extractBucketData();
       conditonallySetupChart();
     }
   }
@@ -164,7 +165,7 @@ export default class BlacklightRangeLimit {
       this.xTicks.push(this.rangeBuckets[this.rangeBuckets.length - 1].to + 1);
     }
 
-    return undefined;
+    return facetListDom;
   }
 
   // Take HTML element with facet list values

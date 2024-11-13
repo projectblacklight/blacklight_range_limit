@@ -65,6 +65,15 @@ describe "Blacklight Range Limit" do
       expect(page).to_not have_content 'Publication Date Sort'
     end
   end
+
+  context 'when on a zero results found page' do
+    it 'should not render the range limit facet' do
+      visit search_catalog_path(q: 'asdfasdfasdf')
+      expect(page).to_not have_selector '#facets .facet-limit.blacklight-pub_date_si'
+      expect(page).to_not have_selector 'input#range_pub_date_si_begin'
+      expect(page).to_not have_selector 'input#range_pub_date_si_end'
+    end
+  end
 end
 
 describe "Blacklight Range Limit with configured input labels" do

@@ -19,8 +19,17 @@ RSpec.describe BlacklightRangeLimit::FilterField do
   describe '#add' do
     it 'adds a new range parameter' do
       new_state = filter.add(1999..2099)
-
       expect(new_state.params.dig(:range, 'some_field')).to include begin: 1999, end: 2099
+    end
+
+    it "adds end-less range" do
+      new_state = filter.add(1999..nil)
+      expect(new_state.params.dig(:range, 'some_field')).to include begin: 1999, end: nil
+    end
+
+    it "adds begin-less range" do
+      new_state = filter.add(nil..2099)
+      expect(new_state.params.dig(:range, 'some_field')).to include begin: nil, end: 2099
     end
   end
 
@@ -32,6 +41,12 @@ RSpec.describe BlacklightRangeLimit::FilterField do
         new_state = filter.add(1999..2099)
 
         expect(new_state.params.dig(:range, 'some_field')).to include begin: 1999, end: 2099
+
+        new_state = filter.add(1999..nil)
+        expect(new_state.params.dig(:range, 'some_field')).to include begin: 1999, end: nil
+
+        new_state = filter.add(nil..2099)
+        expect(new_state.params.dig(:range, 'some_field')).to include begin: nil, end: 2099
       end
     end
 
@@ -62,6 +77,26 @@ RSpec.describe BlacklightRangeLimit::FilterField do
       let(:permitted_params) { blacklight_params.permit_search_params.to_h }
       it 'sanitizes single begin/end values as scalars' do
         expect(permitted_params.dig(:range, 'some_field')).to include 'begin' => '2013', 'end' => '2022'
+      end
+    end
+  end
+
+  context 'with an end-less range' do
+    let(:param_values) { { range: { some_field: { begin: '2013', end: '' } } } }
+
+    describe '#values' do
+      it 'converts the parameters to a Range' do
+        expect(filter.values).to eq [2013..nil]
+      end
+    end
+  end
+
+  context 'with an begin-less range' do
+    let(:param_values) { { range: { some_field: { begin: '', end: '2022' } } } }
+
+    describe '#values' do
+      it 'converts the parameters to a Range' do
+        expect(filter.values).to eq [nil..2022]
       end
     end
   end

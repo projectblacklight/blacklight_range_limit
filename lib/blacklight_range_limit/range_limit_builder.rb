@@ -25,9 +25,17 @@ module BlacklightRangeLimit
         next unless range_config[:chart_js] || range_config[:textual_facets]
 
         selected_value = search_state.filter(config.key).values.first
-        range = (selected_value if selected_value.is_a? Range) || range_config[:assumed_boundaries]
 
-        add_range_segments_to_solr!(solr_params, field_key, range.first, range.last) if range.present?
+        range = if selected_value.is_a? Range
+          selected_value
+        elsif range_config[:assumed_boundaries]
+          Range.new(*range_config[:assumed_boundaries])
+        else
+          nil
+        end
+
+        # If we have both ends of a range
+        add_range_segments_to_solr!(solr_params, field_key, range.begin, range.end) if range && range.count != Float::INFINITY
       end
 
       solr_params

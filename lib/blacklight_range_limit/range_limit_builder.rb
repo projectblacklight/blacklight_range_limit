@@ -80,13 +80,18 @@ module BlacklightRangeLimit
 
         # if it's an one-end range, and condition from original that would use query instead isn't met
         if value.is_a?(Range) && (value.count == Float::INFINITY) && !facet_config&.query
+          # Adapted from
+          # https://github.com/projectblacklight/blacklight/blob/1494bd0884efe7a48623e9b37abe558fa6348e2a/lib/blacklight/solr/search_builder_behavior.rb#L362-L366
+
           solr_field = facet_config.field if facet_config && !facet_config.query
           solr_field ||= facet_field
 
           local_params = []
           local_params << "tag=#{facet_config.tag}" if use_local_params && facet_config && facet_config.tag
 
-          "#{solr_field}:[#{value.begin || "*"} TO #{value.end || "*"}]"
+          prefix = "{!#{local_params.join(' ')}}" unless local_params.empty?
+
+          "#{prefix}#{solr_field}:[#{value.begin || "*"} TO #{value.end || "*"}]"
         else
           super
         end

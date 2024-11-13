@@ -37,6 +37,10 @@ describe 'Run through with javascript', js: true do
       expect(find("input#range_pub_date_si_begin").value).to be_present
       expect(find("input#range_pub_date_si_end").value).to be_present
 
+      # expect expandable limits
+      find("summary", text: "Range List").click
+      expect(page).to have_css("details ul.facet-values li")
+
       # expect "missing" facet
       within 'ul.missing' do
         expect(page).to have_link '[Missing]'
@@ -58,6 +62,10 @@ describe 'Run through with javascript', js: true do
       # min/max from specified range
       expect(find("input#range_pub_date_si_begin").value).to eq start_range
       expect(find("input#range_pub_date_si_end").value).to eq end_range
+
+      # expect expandable limits
+      find("summary", text: "Range List").click
+      expect(page).to have_css("details ul.facet-values li")
     end
   end
 

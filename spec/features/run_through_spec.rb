@@ -69,6 +69,28 @@ describe 'Run through with javascript', js: true do
     end
   end
 
+  context "for single dates" do
+    it "does not show chart or facet list" do
+      visit search_catalog_path
+
+      click_button 'Publication Date Sort'
+      last_date = nil
+      within ".facet-limit.blacklight-pub_date_si" do
+        last_date = find("input#range_pub_date_si_begin").value
+
+        find("input#range_pub_date_si_begin").set(last_date)
+        find("input#range_pub_date_si_end").set(last_date)
+        click_button "Apply limit"
+      end
+
+      expect(page).to have_css(".applied-filter", text: /Publication Date Sort.*#{last_date}/)
+      within ".facet-limit.blacklight-pub_date_si" do
+        expect(page).not_to have_css 'canvas'
+        expect(page).not_to have_css 'details'
+      end
+    end
+  end
+
   context 'when assumed boundaries configured' do
     before do
       CatalogController.blacklight_config.facet_fields['pub_date_si'].range_config = {

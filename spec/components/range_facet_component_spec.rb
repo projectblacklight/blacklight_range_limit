@@ -45,29 +45,6 @@ RSpec.describe BlacklightRangeLimit::RangeFacetComponent, type: :component do
     allow(component).to receive(:search_facet_path).and_return('/range/key')
   end
 
-  it 'renders into the default facet layout' do
-    expect(rendered).to have_selector('h3', text: 'My facet field')
-      .and have_selector('div.collapse')
-  end
-
-  context 'with min/max' do
-    let(:facet_field_params) do
-      {
-        range_queries: [],
-        min: 100,
-        max: 300
-      }
-    end
-
-    # This is JS api
-    it "renders a link to fetch distribution info" do
-      # need request_url for routing of links generated
-      with_request_url '/catalog' do
-        expect(rendered).to have_selector(".distribution a.load_distribution[href]")
-      end
-    end
-  end
-
   context 'with range data' do
     let(:facet_field_params) do
       {
@@ -80,21 +57,26 @@ RSpec.describe BlacklightRangeLimit::RangeFacetComponent, type: :component do
       }
     end
 
+    it 'renders into the default facet layout' do
+      expect(rendered).to have_selector('h3', text: 'My facet field')
+        .and have_selector('div.collapse')
+    end
+
     it 'renders the range data into the profile' do
       expect(rendered).to have_selector('.distribution li', count: 2)
         .and have_selector('.distribution li', text: '100 to 199')
         .and have_selector('.distribution li', text: '200 to 300')
     end
-  end
 
-  it 'renders a form for the range' do
-    expect(rendered).to have_selector('form[action="http://test.host/catalog"][method="get"]')
-      .and have_field('range[key][begin]')
-      .and have_field('range[key][end]')
-  end
+    it 'renders a form for the range' do
+      expect(rendered).to have_selector('form[action="http://test.host/catalog"][method="get"]')
+        .and have_field('range[key][begin]')
+        .and have_field('range[key][end]')
+    end
 
-  it 'does not render the missing link if there are no matching documents' do
-    expect(rendered).not_to have_link '[Missing]'
+    it 'does not render the missing link if there are no matching documents' do
+      expect(rendered).not_to have_link '[Missing]'
+    end
   end
 
   context 'with missing documents' do
@@ -109,6 +91,31 @@ RSpec.describe BlacklightRangeLimit::RangeFacetComponent, type: :component do
     it 'renders a facet value for the documents that are missing the field data' do
       expected_facet_query_param = Regexp.new(Regexp.escape({ f: { '-key': ['[* TO *]'] } }.to_param))
       expect(rendered).to have_link '[Missing]', href: expected_facet_query_param
+    end
+  end
+
+  context 'with min/max but no range segments' do
+    let(:facet_field_params) do
+      {
+        range_queries: [],
+        min: 100,
+        max: 300
+      }
+    end
+
+    it "renders a link to fetch distribution info" do
+      # need request_url for routing of links generated
+      with_request_url '/catalog' do
+        expect(rendered).to have_selector(".distribution a.load_distribution[href]")
+      end
+    end
+  end
+
+  context 'with no data to display (e.g., no results page)' do
+    let(:facet_field_params) { { min: nil, max: nil, missing_facet_item: nil } }
+
+    it 'does not render the range limit facet' do
+      expect(component.render?).to be false
     end
   end
 end

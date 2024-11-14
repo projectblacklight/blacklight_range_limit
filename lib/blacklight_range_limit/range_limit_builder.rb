@@ -25,9 +25,17 @@ module BlacklightRangeLimit
         next unless range_config[:chart_js] || range_config[:textual_facets]
 
         selected_value = search_state.filter(config.key).values.first
-        range = (selected_value if selected_value.is_a? Range) || range_config[:assumed_boundaries]
 
-        add_range_segments_to_solr!(solr_params, field_key, range.first, range.last) if range.present?
+        range = if selected_value.is_a? Range
+          selected_value
+        elsif range_config[:assumed_boundaries]
+          Range.new(*range_config[:assumed_boundaries])
+        else
+          nil
+        end
+
+        # If we have both ends of a range
+        add_range_segments_to_solr!(solr_params, field_key, range.begin, range.end) if range && range.count != Float::INFINITY
       end
 
       solr_params
@@ -59,6 +67,35 @@ module BlacklightRangeLimit
       solr_params[:rows] = 0
 
       return solr_params
+    end
+
+    # hacky polyfill for new Blacklight behavior we need, if we don't have it yet
+    #
+    # https://github.com/projectblacklight/blacklight/pull/3213
+    # https://github.com/projectblacklight/blacklight/pull/3443
+    bl_version = Gem.loaded_specs["blacklight"]&.version
+    if bl_version && (bl_version <= Gem::Version.new("8.6.1"))
+      def facet_value_to_fq_string(facet_field, value, use_local_params: true)
+        facet_config = blacklight_config.facet_fields[facet_field]
+
+        # if it's an one-end range, and condition from original that would use query instead isn't met
+        if value.is_a?(Range) && (value.count == Float::INFINITY) && !facet_config&.query
+          # Adapted from
+          # https://github.com/projectblacklight/blacklight/blob/1494bd0884efe7a48623e9b37abe558fa6348e2a/lib/blacklight/solr/search_builder_behavior.rb#L362-L366
+
+          solr_field = facet_config.field if facet_config && !facet_config.query
+          solr_field ||= facet_field
+
+          local_params = []
+          local_params << "tag=#{facet_config.tag}" if use_local_params && facet_config && facet_config.tag
+
+          prefix = "{!#{local_params.join(' ')}}" unless local_params.empty?
+
+          "#{prefix}#{solr_field}:[#{value.begin || "*"} TO #{value.end || "*"}]"
+        else
+          super
+        end
+      end
     end
 
   end

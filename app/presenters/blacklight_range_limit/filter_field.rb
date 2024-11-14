@@ -22,7 +22,7 @@ module BlacklightRangeLimit
       if value.is_a? Range
         param_key = filters_key
         params[param_key] = (params[param_key] || {}).dup
-        params[param_key][config.key] = { begin: value.first, end: value.last }
+        params[param_key][config.key] = { begin: value.begin, end: value.end }
         new_state.reset(params)
       else
         super
@@ -55,7 +55,7 @@ module BlacklightRangeLimit
       elsif params.dig(param_key, config.key).is_a? Hash
         b_bound = params.dig(param_key, config.key, :begin).presence
         e_bound = params.dig(param_key, config.key, :end).presence
-        Range.new(b_bound&.to_i, e_bound&.to_i) if b_bound && e_bound
+        Range.new(b_bound&.to_i, e_bound&.to_i) if b_bound || e_bound
       end
 
       f = except.include?(:filters) ? [] : [range].compact

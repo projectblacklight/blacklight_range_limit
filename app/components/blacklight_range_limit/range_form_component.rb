@@ -10,11 +10,11 @@ module BlacklightRangeLimit
     end
 
     def begin_value_default
-      @facet_field.selected_range.is_a?(Range) ? @facet_field.selected_range.first : @facet_field.min
+      @facet_field.selected_range.is_a?(Range) ? @facet_field.selected_range.begin : @facet_field.min
     end
 
     def end_value_default
-      @facet_field.selected_range.is_a?(Range) ? @facet_field.selected_range.last : @facet_field.max
+      @facet_field.selected_range.is_a?(Range) ? @facet_field.selected_range.end : @facet_field.max
     end
 
     def begin_input_name

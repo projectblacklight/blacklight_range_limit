@@ -71,6 +71,15 @@ export default class BlacklightRangeLimit {
       return;
     }
 
+    if (this.container.getAttribute("data-textual-facets") == "false") {
+      this.textualFacets = false;
+    }
+    if (this.container.getAttribute("data-textual-facets-collapsible") == "false") {
+      this.textualFacetsCollapsible = false;
+    }
+
+    this.rangeListHeadingLocalized = this.container.getAttribute("data-range-list-heading-localized") || "Range List";
+
     const bounding = container.getBoundingClientRect();
     if (bounding.width > 0 || bounding.height > 0) {
       this.setup(); // visible, init now
@@ -79,14 +88,6 @@ export default class BlacklightRangeLimit {
       // extra http request to server if it will never be needed!
       this.whenBecomesVisible(container, target => this.setup());
     }
-
-    if (this.container.getAttribute("data-textual-facets") == "false") {
-      this.textualFacets = false;
-    }
-    if (this.container.getAttribute("data-textual-facets-collapsible") == "false") {
-      this.textualFacetsCollapsible = false;
-    }
-    this.rangeListHeadingLocalized = this.container.getAttribute("data-range-list-heading-localized") || "Range List";
   }
 
   // if the range fetch link is still in DOM, fetch ranges from back-end,

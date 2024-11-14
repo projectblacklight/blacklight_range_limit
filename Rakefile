@@ -25,6 +25,44 @@ task ci: ['engine_cart:generate'] do
   end
 end
 
+desc "check npm and gem versions match before release"
+task :guard_version_match do
+  gem_version = File.read(__dir__ + "/VERSION").chomp
+  npm_version = JSON.parse(File.read(__dir__ + "/package.json"))["version"]
+
+  # 9.0.0.beta1 in gem becomes 9.0.0-beta1 in npm
+  gem_version_parts = gem_version.split(".")
+  npm_version_required = [
+    gem_version_parts.slice(0, 3).join("."),
+    gem_version_parts.slice(3, gem_version_parts.length).join(".")
+  ].join("-")
+
+  if npm_version != npm_version_required
+    raise <<~EOS
+      You should not publish without npm version in package.json matching gem version
+
+      gem version: #{gem_version}
+      package.json version: #{npm_version}
+
+      expected package.json version: #{npm_version_required}
+
+    EOS
+  end
+end
+
+# Get our guard to run before `rake release`'s, and warning afterwards
+task "release:guard_clean" => :guard_version_match
+Rake::Task["guard_version_match"].enhance do
+  puts <<~EOS
+
+    ⚠️  Please remember to run `npm publish` the npm package too!  ⚠️
+
+    If you don't have permission, please ask someone who does for help.
+    https://www.npmjs.com/package/blacklight-range-limit
+
+  EOS
+end
+
 
 namespace :test do
   namespace :spec do

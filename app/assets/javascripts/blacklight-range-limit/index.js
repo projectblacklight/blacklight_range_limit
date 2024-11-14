@@ -41,6 +41,7 @@ export default class BlacklightRangeLimit {
     });
   }
 
+  chartEnabled = true;
   textualFacets = true;
   textualFacetsCollapsible = true;
   rangeListHeadingLocalized = undefined;
@@ -71,12 +72,9 @@ export default class BlacklightRangeLimit {
       return;
     }
 
-    if (this.container.getAttribute("data-textual-facets") == "false") {
-      this.textualFacets = false;
-    }
-    if (this.container.getAttribute("data-textual-facets-collapsible") == "false") {
-      this.textualFacetsCollapsible = false;
-    }
+    this.chartEnabled = (this.container.getAttribute("data-chart-enabled") != "false");
+    this.textualFacets = (this.container.getAttribute("data-textual-facets") != "false");
+    this.textualFacetsCollapsible = (this.container.getAttribute("data-textual-facets-collapsible") != "false")
 
     this.rangeListHeadingLocalized = this.container.getAttribute("data-range-list-heading-localized") || "Range List";
 
@@ -104,7 +102,7 @@ export default class BlacklightRangeLimit {
     // when query has range limits, we don't need to load, it's already there.
     let conditonallySetupChart = () => {
       // No need to draw chart for only one or none buckets, not useful
-      if (this.distributionElement.classList.contains("chart_js") && this.rangeBuckets.length > 1) {
+      if (this.chartEnabled && this.rangeBuckets.length > 1) {
         this.chartCanvasElement = this.setupDomForChart();
         this.drawChart(this.chartCanvasElement);
       }

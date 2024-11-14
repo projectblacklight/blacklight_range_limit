@@ -5,6 +5,7 @@
 
   <% component.with_body do %>
     <div class="limit_content range_limit <%= @facet_field.key %>-config blrl-plot-config"
+        data-chart-enabled="<%= !! range_config[:chart_js] %>"
         data-chart-segment-border-color="<%= range_config[:chart_segment_border_color] %>"
         data-chart-segment-bg-color="<%= range_config[:chart_segment_bg_color] %>"
         data-textual-facets="<%= !! range_config[:textual_facets] %>"

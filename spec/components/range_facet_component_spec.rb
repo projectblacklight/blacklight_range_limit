@@ -106,7 +106,67 @@ RSpec.describe BlacklightRangeLimit::RangeFacetComponent, type: :component do
     it "renders a link to fetch distribution info" do
       # need request_url for routing of links generated
       with_request_url '/catalog' do
-        expect(rendered).to have_selector(".distribution a.load_distribution[href]")
+        load_link = rendered.find(".distribution a.load_distribution[href]")
+        expect(load_link).to be_present
+
+        expect(load_link["href"]).to be_present
+        params = Rack::Utils.parse_nested_query(load_link["href"].split("?").try(:last))
+        expect(params["range_field"]).to eq facet_field.key
+        expect(params["range_start"]).to eq facet_field_params[:min].to_s
+        expect(params["range_end"]).to eq facet_field_params[:max].to_s
+      end
+    end
+  end
+
+  context 'with open-ended query' do
+    let(:selected_max) { 200 }
+    let(:data_max) { 300 }
+
+    let(:facet_field) do
+      instance_double(
+        BlacklightRangeLimit::FacetFieldPresenter,
+        key: 'key',
+        active?: false,
+        collapsed?: false,
+        in_modal?: false,
+        label: 'My facet field',
+        selected_range: nil,
+        selected_range_facet_item: Blacklight::Solr::Response::Facets::FacetItem.new(..selected_max),
+        missing_facet_item: nil,
+        missing_selected?: false,
+        min: nil,
+        max: nil,
+        search_state: Blacklight::SearchState.new({}, nil),
+        range_config: BlacklightRangeLimit.default_range_config[:range_config],
+        modal_path: nil,
+        facet_field: facet_config,
+        **facet_field_params,
+        **extra_facet_field_params
+      )
+    end
+
+    let(:facet_field_params) do
+      {
+        range_queries: [],
+        min: 100,
+        max: data_max
+      }
+    end
+
+    # This can be relevant in multi-valued queries, where even though you limited to
+    # < 200, some items in search can ALSO have additional values greater than 200, but
+    # we don't want to include them in our range buckets.
+    it "renders fetch distribution with expressed boundaries taking priority" do
+      # need request_url for routing of links generated
+      with_request_url '/catalog' do
+        load_link = rendered.find(".distribution a.load_distribution[href]")
+        expect(load_link).to be_present
+
+        expect(load_link["href"]).to be_present
+        params = Rack::Utils.parse_nested_query(load_link["href"].split("?").try(:last))
+        expect(params["range_field"]).to eq facet_field.key
+        expect(params["range_start"]).to eq facet_field_params[:min].to_s
+        expect(params["range_end"]).to eq selected_max.to_s
       end
     end
   end

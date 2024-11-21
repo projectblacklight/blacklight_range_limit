@@ -31,5 +31,17 @@ module BlacklightRangeLimit
     def uses_distribution?
       range_config[:chart_js] || range_config[:textual_facets]
     end
+
+    # URL that will return the distribution list of range seguments
+    def load_distribution_link
+      # For open-ended ranges, the selected range should take priority for the boundary
+      # over actual response min/max. Matters for multi-valued fields.
+      min = @facet_field.selected_range_facet_item&.value&.begin || @facet_field.min
+      max = @facet_field.selected_range_facet_item&.value&.end || @facet_field.max
+
+      return nil unless (min && max)
+
+      range_limit_url(range_start: min, range_end: max)
+    end
   end
 end

@@ -19,7 +19,7 @@ Decimal numbers and Dates are NOT supported; they theoretically could be in the 
 
 * Javascript requires you to be using either rails-importmaps or a package.json-based builder like jsbundling-rails or vite-ruby.  Legacy "sprockets-only" is not supported, however propshaft or sprockets can be used as your base asset pipeline.
 
-* Blaklight 7.0+.  Rails 7.0+
+* Blacklight 7.0+.  Rails 7.0+
 
 
 # Installation
@@ -34,7 +34,7 @@ Run `rails generate blacklight_range_limit:install`
 
 ### Manual Javascript setup is not hard
 
-The installer could have trouble figuring out how to add Javascript to your particular setup. In the end, all you need is `blacklight-range-limit` either importmap-pinned (with it's chart.js dependency), or added to your package.json, and then, in a file that has access to the `Blacklight` import:
+The installer could have trouble figuring out how to add Javascript to your particular setup. In the end, all you need is `blacklight-range-limit` either importmap-pinned (with its chart.js dependency), or added to your package.json, and then, in a file that has access to the `Blacklight` import:
 
     import BlacklightRangeLimit from "blacklight-range-limit";
     BlacklightRangeLimit.init({ onLoadHandler: Blacklight.onLoad });
@@ -59,7 +59,7 @@ For import map pins, note:
 
 ### Unreleased version?
 
-If you'd like to use an unrelased version from git, just add that to your Gemfile in the usual way.
+If you'd like to use an unreleased version from git, just add that to your Gemfile in the usual way.
 
 importmap-rails use should then Just Work.
 
@@ -102,8 +102,7 @@ config.add_facet_field 'pub_date', label: 'Publication Year', range_config: {
        chart_segment_border_color: "rgba(0,0,0, 0.5)",
        chart_segment_bg_color: "#ccddcc",
        chart_aspect_ratio: "2"
-    }
-)
+}
 ```
 
 * **:num_segments** :
@@ -112,19 +111,21 @@ config.add_facet_field 'pub_date', label: 'Publication Year', range_config: {
   * Default null. For a result set that has not yet been limited, instead of taking boundaries from results and making a second AJAX request to fetch segments, just assume these given boundaries. If you'd like to avoid this second AJAX Solr call, you can set :assumed_boundaries to a two-element array of integers instead, and the assumed boundaries will always be used. Note this is live ruby code, you can put calculations in there like Time.now.year + 2.
 * **chart_js**:
   * Default true. If false, the Javascript chart is not loaded, you can still get textual facets for bucket with `textual_facets` config.
-* **textual_facets**: Default true. Should we show textual facet list too? Universal design
+* **textual_facets**:
+  * Default true. Should we show textual facet list too? Universal design
   for accessibility, may have accessibilty concerns to turn off.
-* **textual_facets_collapsible**: Put the textual facets in a collapse/expand
+* **textual_facets_collapsible**:
+  * Put the textual facets in a collapse/expand
   disclosure. If you set chart_js to false, may make sense to set this to false too, to have
   textual facets only instead of chart?
-* **chart_segment_border_color** / **chart_segment_bg_color** :
+* **chart_segment_border_color** / **chart_segment_bg_color**:
   * Set colors for the edge and fill of the segment bars in the histogram.
-* chart_aspect_ratio: for chart.js, will fill available width then this determines size of chart. defaults to 2
-
+* **chart_aspect_ratio**:
+  * Defaults to 2. For chart.js, will fill available width then this determines size of chart.
 
 ## Javascript dependencies
 
-We use [chart.js](https://www.chartjs.org/) to draw the chart. It has one dependency of it's own. These need to be either pinned with importmap-rails, or used via the chart.js npm package and an npm-package-based bundler.
+We use [chart.js](https://www.chartjs.org/) to draw the chart. It has one dependency of its own. These need to be either pinned with importmap-rails, or used via the chart.js npm package and an npm-package-based bundler.
 
 There is **no CSS** needed.
 
@@ -169,4 +170,3 @@ Once you are done iterating on your test you will need to stop the application s
 # Publishing Javascript
 
 run `npm publish` to push the javascript package to https://npmjs.org/package/blacklight-range-limit
-

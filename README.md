@@ -99,6 +99,7 @@ config.add_facet_field 'pub_date', label: 'Publication Year', range_config: {
        chart_js: true,
        textual_facets: true,
        textual_facets_collapsible: true,
+       show_missing_link: true,
        chart_segment_border_color: "rgba(0,0,0, 0.5)",
        chart_segment_bg_color: "#ccddcc",
        chart_aspect_ratio: "2"
@@ -118,6 +119,8 @@ config.add_facet_field 'pub_date', label: 'Publication Year', range_config: {
   * Put the textual facets in a collapse/expand
   disclosure. If you set chart_js to false, may make sense to set this to false too, to have
   textual facets only instead of chart?
+* **show_missing_link**:
+  * Default true. Display a link (with count) to results that are _missing_ a value for the range field.
 * **chart_segment_border_color** / **chart_segment_bg_color**:
   * Set colors for the edge and fill of the segment bars in the histogram.
 * **chart_aspect_ratio**:

@@ -154,4 +154,24 @@ describe 'Run through with javascript', js: true do
       expect(find("input#range_pub_date_si_end").value).to be_present
     end
   end
+
+  context 'when missing facet item is configured not to show' do
+    before do
+      CatalogController.blacklight_config.facet_fields['pub_date_si'].range_config = {
+        show_missing_link: false
+      }
+    end
+
+    after do
+      CatalogController.blacklight_config.facet_fields['pub_date_si'].range_config = {}
+    end
+
+    it 'should not show the missing facet item' do
+      visit search_catalog_path
+
+      within ".facet-limit.blacklight-pub_date_si" do
+        expect(page).not_to have_css("ul.missing")
+      end
+    end
+  end
 end

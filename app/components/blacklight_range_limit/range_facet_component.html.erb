@@ -41,7 +41,7 @@
           </div>
         <% end %>
 
-        <% if @facet_field.missing_facet_item && !request.xhr? && uses_distribution? %>
+        <% if range_config[:show_missing_link] && @facet_field.missing_facet_item && !request.xhr? && uses_distribution? %>
           <%= render BlacklightRangeLimit::RangeSegmentsComponent.new(facet_field: @facet_field, facet_items: [@facet_field.missing_facet_item], classes: ['missing', 'mt-3']) %>
         <% end %>
       <% end %>

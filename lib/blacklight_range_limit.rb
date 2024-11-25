@@ -27,6 +27,7 @@ module BlacklightRangeLimit
         chart_js: true,
         textual_facets: true,
         textual_facets_collapsible: true,
+        show_missing_link: true,
         chart_segment_border_color: 'rgb(54, 162, 235)',
         chart_segment_bg_color: 'rgba(54, 162, 235, 0.5)',
         chart_aspect_ratio: 2,

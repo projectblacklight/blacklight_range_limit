@@ -19,7 +19,7 @@
       <!-- no results profile if missing is selected -->
       <% unless @facet_field.missing_selected? %>
         <%# this has to be on page if you want calculated facets to show up, JS sniffs it.
-          it was very hard to get chart.js to be succesfully resonsive, required this wrapper!
+          it was very hard to get chart.js to be successfully responsive, required this wrapper!
           https://github.com/chartjs/Chart.js/issues/11005 -%>
         <div class="chart-wrapper mb-3" data-chart-wrapper="true" style="display: none; position: relative; width: 100%; aspect-ratio: <%= range_config[:chart_aspect_ratio] %>;">
         </div>
@@ -30,7 +30,7 @@
               (min = @facet_field.min) &&
               (max = @facet_field.max) %>
           <div class="distribution <%= 'chart_js' unless range_config[:chart_js] == false %>">
-            <!-- if  we already fetched segments from solr, display them
+            <!-- if we already fetched segments from solr, display them
                  here. Otherwise, display a link to fetch them, which JS
                  will AJAX fetch.  -->
             <% if @facet_field.range_queries.any? %>

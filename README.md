@@ -34,7 +34,10 @@ Run `rails generate blacklight_range_limit:install`
 
 ### Manual Javascript setup is not hard
 
-The installer could have trouble figuring out how to add Javascript to your particular setup. In the end, all you need is `blacklight-range-limit` either importmap-pinned (with its chart.js dependency), or added to your package.json, and then, in a file that has access to the `Blacklight` import:
+The installer could have trouble figuring out how to add Javascript to your particular setup. If it's not working right and you want the installer to skip asset generation, you can execute as `rails generate blacklight_range_limit:install --skip-assets`.
+
+
+In the end, all you need is `blacklight-range-limit` either importmap-pinned (with its chart.js dependency), or added to your package.json, and then, in a file that has access to the `Blacklight` import:
 
     import BlacklightRangeLimit from "blacklight-range-limit";
     BlacklightRangeLimit.init({ onLoadHandler: Blacklight.onLoad });

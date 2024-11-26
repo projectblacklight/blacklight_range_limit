@@ -4,10 +4,13 @@ module BlacklightRangeLimit
   class InstallGenerator < Rails::Generators::Base
     source_root File.expand_path('../templates', __FILE__)
 
+    class_option :'skip-assets', type: :boolean, default: false, desc: "Skip generation of assets into app"
     class_option :'builder-path', type: :string, default: 'app/models/search_builder.rb', aliases: "-b", desc: "Set the path, relative to Rails root, to the Blacklight app's search builder class"
 
     def generate_assets
-      generate 'blacklight_range_limit:assets'
+      unless options[:'skip-assets']
+        generate 'blacklight_range_limit:assets'
+      end
     end
 
     def install_catalog_controller_mixin

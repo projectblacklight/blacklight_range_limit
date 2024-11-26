@@ -26,13 +26,7 @@ module BlacklightRangeLimit
 
         selected_value = search_state.filter(config.key).values.first
 
-        range = if selected_value.is_a? Range
-          selected_value
-        elsif range_config[:assumed_boundaries]
-          Range.new(*range_config[:assumed_boundaries])
-        else
-          nil
-        end
+        range = bl_create_selected_range_value(selected_value, config)
 
         # If we have both ends of a range
         add_range_segments_to_solr!(solr_params, field_key, range.begin, range.end) if range && range.count != Float::INFINITY
@@ -98,5 +92,30 @@ module BlacklightRangeLimit
       end
     end
 
+    # @returns Range or nil
+    #
+    # Range created from a range value or from assumed boundaries if present, and clamped between min and max
+    def bl_create_selected_range_value(selected_value, field_config)
+      range_config = field_config.range_config
+
+      range = if selected_value.is_a? Range
+        selected_value
+      elsif range_config[:assumed_boundaries]
+        Range.new(*range_config[:assumed_boundaries])
+      else
+        nil
+      end
+
+      # clamp between config'd min and max
+      min = range_config[:min_value]
+      max = range_config[:max_value]
+
+      range = Range.new(
+        (range.begin.clamp(min, max) if range.begin),
+        (range.end.clamp(min, max) if range.end),
+      ) if range
+
+      range
+    end
   end
 end

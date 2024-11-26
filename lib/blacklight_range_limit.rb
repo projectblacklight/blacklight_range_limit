@@ -31,7 +31,9 @@ module BlacklightRangeLimit
         chart_segment_border_color: 'rgb(54, 162, 235)',
         chart_segment_bg_color: 'rgba(54, 162, 235, 0.5)',
         chart_aspect_ratio: 2,
-        assumed_boundaries: nil
+        assumed_boundaries: nil,
+        min_value: -2_147_483_648, # solr intfield min and max
+        max_value: 2_147_483_648
       },
       filter_class: BlacklightRangeLimit::FilterField,
       presenter: BlacklightRangeLimit::FacetFieldPresenter,

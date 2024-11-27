@@ -176,4 +176,35 @@ describe 'Run through with javascript', js: true do
       end
     end
   end
+
+  context "Range Limit text facets" do
+    # Make sure it works with strict permitted params
+    around do |example|
+      original = ActionController::Parameters.action_on_unpermitted_parameters
+      ActionController::Parameters.action_on_unpermitted_parameters = :raise
+
+      example.run
+
+      ActionController::Parameters.action_on_unpermitted_parameters = original
+    end
+
+    it "work with strict permitted params" do
+      visit search_catalog_path
+
+      click_button 'Publication Date Sort'
+
+      from_val, to_val = nil, nil
+      within ".facet-limit.blacklight-pub_date_si" do
+        find("summary", text: "Range List").click
+
+        facet_link = first(".facet-values li a")
+        from_val = facet_link.find("span[data-blrl-begin]")["data-blrl-begin"]
+        to_val = facet_link.find("span[data-blrl-end]")["data-blrl-end"]
+
+        facet_link.click
+      end
+
+      expect(page).to have_css(".applied-filter", text: /Publication Date Sort.*#{from_val} to #{to_val}/)
+    end
+  end
 end

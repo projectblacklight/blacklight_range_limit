@@ -50,7 +50,13 @@ module BlacklightRangeLimit
     def values(except: [])
       params = search_state.params
       param_key = filters_key
-      range = if params.dig(param_key, config.key).is_a? Range
+      range = if !params.try(:dig, param_key).respond_to?(:dig)
+        # bad data, not a hash at all, correct it. Yes, it's bad form to mutate
+        # params here, but we found no better solution -- this only necessary in BL
+        # prior to 8.x, not sure why, but this branch can be omitted in BL 8.
+        params.delete(param_key)
+        nil
+      elsif params.dig(param_key, config.key).is_a? Range
         params.dig(param_key, config.key)
       elsif params.dig(param_key, config.key).is_a? Hash
         b_bound = params.dig(param_key, config.key, :begin).presence

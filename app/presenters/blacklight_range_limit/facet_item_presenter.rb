@@ -9,7 +9,7 @@ module BlacklightRangeLimit
     end
 
     # Very hacky way to keep params used for ajax query for segments out
-    # of our facet links. There oughta be a better way?
+    # of our generated facet links. Sorry this seems to be the best way!
     #
     # https://github.com/projectblacklight/blacklight_range_limit/issues/296
     def href(path_options = {})

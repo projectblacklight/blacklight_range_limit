@@ -42,5 +42,20 @@ describe CatalogController, type: :request do
       expect(response.code).to eq("200")
       expect(parsed_body.css("span.applied-filter")).not_to be_present
     end
+
+    describe "out of bounds range config" do
+      let(:max) { BlacklightRangeLimit.default_range_config[:range_config][:max_value] }
+      let(:min) { BlacklightRangeLimit.default_range_config[:range_config][:min_value] }
+
+      let(:too_high) { max.abs * 2 }
+      let(:too_low) { min.abs * -2 }
+
+      it "does not error" do
+        get "/catalog?#{ {"range"=>{ range_facet_field => {"begin"=> too_low, "end"=> too_high }}}.to_param }"
+
+        expect(response.code).to eq("200")
+        expect(parsed_body.css("span.applied-filter")).to be_present
+      end
+    end
   end
 end

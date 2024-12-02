@@ -100,7 +100,9 @@ module BlacklightRangeLimit
 
       range = if selected_value.is_a? Range
         selected_value
-      elsif range_config[:assumed_boundaries]
+      elsif range_config[:assumed_boundaries].is_a?(Range)
+        range_config[:assumed_boundaries]
+      elsif range_config[:assumed_boundaries] # Array of two things please
         Range.new(*range_config[:assumed_boundaries])
       else
         nil

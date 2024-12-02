@@ -136,14 +136,15 @@ describe 'Run through with javascript', js: true do
   end
 
   context 'when assumed boundaries configured' do
-    before do
-      CatalogController.blacklight_config.facet_fields['pub_date_si'].range_config = {
-        assumed_boundaries: start_range.to_i...end_range.to_i
-      }
-    end
+    around do |example|
+      original = CatalogController.blacklight_config.facet_fields['pub_date_si'].range_config
+      CatalogController.blacklight_config.facet_fields['pub_date_si'].range_config = original.merge({
+         :assumed_boundaries=>1900...2100,
+      })
 
-    after do
-      CatalogController.blacklight_config.facet_fields['pub_date_si'].range_config = {}
+      example.run
+
+      CatalogController.blacklight_config.facet_fields['pub_date_si'].range_config = original
     end
 
     it 'should show the range limit with set boundaries' do
@@ -156,14 +157,15 @@ describe 'Run through with javascript', js: true do
   end
 
   context 'when missing facet item is configured not to show' do
-    before do
-      CatalogController.blacklight_config.facet_fields['pub_date_si'].range_config = {
+    around do |example|
+      original = CatalogController.blacklight_config.facet_fields['pub_date_si'].range_config
+      CatalogController.blacklight_config.facet_fields['pub_date_si'].range_config = original.merge({
         show_missing_link: false
-      }
-    end
+      })
 
-    after do
-      CatalogController.blacklight_config.facet_fields['pub_date_si'].range_config = {}
+      example.run
+
+      CatalogController.blacklight_config.facet_fields['pub_date_si'].range_config = original
     end
 
     it 'should not show the missing facet item' do

@@ -13,7 +13,8 @@ module BlacklightRangeLimit
     #
     # https://github.com/projectblacklight/blacklight_range_limit/issues/296
     def href(path_options = {})
-      super(path_options.merge(range_end: nil, range_field: nil, range_start: nil))
+      override_to_nil = BlacklightRangeLimit::ControllerOverride::RANGE_LIMIT_FIELDS.collect { |f| [f, nil] }.to_h
+      super(path_options.merge(override_to_nil))
     end
 
     private

@@ -49,7 +49,8 @@ module BlacklightRangeLimit
     def fetch_specific_range_limit(solr_params)
       field_key = blacklight_params[:range_field] # what field to fetch for
 
-      unless  blacklight_params[:range_start].present? && blacklight_params[:range_end].present?
+      unless  blacklight_params[:range_start].present? && blacklight_params[:range_start].kind_of?(String) &&
+              blacklight_params[:range_end].present? && blacklight_params[:range_end].kind_of?(String)
         raise BlacklightRangeLimit::InvalidRange
       end
 

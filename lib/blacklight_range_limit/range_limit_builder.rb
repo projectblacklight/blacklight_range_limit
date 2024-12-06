@@ -48,6 +48,12 @@ module BlacklightRangeLimit
     # range_field, range_start, range_end
     def fetch_specific_range_limit(solr_params)
       field_key = blacklight_params[:range_field] # what field to fetch for
+
+      unless  blacklight_params[:range_start].present? && blacklight_params[:range_start].kind_of?(String) &&
+              blacklight_params[:range_end].present? && blacklight_params[:range_end].kind_of?(String)
+        raise BlacklightRangeLimit::InvalidRange
+      end
+
       start = blacklight_params[:range_start].to_i
       finish = blacklight_params[:range_end].to_i
 
@@ -61,6 +67,9 @@ module BlacklightRangeLimit
       solr_params[:rows] = 0
 
       return solr_params
+    rescue BlacklightRangeLimit::InvalidRange
+      # This will make Rails return a 400
+      raise ActionController::BadRequest, "invalid range_start (#{blacklight_params[:range_start]}) or range_end (#{blacklight_params[:range_end]})"
     end
 
     # hacky polyfill for new Blacklight behavior we need, if we don't have it yet

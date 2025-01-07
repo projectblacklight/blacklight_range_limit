@@ -32,10 +32,11 @@ task :guard_version_match do
 
   # 9.0.0.beta1 in gem becomes 9.0.0-beta1 in npm
   gem_version_parts = gem_version.split(".")
+
   npm_version_required = [
     gem_version_parts.slice(0, 3).join("."),
     gem_version_parts.slice(3, gem_version_parts.length).join(".")
-  ].join("-")
+  ].collect {|s| s if s && !s.empty? }.compact.join("-")
 
   if npm_version != npm_version_required
     raise <<~EOS

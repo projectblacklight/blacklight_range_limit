@@ -13,9 +13,13 @@ class TestAppGenerator < Rails::Generators::Base
   end
 
   def run_bl8_jsbundling_fixup
-    # while it's named confusingly, the BL8 assets:propshaft generator has what we need
-    # for jsbundling, I think.
-    if File.exist?("package.json") && Blacklight::VERSION.split(".").first == "8"
+    # BL 8.7.0 doesn't seem to need anything, but BL8 before that the automatic BL
+    # install process doesn't do everything we need.
+    #
+    # By manually triggering the BL8 assets:propshaft generator, we can get what we need
+    # for jsbundling, even though it's named confusingly for that, it works in these
+    # versions.
+    if File.exist?("package.json") && Gem::Requirement.create("~> 8.0", "< 8.7.0").satisfied_by?(Gem::Version.new(Blacklight::VERSION))
       generate "blacklight:assets:propshaft"
     end
   end

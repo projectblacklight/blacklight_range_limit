@@ -9,7 +9,6 @@ module BlacklightRangeLimit
         options = @defaults.merge(options)
 
         mapper.get 'range_limit', action: 'range_limit'
-        mapper.get 'range_limit_panel/:id', action: 'range_limit_panel'
       end
     end
   end

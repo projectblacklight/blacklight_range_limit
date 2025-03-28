@@ -24,8 +24,8 @@ jobs:
         #
         #   * Blacklight: 7, 8, or 9
         #   * Rails: 7 or 8
-        #   * sprockets or propshaft(with cssbundling-rails sass)
-        #   * importmap-rails or esbuild  (each with sprockets or importmaps)
+        #   * sprockets or propshaft (with cssbundling-rails sass)
+        #   * importmap-rails or esbuild (each with sprockets or importmaps)
         #
         # We should work with almost every combo of these (even though BL itself
         # doesn't officially support every one), but we don't test with every one,
@@ -42,13 +42,12 @@ jobs:
             ruby: "3.3"
             additional_name: "/ importmap-rails"
             additional_engine_cart_rails_options: "--css=bootstrap"
+
           - rails_version: "~> 8.0.0"
             blacklight_version: '{ "git": "https://github.com/projectblacklight/blacklight.git" }'
             ruby: "3.3"
             additional_name: "/ esbuild"
             additional_engine_cart_rails_options: "--css=bootstrap --javascript=esbuild"
-
-
 
           # BLACKLIGHT 8, can test with use importmaps and esbuild
           #
@@ -57,14 +56,16 @@ jobs:
             blacklight_version: "~> 8.0"
             ruby: "3.3"
             additional_name: "/ importmap-rails, sprockets"
+
           - rails_version: "7.2.1"
             blacklight_version: "~> 8.0"
             ruby: "3.3"
             additional_name: "/ importmap-rails, propshaft"
             additional_engine_cart_rails_options: "-a propshaft --css=bootstrap"
+
           - rails_version: "7.2.1"
             blacklight_version: "~> 8.0"
-            ruby: 3.3
+            ruby: "3.3"
             additional_engine_cart_rails_options: "-a propshaft --javascript=esbuild --css=bootstrap"
             additional_name: "/ esbuild, propshaft"
 
@@ -73,10 +74,9 @@ jobs:
             # * Blacklight 8 can't easily generate an app with Rails 7 and sprockets and esbuild
             #   (the default layout won't be right), although I think it should work fine.
             #
-            # * Can't test with unreleaed Blacklight main and esbuild because the blacklight-frontend
-            #   npm package doens't work from git checkout.  So currently can't test with Rails8
+            # * Can't test with unreleased Blacklight main and esbuild because the blacklight-frontend
+            #   npm package doesn't work from git checkout.  So currently can't test with Rails 8
             #   and esbuild.
-
 
 
           # BLACKLIGHT 7, only test with esbuild, not sure if it supports importmaps, it won't generate it
@@ -86,6 +86,7 @@ jobs:
             ruby: "3.3"
             additional_engine_cart_rails_options: "--javascript=esbuild"
             additional_name: "/ esbuild, sprockets"
+
           - rails_version: "7.2.1"
             blacklight_version: "~> 7.0"
             ruby: "3.3"
@@ -97,15 +98,6 @@ jobs:
             ruby: "3.2"
             additional_engine_cart_rails_options: "--javascript=esbuild"
             additional_name: "/ esbuild, sprockets"
-
-          - rails_version: "7.0.8.4"
-            blacklight_version: "~> 7.0"
-            ruby: "3.1"
-            additional_engine_cart_rails_options: "--javascript=esbuild"
-            additional_name: "/ esbuild, sprockets"
-
-
-
 
 
     env:

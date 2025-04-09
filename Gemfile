@@ -54,6 +54,9 @@ else
       gem 'sass-rails', '~> 5.0'
       gem 'sprockets', '~> 3.7'
       gem 'thor', '~> 0.20'
+    when /^7.0/, /^7.1/
+      # https://github.com/projectblacklight/blacklight/issues/3493
+      gem "concurrent-ruby", "< 1.3.5"
     end
   end
 end

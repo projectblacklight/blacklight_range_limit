@@ -6,7 +6,16 @@ module BlacklightRangeLimit
 
     def initialize(facet_field:, layout: nil, classes: BlacklightRangeLimit.classes)
       @facet_field = facet_field
-      @layout = layout == false ? Blacklight::FacetFieldNoLayoutComponent : Blacklight::FacetFieldComponent
+      @layout = if layout == false
+                  Blacklight::FacetFieldNoLayoutComponent
+                elsif layout
+                  layout
+                elsif defined?(Blacklight::Facets::FacetFieldComponent)
+                  Blacklight::Facets::FacetFieldComponent # Blacklight 9
+                else
+                  Blacklight::FacetFieldComponent # Blacklight < 9
+                end
+
       @classes = classes
     end
 
@@ -39,7 +48,7 @@ module BlacklightRangeLimit
       min = @facet_field.selected_range_facet_item&.value&.begin || @facet_field.min
       max = @facet_field.selected_range_facet_item&.value&.end || @facet_field.max
 
-      return nil unless (min && max)
+      return nil unless min && max
 
       range_limit_url(range_start: min, range_end: max)
     end

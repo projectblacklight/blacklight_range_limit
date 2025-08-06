@@ -3,7 +3,7 @@
 module BlacklightRangeLimit
   class RangeSegmentsComponent < Blacklight::Component
     def initialize(facet_field:, facet_items: nil, item_component: nil, classes: [])
-      super
+      super()
 
       @facet_field = facet_field
       @facet_items = facet_items || facet_field.try(:range_queries) || []

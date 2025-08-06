@@ -49,8 +49,31 @@ jobs:
             additional_name: "/ esbuild"
             additional_engine_cart_rails_options: "--css=bootstrap --javascript=esbuild"
 
+          # BLACKLIGHT 9, with beta cause that's all that's out as we write this
+          # and with Rails 8.0 only for simplicity
+          #
+
+          - rails_version: "~> 8.0.0"
+            blacklight_version: '~> 9.0.0.beta'
+            ruby: "3.4"
+            additional_name: "/ importmap-rails"
+            additional_engine_cart_rails_options: "--css=bootstrap"
+
+          - rails_version: "~> 8.0.0"
+            blacklight_version: '~> 9.0.0.beta'
+            ruby: "3.4"
+            additional_name: "/ esbuild"
+            additional_engine_cart_rails_options: "--css=bootstrap --javascript=esbuild"
+
+
           # BLACKLIGHT 8, can test with use importmaps and esbuild
           #
+
+          - rails_version: "~> 8.0.0"
+            blacklight_version: "~> 8.0"
+            ruby: "3.3"
+            additional_name: "/ importmap-rails, propshaft"
+            additional_engine_cart_rails_options: "-a propshaft --css=bootstrap"
 
           - rails_version: "7.2.1"
             blacklight_version: "~> 8.0"

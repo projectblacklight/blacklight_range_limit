@@ -44,8 +44,8 @@ RSpec.configure do |config|
   config.infer_spec_type_from_file_location!
 
   config.include PresenterTestHelpers, type: :presenter
+  config.include ViewComponent::TestHelpers, type: :presenter
   config.include ViewComponent::TestHelpers, type: :component
 
   config.example_status_persistence_file_path = 'spec/examples.txt'
-
 end

@@ -7,7 +7,10 @@ module BlacklightRangeLimit
 
       @facet_field = facet_field
       @facet_items = facet_items || facet_field.try(:range_queries) || []
-      @item_component = facet_field.facet_field.item_component || Blacklight::FacetItemComponent
+      # newer versions of BL9 want Blacklight::Facets::ItemComponent -- the older one is supposed
+      # to be deprecated, but in fact may not work so we use newer if avail.
+      @item_component = facet_field.facet_field.item_component ||
+        (defined?(Blacklight::Facets::ItemComponent) ? Blacklight::Facets::ItemComponent : Blacklight::FacetItemComponent)
       @classes = classes
     end
 

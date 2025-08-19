@@ -1,0 +1,9 @@
+<div class="d-flex flex-column mr-1 me-1">
+  <%= label_tag @input_name, @label_text, class: 'text-muted small mb-1' %>
+  <%= number_field_tag @input_name,
+    @input_value,
+    min: @min_value,
+    max: @max_value,
+    class: "form-control form-control-sm #{@css_class}" %>
+</div>
+

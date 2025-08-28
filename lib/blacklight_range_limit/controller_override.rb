@@ -8,18 +8,17 @@ module BlacklightRangeLimit
 
     RANGE_LIMIT_FIELDS = [:range_end, :range_field, :range_start].freeze
 
+    included do
+      # have to do this in before_action so it's done before any application level
+      # before_actions, that might do something that needs it
+      before_action :_range_limit_add_search_state_fields, only: :range_limit
+    end
+
     # Action method of our own!
     # Delivers a _partial_ that's a display of a single fields range facets.
     # Used when we need a second Solr query to get range facets, after the
     # first found min/max from result set.
     def range_limit
-      # The builder in this action will need our special range_limit fields, so we
-      # must allow them.
-      if blacklight_config.search_state_fields
-        missing_keys = RANGE_LIMIT_FIELDS - blacklight_config.search_state_fields
-        blacklight_config.search_state_fields.concat(missing_keys)
-      end
-
       @facet = blacklight_config.facet_fields[params[:range_field]]
       raise ActionController::RoutingError, 'Not Found' unless @facet&.range
 
@@ -38,6 +37,14 @@ module BlacklightRangeLimit
       @presenter = (@facet.presenter || BlacklightRangeLimit::FacetFieldPresenter).new(@facet, display_facet, view_context)
 
       render BlacklightRangeLimit::RangeSegmentsComponent.new(facet_field: @presenter), layout: !request.xhr?
+    end
+
+    def _range_limit_add_search_state_fields
+      # The builder in this action will need our special range_limit fields, so we
+      # must allow them.
+      blacklight_config.search_state_fields ||= []
+      missing_keys = RANGE_LIMIT_FIELDS - blacklight_config.search_state_fields
+      blacklight_config.search_state_fields.concat(missing_keys)
     end
 
     class_methods do

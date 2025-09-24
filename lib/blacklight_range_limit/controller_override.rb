@@ -28,8 +28,14 @@ module BlacklightRangeLimit
       # field (with start/end params) mentioned in query params
       # range_field, range_start, and range_end
 
-      @response, _ = search_service.search_results do |search_builder|
-        search_builder.except(:add_range_limit_params).append(:fetch_specific_range_limit)
+      if Gem.loaded_specs['blacklight'].version.to_s.start_with?('6.')
+        @response, _ = search_results(params) do |search_builder|
+          search_builder.except(:add_range_limit_params).append(:fetch_specific_range_limit)
+        end
+      else
+        @response, _ = search_service.search_results do |search_builder|
+          search_builder.except(:add_range_limit_params).append(:fetch_specific_range_limit)
+        end
       end
 
       display_facet = @response.aggregations[@facet.field] || Blacklight::Solr::Response::Facets::FacetField.new(@facet.key, [], response: @response)

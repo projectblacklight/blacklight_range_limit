@@ -34,19 +34,22 @@ jobs:
         # that'd be too much. Plus BL can't *generate* every one even though it
         # can be made to work with every one. We test with some good significant
         # representative samples.
+        #
+        # If 'blacklight_version' includes `://`, will be understood as github url,
+        # used for testing off blacklight main.
 
         include:
           # BLACKLIGHT EDGE, can test with Rails 8 beta, importmap and esbuild
           #
 
           - rails_version: "~> 8.0.0"
-            blacklight_version: '{ "git": "https://github.com/projectblacklight/blacklight.git" }'
+            blacklight_version: 'https://github.com/projectblacklight/blacklight.git'
             ruby: "3.3"
             additional_name: "/ importmap-rails"
             additional_engine_cart_rails_options: "--css=bootstrap"
 
           - rails_version: "~> 8.0.0"
-            blacklight_version: '{ "git": "https://github.com/projectblacklight/blacklight.git" }'
+            blacklight_version: 'https://github.com/projectblacklight/blacklight.git'
             ruby: "3.3"
             additional_name: "/ esbuild"
             additional_engine_cart_rails_options: "--css=bootstrap --javascript=esbuild"

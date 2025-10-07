@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-require 'json'
 
 source 'https://rubygems.org'
 
@@ -15,9 +14,8 @@ end
 # a blacklight version other than the latest allowed by gemspec, to get
 # tests to pass, or to test on older BL still supported here.
 if ENV['BLACKLIGHT_VERSION']
-  # allow direct git and other with serialized json kw args
-  if ENV['BLACKLIGHT_VERSION'].start_with?("{")
-    gem "blacklight", **JSON.parse(ENV['BLACKLIGHT_VERSION'])
+  if ENV['BLACKLIGHT_VERSION'].include?("://")
+    gem "blacklight", git: ENV['BLACKLIGHT_VERSION']
   else
     gem "blacklight", ENV['BLACKLIGHT_VERSION']
   end

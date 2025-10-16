@@ -39,24 +39,36 @@ jobs:
         # used for testing off blacklight main.
 
         include:
-          # BLACKLIGHT EDGE, can test with Rails 8 beta, importmap and esbuild
+          # BLACKLIGHT EDGE, can test with latest rails, importmap and esbuild
           #
 
-          - rails_version: "~> 8.0.0"
+          - rails_version: "~> 8.1.0.rc1"
             blacklight_version: 'https://github.com/projectblacklight/blacklight.git'
             ruby: "3.3"
             additional_name: "/ importmap-rails"
             additional_engine_cart_rails_options: "--css=bootstrap"
 
-          - rails_version: "~> 8.0.0"
+          - rails_version: "~> 8.1.0.rc1"
             blacklight_version: 'https://github.com/projectblacklight/blacklight.git'
             ruby: "3.3"
             additional_name: "/ esbuild"
             additional_engine_cart_rails_options: "--css=bootstrap --javascript=esbuild"
 
           # BLACKLIGHT 9, with beta cause that's all that's out as we write this
-          # and with Rails 8.0 only for simplicity
+          # and with Rails 8 and 8.1
           #
+
+          - rails_version: "~> 8.1.0.rc1"
+            blacklight_version: '~> 9.0.0.beta'
+            ruby: "3.4"
+            additional_name: "/ importmap-rails"
+            additional_engine_cart_rails_options: "--css=bootstrap"
+
+          - rails_version: "~> 8.1.0.rc1"
+            blacklight_version: '~> 9.0.0.beta'
+            ruby: "3.4"
+            additional_name: "/ esbuild"
+            additional_engine_cart_rails_options: "--css=bootstrap --javascript=esbuild"
 
           - rails_version: "~> 8.0.0"
             blacklight_version: '~> 9.0.0.beta'
@@ -71,8 +83,20 @@ jobs:
             additional_engine_cart_rails_options: "--css=bootstrap --javascript=esbuild"
 
 
-          # BLACKLIGHT 8, can test with use importmaps and esbuild
-          #
+          # BLACKLIGHT 8, can test with use importmaps and esbuild, also rails 8 and 8.1
+          # and a bit of 7.2
+
+          - rails_version: "~> 8.1.0.rc1"
+            blacklight_version: "~> 8.0"
+            ruby: "3.3"
+            additional_name: "/ importmap-rails, propshaft"
+            additional_engine_cart_rails_options: "-a propshaft --css=bootstrap"
+
+          - rails_version: "~> 8.1.0.rc1"
+            blacklight_version: "~> 8.0"
+            ruby: "3.3"
+            additional_engine_cart_rails_options: "-a propshaft --javascript=esbuild --css=bootstrap"
+            additional_name: "/ esbuild, propshaft"
 
           - rails_version: "~> 8.0.0"
             blacklight_version: "~> 8.0"

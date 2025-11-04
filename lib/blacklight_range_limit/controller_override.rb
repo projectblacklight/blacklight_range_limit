@@ -6,7 +6,7 @@ module BlacklightRangeLimit
   module ControllerOverride
     extend ActiveSupport::Concern
 
-    RANGE_LIMIT_FIELDS = [:range_end, :range_field, :range_start].freeze
+    RANGE_LIMIT_FIELDS = %i[range_end range_field range_start].freeze
 
     included do
       # have to do this in before_action so it's done before any application level
@@ -22,19 +22,14 @@ module BlacklightRangeLimit
       @facet = blacklight_config.facet_fields[params[:range_field]]
       raise ActionController::RoutingError, 'Not Found' unless @facet&.range
 
-      # We need to swap out the add_range_limit_params search param filter,
-      # and instead add in our fetch_specific_range_limit filter,
-      # to fetch only the range limit segments for only specific
-      # field (with start/end params) mentioned in query params
-      # range_field, range_start, and range_end
+      @response, = range_limit_search_service.search_results
 
-      @response, _ = search_service.search_results do |search_builder|
-        search_builder.except(:add_range_limit_params).append(:fetch_specific_range_limit)
-      end
+      display_facet = @response.aggregations[@facet.field] || Blacklight::Solr::Response::Facets::FacetField.new(
+        @facet.key, [], response: @response
+      )
 
-      display_facet = @response.aggregations[@facet.field] || Blacklight::Solr::Response::Facets::FacetField.new(@facet.key, [], response: @response)
-
-      @presenter = (@facet.presenter || BlacklightRangeLimit::FacetFieldPresenter).new(@facet, display_facet, view_context)
+      @presenter = (@facet.presenter || BlacklightRangeLimit::FacetFieldPresenter).new(@facet, display_facet,
+                                                                                       view_context)
 
       render BlacklightRangeLimit::RangeSegmentsComponent.new(facet_field: @presenter), layout: !request.xhr?
     end
@@ -45,6 +40,14 @@ module BlacklightRangeLimit
       blacklight_config.search_state_fields ||= []
       missing_keys = RANGE_LIMIT_FIELDS - blacklight_config.search_state_fields
       blacklight_config.search_state_fields.concat(missing_keys)
+    end
+
+    # @return [Blacklight::SearchService]
+    def range_limit_search_service
+      search_service_class.new(config: blacklight_config,
+                               search_state: search_state,
+                               search_builder_class: RangeLimitSearchBuilder,
+                               **search_service_context)
     end
 
     class_methods do

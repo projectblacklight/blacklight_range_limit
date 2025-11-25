@@ -9,10 +9,6 @@ group :test do
   gem 'activerecord-jdbcsqlite3-adapter', platform: :jruby
 end
 
-# While gemspec allows BL8 and some people are using BL8... the build
-# has never actually passed on BL8 yet. We may choose to run tests on
-# a blacklight version other than the latest allowed by gemspec, to get
-# tests to pass, or to test on older BL still supported here.
 if ENV['BLACKLIGHT_VERSION']
   if ENV['BLACKLIGHT_VERSION'].include?("://")
     gem "blacklight", git: ENV['BLACKLIGHT_VERSION']

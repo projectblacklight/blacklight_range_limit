@@ -1,6 +1,6 @@
 {
   "name": "blacklight-range-limit",
-  "version": "9.1.0",
+  "version": "9.2.0",
   "description": "A range facet UI component plugin for blacklight",
   "type": "module",
 

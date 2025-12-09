@@ -131,24 +131,29 @@ jobs:
 
 
           # BLACKLIGHT 7, only test with esbuild, not sure if it supports importmaps, it won't generate it
+          # Blacklight 7 generator uses old `Bundler.with_clean_env`, so needs a bundler < 4. (there is no
+          # bundler 3!)
 
           - rails_version: "7.2.1"
             blacklight_version: "~> 7.0"
             ruby: "3.3"
             additional_engine_cart_rails_options: "--javascript=esbuild"
             additional_name: "/ esbuild, sprockets"
+            bundler: "2.7.2"
 
           - rails_version: "7.2.1"
             blacklight_version: "~> 7.0"
             ruby: "3.3"
             additional_engine_cart_rails_options: "--javascript=esbuild --css=bootstrap  -a propshaft"
             additional_name: "/ esbuild, propshaft"
+            bundler: "2.7.2"
 
           - rails_version: "7.1.4"
             blacklight_version: "~> 7.0"
             ruby: "3.2"
             additional_engine_cart_rails_options: "--javascript=esbuild"
             additional_name: "/ esbuild, sprockets"
+            bundler: "2.7.2"
 
 
     env:
@@ -161,7 +166,7 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: ${{ matrix.ruby }}
-          bundler: "latest"
+          bundler: ${{ matrix.bundler != '' && matrix.bundler || 'latest' }}
 
       - name: Install dependencies
         run: bundle install

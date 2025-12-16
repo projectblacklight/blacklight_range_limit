@@ -166,7 +166,10 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: ${{ matrix.ruby }}
-          bundler: ${{ matrix.bundler != '' && matrix.bundler || 'latest' }}
+          #bundler: ${{ matrix.bundler != '' && matrix.bundler || 'latest' }}
+          # Bundler locked to <4, see https://github.com/projectblacklight/blacklight_range_limit/pull/328
+          bundler: ${{ matrix.bundler != '' && matrix.bundler || '2.7.2' }}
+
 
       - name: Install dependencies
         run: bundle install

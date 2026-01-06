@@ -42,13 +42,13 @@ jobs:
           # BLACKLIGHT EDGE, can test with latest rails, importmap and esbuild
           #
 
-          - rails_version: "~> 8.1.0.rc1"
+          - rails_version: "~> 8.1.0"
             blacklight_version: 'https://github.com/projectblacklight/blacklight.git'
             ruby: "3.3"
             additional_name: "/ importmap-rails"
             additional_engine_cart_rails_options: "--css=bootstrap"
 
-          - rails_version: "~> 8.1.0.rc1"
+          - rails_version: "~> 8.1.0"
             blacklight_version: 'https://github.com/projectblacklight/blacklight.git'
             ruby: "3.3"
             additional_name: "/ esbuild"
@@ -57,13 +57,13 @@ jobs:
           # BLACKLIGHT 9 and with Rails 8 and 8.1
           #
 
-          - rails_version: "~> 8.1.0.rc1"
+          - rails_version: "~> 8.1.0"
             blacklight_version: '~> 9.0'
             ruby: "3.4"
             additional_name: "/ importmap-rails"
             additional_engine_cart_rails_options: "--css=bootstrap"
 
-          - rails_version: "~> 8.1.0.rc1"
+          - rails_version: "~> 8.1.0"
             blacklight_version: '~> 9.0'
             ruby: "3.4"
             additional_name: "/ esbuild"
@@ -85,13 +85,13 @@ jobs:
           # BLACKLIGHT 8, can test with use importmaps and esbuild, also rails 8 and 8.1
           # and a bit of 7.2
 
-          - rails_version: "~> 8.1.0.rc1"
+          - rails_version: "~> 8.1.0"
             blacklight_version: "~> 8.0"
             ruby: "3.3"
             additional_name: "/ importmap-rails, propshaft"
             additional_engine_cart_rails_options: "-a propshaft --css=bootstrap"
 
-          - rails_version: "~> 8.1.0.rc1"
+          - rails_version: "~> 8.1.0"
             blacklight_version: "~> 8.0"
             ruby: "3.3"
             additional_engine_cart_rails_options: "-a propshaft --javascript=esbuild --css=bootstrap"
@@ -131,24 +131,29 @@ jobs:
 
 
           # BLACKLIGHT 7, only test with esbuild, not sure if it supports importmaps, it won't generate it
+          # Blacklight 7 generator uses old `Bundler.with_clean_env`, so needs a bundler < 4. (there is no
+          # bundler 3!)
 
           - rails_version: "7.2.1"
             blacklight_version: "~> 7.0"
             ruby: "3.3"
             additional_engine_cart_rails_options: "--javascript=esbuild"
             additional_name: "/ esbuild, sprockets"
+            bundler: "2.7.2"
 
           - rails_version: "7.2.1"
             blacklight_version: "~> 7.0"
             ruby: "3.3"
             additional_engine_cart_rails_options: "--javascript=esbuild --css=bootstrap  -a propshaft"
             additional_name: "/ esbuild, propshaft"
+            bundler: "2.7.2"
 
           - rails_version: "7.1.4"
             blacklight_version: "~> 7.0"
             ruby: "3.2"
             additional_engine_cart_rails_options: "--javascript=esbuild"
             additional_name: "/ esbuild, sprockets"
+            bundler: "2.7.2"
 
 
     env:
@@ -161,7 +166,10 @@ jobs:
         uses: ruby/setup-ruby@v1
         with:
           ruby-version: ${{ matrix.ruby }}
-          bundler: "latest"
+          #bundler: ${{ matrix.bundler != '' && matrix.bundler || 'latest' }}
+          # Bundler locked to <4, see https://github.com/projectblacklight/blacklight_range_limit/pull/328
+          bundler: ${{ matrix.bundler != '' && matrix.bundler || '2.7.2' }}
+
 
       - name: Install dependencies
         run: bundle install

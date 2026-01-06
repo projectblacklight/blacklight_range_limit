@@ -74,3 +74,13 @@ jobs:
       env:
         RAILS_VERSION: 5.2.4.2
         ENGINE_CART_RAILS_OPTIONS: '--skip-git --skip-listen --skip-spring --skip-keeps --skip-action-cable --skip-coffee --skip-test'
+
+  notify_on_failure:
+    if: failure()
+    needs: [test, test_rails6_0, test_rails5_2]
+    uses: tulibraries/.github/.github/workflows/slack-notify.yml@main
+    with:
+      repo: ${{ github.repository }}
+      run_id: ${{ github.run_id }}
+      workflow: ${{ github.workflow }}
+    secrets: inherit

@@ -11,7 +11,7 @@ on:
   push:
     branches: [main]
   pull_request:
-    branches: ['**']
+    branches: ["**"]
   schedule:
     - cron: "0 2 * * TUE"
 
@@ -43,13 +43,13 @@ jobs:
           #
 
           - rails_version: "~> 8.1.0"
-            blacklight_version: 'https://github.com/projectblacklight/blacklight.git'
+            blacklight_version: "https://github.com/projectblacklight/blacklight.git"
             ruby: "3.3"
             additional_name: "/ importmap-rails"
             additional_engine_cart_rails_options: "--css=bootstrap"
 
           - rails_version: "~> 8.1.0"
-            blacklight_version: 'https://github.com/projectblacklight/blacklight.git'
+            blacklight_version: "https://github.com/projectblacklight/blacklight.git"
             ruby: "3.3"
             additional_name: "/ esbuild"
             additional_engine_cart_rails_options: "--css=bootstrap --javascript=esbuild"
@@ -58,32 +58,30 @@ jobs:
           #
 
           - rails_version: "~> 8.1.0"
-            blacklight_version: '~> 9.0'
+            blacklight_version: "~> 9.0"
             ruby: "3.4"
             additional_name: "/ importmap-rails"
             additional_engine_cart_rails_options: "--css=bootstrap"
 
           - rails_version: "~> 8.1.0"
-            blacklight_version: '~> 9.0'
+            blacklight_version: "~> 9.0"
             ruby: "3.4"
             additional_name: "/ esbuild"
             additional_engine_cart_rails_options: "--css=bootstrap --javascript=esbuild"
 
           - rails_version: "~> 8.0.0"
-            blacklight_version: '~> 9.0'
+            blacklight_version: "~> 9.0"
             ruby: "3.4"
             additional_name: "/ importmap-rails"
             additional_engine_cart_rails_options: "--css=bootstrap"
 
           - rails_version: "~> 8.0.0"
-            blacklight_version: '~> 9.0'
+            blacklight_version: "~> 9.0"
             ruby: "3.4"
             additional_name: "/ esbuild"
             additional_engine_cart_rails_options: "--css=bootstrap --javascript=esbuild"
-
 
           # BLACKLIGHT 8, can test with use importmaps and esbuild, also rails 8 and 8.1
-          # and a bit of 7.2
 
           - rails_version: "~> 8.1.0"
             blacklight_version: "~> 8.0"
@@ -102,23 +100,6 @@ jobs:
             ruby: "3.3"
             additional_name: "/ importmap-rails, propshaft"
             additional_engine_cart_rails_options: "-a propshaft --css=bootstrap"
-
-          - rails_version: "7.2.1"
-            blacklight_version: "~> 8.0"
-            ruby: "3.3"
-            additional_name: "/ importmap-rails, sprockets"
-
-          - rails_version: "7.2.1"
-            blacklight_version: "~> 8.0"
-            ruby: "3.3"
-            additional_name: "/ importmap-rails, propshaft"
-            additional_engine_cart_rails_options: "-a propshaft --css=bootstrap"
-
-          - rails_version: "7.2.1"
-            blacklight_version: "~> 8.0"
-            ruby: "3.3"
-            additional_engine_cart_rails_options: "-a propshaft --javascript=esbuild --css=bootstrap"
-            additional_name: "/ esbuild, propshaft"
 
             # We can't currently test Blacklight 8 in a few situations we'd like to.
             #
@@ -128,33 +109,6 @@ jobs:
             # * Can't test with unreleased Blacklight main and esbuild because the blacklight-frontend
             #   npm package doesn't work from git checkout.  So currently can't test with Rails 8
             #   and esbuild.
-
-
-          # BLACKLIGHT 7, only test with esbuild, not sure if it supports importmaps, it won't generate it
-          # Blacklight 7 generator uses old `Bundler.with_clean_env`, so needs a bundler < 4. (there is no
-          # bundler 3!)
-
-          - rails_version: "7.2.1"
-            blacklight_version: "~> 7.0"
-            ruby: "3.3"
-            additional_engine_cart_rails_options: "--javascript=esbuild"
-            additional_name: "/ esbuild, sprockets"
-            bundler: "2.7.2"
-
-          - rails_version: "7.2.1"
-            blacklight_version: "~> 7.0"
-            ruby: "3.3"
-            additional_engine_cart_rails_options: "--javascript=esbuild --css=bootstrap  -a propshaft"
-            additional_name: "/ esbuild, propshaft"
-            bundler: "2.7.2"
-
-          - rails_version: "7.1.4"
-            blacklight_version: "~> 7.0"
-            ruby: "3.2"
-            additional_engine_cart_rails_options: "--javascript=esbuild"
-            additional_name: "/ esbuild, sprockets"
-            bundler: "2.7.2"
-
 
     env:
       BLACKLIGHT_VERSION: ${{ matrix.blacklight_version || '~> 8.0' }}
@@ -169,7 +123,6 @@ jobs:
           #bundler: ${{ matrix.bundler != '' && matrix.bundler || 'latest' }}
           # Bundler locked to <4, see https://github.com/projectblacklight/blacklight_range_limit/pull/328
           bundler: ${{ matrix.bundler != '' && matrix.bundler || '2.7.2' }}
-
 
       - name: Install dependencies
         run: bundle install

@@ -61,25 +61,49 @@ module BlacklightRangeLimit
     private
 
     def missing
-      stats_for_field.fetch('missing', 0)
+      json_facet_stats.dig('missing', 'count') || stats_for_field.fetch('missing', 0)
     end
 
+    # Read range stats from the JSON Facet API response.
+    # The range_limit_builder stores them under "<solr_field>_range_stats".
+    def json_facet_stats
+      response.dig('facets', "#{facet_field.field}_range_stats") || {}
+    end
+
+    # Legacy stats-component path – kept as a fallback so that the presenter
+    # still works when the upstream application has not yet switched its Solr
+    # request handler to the JSON Facet API approach.
     def stats_for_field
       response.dig('stats', 'stats_fields', facet_field.field) || {}
     end
 
     # type is 'min' or 'max'
     # Returns smallest and largest value in current result set, if available
-    # from stats component response.
+    # from the JSON Facet API response (preferred) or the stats component
+    # response (legacy fallback).
     def range_results_endpoint(type)
-      stats = stats_for_field
+      type_s = type.to_s
 
-      return nil unless stats.key? type
-      # StatsComponent returns weird min/max when there are in
-      # fact no values
+      # Try JSON Facet API first
+      json_stats = json_facet_stats
+      if json_stats.key?(type_s)
+        raw = json_stats[type_s]
+        return nil if raw.nil?
+
+        # Check if all docs are missing a value – no meaningful min/max
+        missing_count = json_stats.dig('missing', 'count') || 0
+        return nil if selected_range_hits == missing_count && missing_count > 0
+
+        year = BlacklightRangeLimit.year_from_solr_date(raw)
+        return year.to_s if year
+      end
+
+      # Fall back to legacy stats component
+      stats = stats_for_field
+      return nil unless stats.key? type_s
       return nil if selected_range_hits == stats['missing']
 
-      stats[type].to_s.gsub(/\.0+/, '')
+      stats[type_s].to_s.gsub(/\.0+/, '')
     end
 
     def selected_range_hits

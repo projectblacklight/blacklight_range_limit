@@ -176,6 +176,17 @@
 
 
     <dynamicField name="*_srpt" type="location_rpt" stored="true" indexed="true" multiValued="true" />
+
+    <!-- date range (_dr...) -->
+    <!-- Supports single dates (e.g. "1998") and date ranges (e.g. "[1998 TO 2005]") -->
+
+    <dynamicField name="*_dri" type="date_range" stored="false" indexed="true" multiValued="false"/>
+    <dynamicField name="*_drim" type="date_range" stored="false" indexed="true" multiValued="true"/>
+
+    <dynamicField name="*_drs" type="date_range" stored="true" indexed="false" multiValued="false"/>
+    <dynamicField name="*_drsm" type="date_range" stored="true" indexed="false" multiValued="true"/>
+    <dynamicField name="*_drsi" type="date_range" stored="true" indexed="true" multiValued="false"/>
+    <dynamicField name="*_drsim" type="date_range" stored="true" indexed="true" multiValued="true"/>
     <dynamicField name="*_bbox" type="bbox" stored="true" indexed="true" />
 
 
@@ -238,6 +249,11 @@
     <fieldType name="date" class="solr.TrieDateField" precisionStep="0" positionIncrementGap="0"/>
     <!-- A Trie based date field for faster date range queries and date faceting. -->
     <fieldType name="tdate" class="solr.TrieDateField" precisionStep="6" positionIncrementGap="0"/>
+
+    <!-- A field type for indexing date ranges (single dates or spans).
+         Accepts truncated dates like "1998" (meaning the whole year) as well as
+         full ISO-8601 dates and Solr date-range syntax like "[1998 TO 2005]". -->
+    <fieldType name="date_range" class="solr.DateRangeField" />
 
 
     <!-- This point type indexes the coordinates as separate fields (subFields)

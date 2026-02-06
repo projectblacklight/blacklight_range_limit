@@ -1,18 +1,21 @@
 # Meant to be in a Controller, included in our ControllerOverride module.
 module BlacklightRangeLimit
   module SegmentCalculation
-
     protected
 
     # Calculates segment facets within a given start and end on a given
     # field, returns request params to be added on to what's sent to
     # solr to get the calculated facet segments.
-    # Assumes solr_field is an integer, as range endpoint will be found
-    # by subtracting one from subsequent boundary.
+    #
+    # Uses year-level date boundaries for DateRangeField compatibility.
+    # The min and max are year integers; they are converted to Solr
+    # date-range query syntax (truncated years) so that DateRangeField
+    # can interpret them correctly.
     #
     # Changes solr_params passed in.
     def add_range_segments_to_solr!(solr_params, facet_field, min, max)
-      raise InvalidRange, "The min date must be before the max date" if min > max
+      raise InvalidRange, 'The min date must be before the max date' if min > max
+
       field_config = blacklight_config.facet_fields[facet_field.to_s]
 
       return solr_params unless field_config
@@ -24,9 +27,16 @@ module BlacklightRangeLimit
       boundaries = boundaries_for_range_facets(min, max, range_config[:num_segments] || 10)
 
       # Now make the boundaries into actual filter.queries.
+      # For DateRangeField compatibility the query uses bare year values,
+      # which Solr's DateRangeField interprets as truncated ISO-8601 dates
+      # (e.g. "1998" means the entire year 1998).
+      #
+      # Each segment covers [boundary_n TO boundary_(n+1) - 1] expressed
+      # as years so that the ranges are inclusive on both ends without
+      # overlapping.
       0.upto(boundaries.length - 2) do |index|
         first = boundaries[index]
-        last =  boundaries[index+1].to_i - 1
+        last  = boundaries[index + 1].to_i - 1
 
         solr_params[:"facet.query"] << "#{field_config.field}:[#{first} TO #{last}]"
       end
@@ -43,7 +53,8 @@ module BlacklightRangeLimit
     # be turned into inclusive ranges, the FINAL boundary will be one
     # unit more than the actual end of the last range later computed.
     def boundaries_for_range_facets(first, last, num_div)
-      raise ArgumentError, "The first date must be before the last date" if last < first
+      raise ArgumentError, 'The first date must be before the last date' if last < first
+
       # arithmetic issues require last to be one more than the actual
       # last value included in our inclusive range
       last += 1
@@ -54,58 +65,55 @@ module BlacklightRangeLimit
 
       # Don't know what most of these variables mean, just copying
       # from Flot.
-      dec = -1 * ( Math.log10(delta) ).floor
-      magn = (10 ** (-1 * dec)).to_f
-      norm = (magn == 0) ? delta : (delta / magn) # norm is between 1.0 and 10.0
+      dec = -1 * Math.log10(delta).floor
+      magn = (10**(-1 * dec)).to_f
+      norm = magn == 0 ? delta : (delta / magn) # norm is between 1.0 and 10.0
 
       size = 10
-       if (norm < 1.5)
-         size = 1
-       elsif (norm < 3)
-         size = 2;
-         # special case for 2.5, requires an extra decimal
-         if (norm > 2.25 )
-           size = 2.5;
-           dec = dec + 1
-         end
-       elsif (norm < 7.5)
-         size = 5
-       end
+      if norm < 1.5
+        size = 1
+      elsif norm < 3
+        size = 2
+        # special case for 2.5, requires an extra decimal
+        if norm > 2.25
+          size = 2.5
+          dec += 1
+        end
+      elsif norm < 7.5
+        size = 5
+      end
 
-       size = size * magn
+      size *= magn
 
-       boundaries = []
+      boundaries = []
 
-       start = floorInBase(first, size)
-       i = 0
-       v = Float::MAX
-       prev = nil
-       begin
-         prev = v
-         v = start + i * size
-         boundaries.push(v.to_i)
-         i += 1
-       end while ( v < last && v != prev)
+      start = floorInBase(first, size)
+      i = 0
+      v = Float::MAX
+      prev = nil
+      begin
+        prev = v
+        v = start + i * size
+        boundaries.push(v.to_i)
+        i += 1
+      end while (v < last && v != prev)
 
-       # Can create dups for small ranges, tighten up
-       boundaries.uniq!
+      # Can create dups for small ranges, tighten up
+      boundaries.uniq!
 
-       # That algorithm i don't entirely understand will sometimes
-       # extend past our first and last, tighten it up and make sure
-       # first and last are endpoints.
-       boundaries.delete_if {|b| b <= first || b >= last}
-       boundaries.unshift(first)
-       boundaries.push(last)
+      # That algorithm i don't entirely understand will sometimes
+      # extend past our first and last, tighten it up and make sure
+      # first and last are endpoints.
+      boundaries.delete_if { |b| b <= first || b >= last }
+      boundaries.unshift(first)
+      boundaries.push(last)
 
-       return boundaries
+      boundaries
     end
 
     # Cribbed from Flot.  Round to nearby lower multiple of base
     def floorInBase(n, base)
-       return base * (n / base).floor
+      base * (n / base).floor
     end
-
-
-
   end
 end

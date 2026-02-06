@@ -6,7 +6,9 @@ RSpec.describe BlacklightRangeLimit::SegmentCalculation do
       include BlacklightRangeLimit::SegmentCalculation
 
       def blacklight_config
-        Blacklight::Configuration.new
+        @blacklight_config ||= Blacklight::Configuration.new.tap do |config|
+          config.add_facet_field 'date_dt', field: 'date_dt', range: true
+        end
       end
     end
   end
@@ -14,7 +16,7 @@ RSpec.describe BlacklightRangeLimit::SegmentCalculation do
   describe '#boundaries_for_range_facets' do
     subject { dummy_class.new.send(:boundaries_for_range_facets, first, last, num_div) }
 
-    context "the happy path" do
+    context 'the happy path' do
       let(:first) { 1000 }
       let(:last) { 2008 }
       let(:num_div) { 10 }
@@ -34,7 +36,7 @@ RSpec.describe BlacklightRangeLimit::SegmentCalculation do
     end
   end
 
-  describe "#add_range_segments_to_solr!" do
+  describe '#add_range_segments_to_solr!' do
     subject { dummy_class.new.send(:add_range_segments_to_solr!, solr_params, solr_field, min, max) }
 
     let(:solr_params) { {} }

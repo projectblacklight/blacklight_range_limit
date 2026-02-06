@@ -26,19 +26,19 @@ RSpec.describe BlacklightRangeLimit::FacetFieldPresenter, type: :presenter do
   end
   let(:response) do
     Blacklight::Solr::Response.new(
-      {
-        response: { numFound: 5 },
-        stats: {
-          stats_fields: {
-            some_field: some_field_stats
-          }
-        }
-      },
+      response_data,
       nil
     )
   end
 
-  let(:some_field_stats) { {} }
+  let(:response_data) do
+    {
+      response: { numFound: 5 },
+      facets: facets_data
+    }
+  end
+
+  let(:facets_data) { {} }
 
   describe '#range_queries' do
     let(:response) do
@@ -60,75 +60,168 @@ RSpec.describe BlacklightRangeLimit::FacetFieldPresenter, type: :presenter do
     end
   end
 
-  describe '#min' do
-    let(:some_field_stats) do
+  context 'with JSON Facet API response' do
+    let(:facets_data) do
       {
-        max: 999.00,
-        min: 700.0000,
-        missing: 0
+        'count' => 5,
+        'some_field_range_stats' => {
+          'count' => 5,
+          'min' => '1941-01-01T00:00:00Z',
+          'max' => '2008-12-31T23:59:59Z',
+          'missing' => { 'count' => 1 }
+        }
       }
     end
 
-    it 'extracts the min stat, stringifies it (for some reason), and truncates it' do
-      expect(presenter.min).to eq '700'
+    describe '#min' do
+      it 'extracts the year from the JSON facet min date' do
+        expect(presenter.min).to eq '1941'
+      end
     end
 
-    context 'when all documents in the response are missing data' do
-      let(:some_field_stats) do
+    describe '#max' do
+      it 'extracts the year from the JSON facet max date' do
+        expect(presenter.max).to eq '2008'
+      end
+    end
+
+    describe '#missing_facet_item' do
+      it 'extracts the missing count from JSON facet response' do
+        expect(presenter.missing_facet_item.hits).to eq 1
+      end
+    end
+
+    context 'when all documents are missing the field' do
+      let(:facets_data) do
         {
-          max: -345,
-          min: -999,
-          missing: 5
+          'count' => 5,
+          'some_field_range_stats' => {
+            'count' => 5,
+            'min' => nil,
+            'max' => nil,
+            'missing' => { 'count' => 5 }
+          }
         }
       end
 
-      it 'returns nil' do
+      it 'returns nil for min' do
         expect(presenter.min).to be_nil
       end
-    end
-  end
 
-  describe '#max' do
-    let(:some_field_stats) do
-      {
-        max: 999.00,
-        min: 700.0000,
-        missing: 0
-      }
-    end
-
-    it 'extracts the ,ax stat, stringifies it (for some reason), and truncates it' do
-      expect(presenter.max).to eq '999'
-    end
-
-    context 'when all documents in the response are missing data' do
-      let(:some_field_stats) do
-        {
-          max: -345,
-          min: -999,
-          missing: 5
-        }
-      end
-
-      it 'returns nil' do
+      it 'returns nil for max' do
         expect(presenter.max).to be_nil
       end
     end
+
+    context 'when min/max are truncated year strings' do
+      let(:facets_data) do
+        {
+          'count' => 5,
+          'some_field_range_stats' => {
+            'count' => 5,
+            'min' => '1998',
+            'max' => '2005',
+            'missing' => { 'count' => 0 }
+          }
+        }
+      end
+
+      it 'extracts the year from truncated min' do
+        expect(presenter.min).to eq '1998'
+      end
+
+      it 'extracts the year from truncated max' do
+        expect(presenter.max).to eq '2005'
+      end
+    end
   end
 
-  describe '#missing_facet_item' do
-    let(:some_field_stats) do
+  context 'with legacy stats component response' do
+    let(:response_data) do
       {
-        missing: 5
+        response: { numFound: 5 },
+        stats: {
+          stats_fields: {
+            some_field: some_field_stats
+          }
+        }
       }
     end
 
-    it 'extracts the missing stat' do
-      expect(presenter.missing_facet_item.hits).to eq 5
+    let(:some_field_stats) { {} }
+
+    describe '#min' do
+      let(:some_field_stats) do
+        {
+          'max' => 999.00,
+          'min' => 700.0000,
+          'missing' => 0
+        }
+      end
+
+      it 'extracts the min stat, stringifies it, and truncates it' do
+        expect(presenter.min).to eq '700'
+      end
+
+      context 'when all documents in the response are missing data' do
+        let(:some_field_stats) do
+          {
+            'max' => -345,
+            'min' => -999,
+            'missing' => 5
+          }
+        end
+
+        it 'returns nil' do
+          expect(presenter.min).to be_nil
+        end
+      end
+    end
+
+    describe '#max' do
+      let(:some_field_stats) do
+        {
+          'max' => 999.00,
+          'min' => 700.0000,
+          'missing' => 0
+        }
+      end
+
+      it 'extracts the max stat, stringifies it, and truncates it' do
+        expect(presenter.max).to eq '999'
+      end
+
+      context 'when all documents in the response are missing data' do
+        let(:some_field_stats) do
+          {
+            'max' => -345,
+            'min' => -999,
+            'missing' => 5
+          }
+        end
+
+        it 'returns nil' do
+          expect(presenter.max).to be_nil
+        end
+      end
+    end
+
+    describe '#missing_facet_item' do
+      let(:some_field_stats) do
+        {
+          'missing' => 5
+        }
+      end
+
+      it 'extracts the missing stat' do
+        expect(presenter.missing_facet_item.hits).to eq 5
+      end
     end
   end
 
   describe '#selected_range' do
+    let(:response_data) { { response: { numFound: 5 } } }
+
     it 'returns nil if no range is selected' do
       expect(presenter.selected_range).to eq nil
     end

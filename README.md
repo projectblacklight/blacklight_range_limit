@@ -1,4 +1,4 @@
-BlacklightRangeLimit:  integer range limiting and profiling for Blacklight applications
+BlacklightRangeLimit:  date range limiting and profiling for Blacklight applications
 
 ![Build Status](https://github.com/projectblacklight/blacklight/workflows/CI/badge.svg) [![Gem Version](https://badge.fury.io/rb/blacklight_range_limit.png)](http://badge.fury.io/rb/blacklight_range_limit)
 
@@ -6,16 +6,14 @@ BlacklightRangeLimit:  integer range limiting and profiling for Blacklight appli
 
 # Description
 
-The BlacklightRangeLimit plugin provides a 'facet' or limit for integer fields, that lets the user enter range limits with a text box or a slider, and also provides area charts giving a sense of the distribution of values (with drill down).
+The BlacklightRangeLimit plugin provides a 'facet' or limit for date fields, that lets the user enter range limits with a text box or a slider, and also provides area charts giving a sense of the distribution of values (with drill down).
 
-The primary use case of this plugin is for 'year' data, but it should work for any integer field.
-
-Decimal numbers and Dates are NOT supported; they theoretically could be in the future, although it gets tricky.
+The primary use case of this plugin is for 'year' data using Solr's `DateRangeField`. This field type supports both single dates (e.g. `"1998"`) and date ranges (e.g. `"[1998 TO 2005]"`), making it ideal for library catalog records that may span multiple years.
 
 
 # Requirements
 
-* A Solr integer field. It might be advantageous to use an IntPointField.
+* A Solr `DateRangeField`. The field should be indexed and stored (e.g. using the `*_drsi` dynamic field suffix from the sample schema). Values can be truncated ISO-8601 dates like `"1998"` (meaning the entire year), full dates like `"1998-06-15"`, or date ranges like `"[1998 TO 2005]"`.
 
 * Javascript requires you to be using either rails-importmaps or a package.json-based builder like jsbundling-rails or vite-ruby.  Legacy "sprockets-only" is not supported, however propshaft or sprockets can be used as your base asset pipeline.
 
@@ -74,14 +72,16 @@ package.json-based use will additionally need to point to the matching unreleaes
 You have at least one solr field you want to display as a range limit, that's why you've installed this plugin. In your CatalogController, the facet configuration should look like:
 
 ```ruby
-config.add_facet_field 'pub_date', label: 'Publication Year', range: true
+config.add_facet_field 'pub_date_drsi', label: 'Publication Year', range: true
 ```
+
+where `pub_date_drsi` is a Solr `DateRangeField` (the `_drsi` suffix maps to the `date_range` field type in the sample schema — stored, indexed, single-valued).
 
 You should now get range limit display. More complicated configuration is available if desired, see Range Facet Configuration below.
 
 ## A note on AJAX use
 
-In order to calculate distribution segment ranges, we need to first know the min and max boundaries. But we don't really know that until we've fetched the result set (we use the Solr Stats component to get min and max with a result set).
+In order to calculate distribution segment ranges, we need to first know the min and max boundaries. But we don't really know that until we've fetched the result set (we use the Solr JSON Facet API to get min and max with a result set).
 
 So, ordinarily, after we've gotten the result set, an additional round trip to back-end and solr will happen, with min max identified, to fetch segments.
 

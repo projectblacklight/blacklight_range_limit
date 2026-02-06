@@ -6,7 +6,7 @@
 
 port: 8983
 verbose: true
-version: 9.6.1
+version: 9.10.1
   <% ENV['CI'] && FileUtils.mkdir_p('ci_dl_solr_dist') %>
 download_dir: <%= 'ci_dl_solr_dist' if ENV['CI'] %>
 collection:

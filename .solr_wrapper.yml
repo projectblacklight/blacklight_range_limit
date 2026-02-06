@@ -12,3 +12,5 @@ download_dir: <%= 'ci_dl_solr_dist' if ENV['CI'] %>
 collection:
   dir: solr/conf/
   name: blacklight-core
+env:
+  SOLR_OPTS: "-Dsolr.config.lib.enabled=true"

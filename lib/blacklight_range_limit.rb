@@ -3,6 +3,7 @@ module BlacklightRangeLimit
   require 'blacklight_range_limit/facet_field_config_override'
   require 'blacklight_range_limit/range_limit_builder'
   require 'blacklight_range_limit/controller_override'
+  require 'blacklight_range_limit/range_limit_search_builder_behavior'
 
   require 'blacklight_range_limit/version'
   require 'blacklight_range_limit/engine'

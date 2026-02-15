@@ -15,11 +15,11 @@ module BlacklightRangeLimit
       ranged_facet_configs = blacklight_config.facet_fields.select { |_key, config| config.range }
       return solr_params unless ranged_facet_configs.any?
 
-      solr_params["stats"] = "true"
-      solr_params["stats.field"] ||= []
+      solr_params['stats'] = 'true'
+      solr_params['stats.field'] ||= []
 
       ranged_facet_configs.each do |field_key, config|
-        solr_params["stats.field"] << config.field
+        solr_params['stats.field'] << config.field
 
         range_config = config.range_config
         next unless range_config[:chart_js] || range_config[:textual_facets]
@@ -29,55 +29,20 @@ module BlacklightRangeLimit
         range = bl_create_selected_range_value(selected_value, config)
 
         # If we have both ends of a range
-        add_range_segments_to_solr!(solr_params, field_key, range.begin, range.end) if range && range.count != Float::INFINITY
+        if range && range.count != Float::INFINITY
+          add_range_segments_to_solr!(solr_params, field_key, range.begin, range.end)
+        end
       end
 
       solr_params
-    end
-
-
-    # Another processing method, this one is NOT included in default processing chain,
-    # it is specifically swapped in *instead of* add_range_limit_params for
-    # certain ajax requests that only want to fetch range limit segments for
-    # ONE field.
-    #
-    # It turns off facetting and sets rows to 0 as well, only results for
-    # single specified field are needed.
-    #
-    # Specified field and parameters are specified in incoming parameters
-    # range_field, range_start, range_end
-    def fetch_specific_range_limit(solr_params)
-      field_key = blacklight_params[:range_field] # what field to fetch for
-
-      unless  blacklight_params[:range_start].present? && blacklight_params[:range_start].kind_of?(String) &&
-              blacklight_params[:range_end].present? && blacklight_params[:range_end].kind_of?(String)
-        raise BlacklightRangeLimit::InvalidRange
-      end
-
-      start = blacklight_params[:range_start].to_i
-      finish = blacklight_params[:range_end].to_i
-
-      add_range_segments_to_solr!(solr_params, field_key, start, finish )
-
-      # Remove all field faceting for efficiency, we won't be using it.
-      solr_params.delete("facet.field")
-      solr_params.delete("facet.field".to_sym)
-
-      # We don't need any actual rows either
-      solr_params[:rows] = 0
-
-      return solr_params
-    rescue BlacklightRangeLimit::InvalidRange
-      # This will make Rails return a 400
-      raise ActionController::BadRequest, "invalid range_start (#{blacklight_params[:range_start]}) or range_end (#{blacklight_params[:range_end]})"
     end
 
     # hacky polyfill for new Blacklight behavior we need, if we don't have it yet
     #
     # https://github.com/projectblacklight/blacklight/pull/3213
     # https://github.com/projectblacklight/blacklight/pull/3443
-    bl_version = Gem.loaded_specs["blacklight"]&.version
-    if bl_version && (bl_version <= Gem::Version.new("8.6.1"))
+    bl_version = Gem.loaded_specs['blacklight']&.version
+    if bl_version && (bl_version <= Gem::Version.new('8.6.1'))
       def facet_value_to_fq_string(facet_field, value, use_local_params: true)
         facet_config = blacklight_config.facet_fields[facet_field]
 
@@ -94,7 +59,7 @@ module BlacklightRangeLimit
 
           prefix = "{!#{local_params.join(' ')}}" unless local_params.empty?
 
-          "#{prefix}#{solr_field}:[#{value.begin || "*"} TO #{value.end || "*"}]"
+          "#{prefix}#{solr_field}:[#{value.begin || '*'} TO #{value.end || '*'}]"
         else
           super
         end
@@ -108,23 +73,25 @@ module BlacklightRangeLimit
       range_config = field_config.range_config
 
       range = if selected_value.is_a? Range
-        selected_value
-      elsif range_config[:assumed_boundaries].is_a?(Range)
-        range_config[:assumed_boundaries]
-      elsif range_config[:assumed_boundaries] # Array of two things please
-        Range.new(*range_config[:assumed_boundaries])
-      else
-        nil
-      end
+                selected_value
+              elsif range_config[:assumed_boundaries].is_a?(Range)
+                range_config[:assumed_boundaries]
+              elsif range_config[:assumed_boundaries] # Array of two things please
+                Range.new(*range_config[:assumed_boundaries])
+              else
+                nil
+              end
 
       # clamp between config'd min and max
       min = range_config[:min_value]
       max = range_config[:max_value]
 
-      range = Range.new(
-        (range.begin.clamp(min, max) if range.begin),
-        (range.end.clamp(min, max) if range.end),
-      ) if range
+      if range
+        range = Range.new(
+          (range.begin.clamp(min, max) if range.begin),
+          (range.end.clamp(min, max) if range.end)
+        )
+      end
 
       range
     end

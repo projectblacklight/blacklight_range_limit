@@ -77,9 +77,9 @@ module BlacklightRangeLimit
             # chart.js is dependency of blacklight-range-limit, currently is not working
             # as vendored importmaps, but instead must be pinned to CDN. You may want to update
             # versions perioidically.
-            pin "chart.js", to: "https://ga.jspm.io/npm:chart.js@4.2.0/dist/chart.js"
+            pin "chart.js", to: "https://cdn.jsdelivr.net/npm/chart.js@4.5.1/+esm"
             # single dependency of chart.js:
-            pin "@kurkle/color", to: "https://ga.jspm.io/npm:@kurkle/color@0.3.2/dist/color.esm.js"
+            pin "@kurkle/color", to: "https://cdn.jsdelivr.net/npm/@kurkle/color@0.4.0/dist/color.esm.min.js"
           EOS
         end
       else

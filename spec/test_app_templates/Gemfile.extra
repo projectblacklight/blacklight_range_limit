@@ -8,3 +8,8 @@ if ENV['BLACKLIGHT_VERSION']
   end
 end
 
+
+# pin json to less than 3 in Gemfile until Rails has some releases that work
+# with json 3, at which point we can relax for versions that can handle it
+# https://github.com/rails/rails/pull/58601
+gem "json", "< 3"

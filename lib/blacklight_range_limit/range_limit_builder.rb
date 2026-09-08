@@ -47,15 +47,15 @@ module BlacklightRangeLimit
     # Specified field and parameters are specified in incoming parameters
     # range_field, range_start, range_end
     def fetch_specific_range_limit(solr_params)
-      field_key = blacklight_params[:range_field] # what field to fetch for
+      field_key = _bl_range_limit_app_params[:range_field] # what field to fetch for
 
-      unless  blacklight_params[:range_start].present? && blacklight_params[:range_start].kind_of?(String) &&
-              blacklight_params[:range_end].present? && blacklight_params[:range_end].kind_of?(String)
+      unless  _bl_range_limit_app_params[:range_start].present? && _bl_range_limit_app_params[:range_start].kind_of?(String) &&
+              _bl_range_limit_app_params[:range_end].present? && _bl_range_limit_app_params[:range_end].kind_of?(String)
         raise BlacklightRangeLimit::InvalidRange
       end
 
-      start = blacklight_params[:range_start].to_i
-      finish = blacklight_params[:range_end].to_i
+      start = _bl_range_limit_app_params[:range_start].to_i
+      finish = _bl_range_limit_app_params[:range_end].to_i
 
       add_range_segments_to_solr!(solr_params, field_key, start, finish )
 
@@ -69,14 +69,29 @@ module BlacklightRangeLimit
       return solr_params
     rescue BlacklightRangeLimit::InvalidRange
       # This will make Rails return a 400
-      raise ActionController::BadRequest, "invalid range_start (#{blacklight_params[:range_start]}) or range_end (#{blacklight_params[:range_end]})"
+      raise ActionController::BadRequest, "invalid range_start (#{_bl_range_limit_app_params[:range_start]}) or range_end (#{_bl_range_limit_app_params[:range_end]})"
+    end
+
+    bl_version = Gem.loaded_specs["blacklight"]&.version
+
+    # get the query params correct way for old or newer blacklight
+    #
+    # https://github.com/projectblacklight/blacklight/pull/3851
+    # https://github.com/projectblacklight/blacklight/pull/3849
+    if bl_version && bl_version < Gem::Version.new("9.1.0")
+      def _bl_range_limit_app_params
+        blacklight_params
+      end
+    else
+      def _bl_range_limit_app_params
+        search_state.params
+      end
     end
 
     # hacky polyfill for new Blacklight behavior we need, if we don't have it yet
     #
     # https://github.com/projectblacklight/blacklight/pull/3213
     # https://github.com/projectblacklight/blacklight/pull/3443
-    bl_version = Gem.loaded_specs["blacklight"]&.version
     if bl_version && (bl_version <= Gem::Version.new("8.6.1"))
       def facet_value_to_fq_string(facet_field, value, use_local_params: true)
         facet_config = blacklight_config.facet_fields[facet_field]

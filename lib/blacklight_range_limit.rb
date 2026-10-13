@@ -16,7 +16,7 @@ module BlacklightRangeLimit
 
   self.classes = {
     form: 'range_limit_form',
-    submit: 'submit btn btn-sm btn-secondary'
+    submit: 'submit btn btn-sm btn-secondary btn-solid theme-secondary'
   }
 
   def self.default_range_config

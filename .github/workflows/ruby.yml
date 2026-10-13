@@ -36,7 +36,10 @@ jobs:
         # representative samples.
         #
         # If 'blacklight_version' includes `://`, will be understood as github url,
-        # used for testing off blacklight main.
+        # used for testing off blacklight main. A `#branch` suffix selects a branch.
+        #
+        # 'bootstrap_version', if set, is passed to the Blacklight generators and
+        # Blacklight config via the BOOTSTRAP_VERSION env var.
 
         include:
           # BLACKLIGHT EDGE, can test with latest rails, importmap and esbuild
@@ -53,6 +56,15 @@ jobs:
             ruby: "3.3"
             additional_name: "/ esbuild"
             additional_engine_cart_rails_options: "--css=bootstrap --javascript=esbuild"
+
+          # BOOTSTRAP 6, on the blacklight branch that supports it. Like Blacklight's own
+          # Bootstrap 6 CI, uses importmap with Bootstrap CSS from a CDN, not --css=bootstrap.
+
+          - rails_version: "~> 8.1.0"
+            blacklight_version: 'https://github.com/projectblacklight/blacklight.git#bootstrap6'
+            bootstrap_version: "6.0.0-alpha.1"
+            ruby: "4.0"
+            additional_name: "/ importmap-rails / bootstrap 6"
 
           # BLACKLIGHT 9 and with Rails 8 and 8.1
           #
@@ -170,6 +182,11 @@ jobs:
           # Bundler locked to <4, see https://github.com/projectblacklight/blacklight_range_limit/pull/328
           bundler: ${{ matrix.bundler != '' && matrix.bundler || '2.7.2' }}
 
+
+      # Only set when needed, an empty BOOTSTRAP_VERSION confuses Blacklight's generators
+      - name: Set Bootstrap version
+        if: matrix.bootstrap_version
+        run: echo "BOOTSTRAP_VERSION=${{ matrix.bootstrap_version }}" >> "$GITHUB_ENV"
 
       - name: Install dependencies
         run: bundle install

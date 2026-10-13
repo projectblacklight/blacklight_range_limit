@@ -11,7 +11,9 @@ end
 
 if ENV['BLACKLIGHT_VERSION']
   if ENV['BLACKLIGHT_VERSION'].include?("://")
-    gem "blacklight", git: ENV['BLACKLIGHT_VERSION']
+    # A git url, optionally with a branch, e.g. https://github.com/projectblacklight/blacklight.git#some-branch
+    git_url, git_branch = ENV['BLACKLIGHT_VERSION'].split("#", 2)
+    gem "blacklight", git: git_url, **({ branch: git_branch } if git_branch).to_h
   else
     gem "blacklight", ENV['BLACKLIGHT_VERSION']
   end

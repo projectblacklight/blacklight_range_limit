@@ -110,6 +110,31 @@ jobs:
             #   npm package doesn't work from git checkout.  So currently can't test with Rails 8
             #   and esbuild.
 
+
+          # BLACKLIGHT 7, as it's being independently maintained with backports, may
+          # actually support more recent Rails than BL 8.x.
+          #
+          # While Blacklight 7 should work with importmaps and is probalby being used
+          # with importamps, the *generators* we need to generate an app from scratch
+          # don't currently seem capable of generating a working importmaps app, so
+          # we do not test that at present -- only esbuild.
+
+          - rails_version: "~> 8.0.5"
+            blacklight_version: "~> 7.0"
+            ruby: "3.3"
+            additional_engine_cart_rails_options: "--javascript=esbuild"
+            additional_name: "/ esbuild, sprockets"
+            bundler: "2.7.2"
+
+          - rails_version: "~> 8.1.4"
+            blacklight_version: "~> 7.0"
+            ruby: "3.3"
+            additional_engine_cart_rails_options: "--javascript=esbuild --css=bootstrap  -a propshaft"
+            additional_name: "/ esbuild, propshaft"
+            bundler: "2.7.2"
+
+
+
     env:
       BLACKLIGHT_VERSION: ${{ matrix.blacklight_version || '~> 8.0' }}
       RAILS_VERSION: ${{ matrix.rails_version }}

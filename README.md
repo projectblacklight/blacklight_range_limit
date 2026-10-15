@@ -19,7 +19,7 @@ Decimal numbers and Dates are NOT supported; they theoretically could be in the 
 
 * Javascript requires you to be using either rails-importmaps or a package.json-based builder like jsbundling-rails or vite-ruby.  Legacy "sprockets-only" is not supported, however propshaft or sprockets can be used as your base asset pipeline.
 
-* Blacklight 8.0+.  Rails 8.1+
+* Blacklight 7.0+.  Rails 8.0+
 
 
 # Installation

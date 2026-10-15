@@ -54,8 +54,7 @@ jobs:
             additional_name: "/ esbuild"
             additional_engine_cart_rails_options: "--css=bootstrap --javascript=esbuild"
 
-          # BLACKLIGHT 9 and with Rails 8 and 8.1
-          #
+          # BLACKLIGHT 9 and with Rails 8.1
 
           - rails_version: "~> 8.1.0"
             blacklight_version: "~> 9.0"
@@ -69,19 +68,7 @@ jobs:
             additional_name: "/ esbuild"
             additional_engine_cart_rails_options: "--css=bootstrap --javascript=esbuild"
 
-          - rails_version: "~> 8.0.0"
-            blacklight_version: "~> 9.0"
-            ruby: "3.4"
-            additional_name: "/ importmap-rails"
-            additional_engine_cart_rails_options: "--css=bootstrap"
-
-          - rails_version: "~> 8.0.0"
-            blacklight_version: "~> 9.0"
-            ruby: "3.4"
-            additional_name: "/ esbuild"
-            additional_engine_cart_rails_options: "--css=bootstrap --javascript=esbuild"
-
-          # BLACKLIGHT 8, can test with use importmaps and esbuild, also rails 8 and 8.1
+          # BLACKLIGHT 8, can test with use importmaps and esbuild, also rails 8.1
 
           - rails_version: "~> 8.1.0"
             blacklight_version: "~> 8.0"
@@ -94,12 +81,6 @@ jobs:
             ruby: "3.3"
             additional_engine_cart_rails_options: "-a propshaft --javascript=esbuild --css=bootstrap"
             additional_name: "/ esbuild, propshaft"
-
-          - rails_version: "~> 8.0.0"
-            blacklight_version: "~> 8.0"
-            ruby: "3.3"
-            additional_name: "/ importmap-rails, propshaft"
-            additional_engine_cart_rails_options: "-a propshaft --css=bootstrap"
 
             # We can't currently test Blacklight 8 in a few situations we'd like to.
             #
